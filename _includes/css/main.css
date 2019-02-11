@@ -8,6 +8,12 @@ body {
     overflow-x: hidden;
 }
 
+@media(min-width:768px) {
+    body {
+        margin:0px -15px 0px 0px;
+    }
+}
+
 p {
     font-size: 20px;
 }
@@ -152,6 +158,7 @@ header .intro-text .skills {
     text-transform: uppercase;
     font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
     font-weight: 700;
+    background-color: #{{ site.color.secondary-dark }};
 }
 
 .navbar a:focus {
@@ -182,7 +189,7 @@ section h2 {
 
 section.success {
     color: #fff;
-    background: #{{ site.color.secondary }};
+    background: #4c81db;
 }
 
 @media(max-width:767px) {
@@ -266,7 +273,7 @@ section.success {
 .btn-outline:active,
 .btn-outline.active {
     border: solid 2px #fff;
-    color: #{{ site.color.primary }};
+    color: #{{ site.color.secondary }};
     background: #fff;
 }
 
@@ -446,7 +453,7 @@ footer .footer-below {
 }
 
 .navbar-nav>.active>a {
-    background-color: #{{ site.color.secondary-dark }} !important;
+    background-color: #{{ site.color.secondary }} !important;
 }
 
 /* Fix modal mouse wheel issues */
