@@ -8,12 +8,6 @@ body {
     overflow-x: hidden;
 }
 
-@media(min-width:768px) {
-    body {
-        margin:0px -15px 0px 0px;
-    }
-}
-
 p {
     font-size: 20px;
 }
@@ -28,7 +22,7 @@ a:focus,
 a:active,
 a.active {
     outline: 0;
-    color: #{{ site.color.primary }};
+    color: #{{ site.color.secondary-dark }};
 }
 
 h1,
@@ -495,4 +489,33 @@ ul.timeline > li:before {
     width: 20px;
     height: 20px;
     z-index: 400;
+}
+
+/* Styling for the buttons in the blog and events section */
+
+.btn-section {
+    text-transform: uppercase;
+    font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight: 700;
+    background-color: #{{ site.color.secondary-dark }};
+    border-radius: 0px;
+}
+
+.btn-section:hover {
+    color: #{{ site.color.secondary-dark }};
+    background-color: #{{ site.color.secondary-light }};
+    border-color: #{{ site.color.secondary-light }};
+}
+
+/* Styling events only */
+.event-title {
+    font-size: 20px;
+}
+
+.event-date {
+
+}
+
+.event-description {
+
 }

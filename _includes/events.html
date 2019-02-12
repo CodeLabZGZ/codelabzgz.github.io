@@ -11,16 +11,16 @@
                 <ul class="timeline">
                     {% for event in site.categories.events limit:5 %}
                     <li>
-                        <a target="_blank">{{ event.category }}</a>
-                        <a class="float-right">{{ event.project-date }}</a>
-                        <p>{{ event.description }}</p>
+                        <a class="event-title">{{ event.title }}</a>
+                        <a class="float-right event-date">{{ event.project-date }}</a>
+                        <p class="event-description">{{ event.description }}</p>
                     </li>
                     {% endfor %}
                 </ul>
             </div>
         </div>
         <div class="row text-center">
-                <a type="button" class="btn btn-primary" href="events/index.html">Todos los eventos</a>
+                <a type="button" class="btn btn-primary btn-section" href="events/index.html">Todos los eventos</a>
         </div>
     </div>
 </section>
