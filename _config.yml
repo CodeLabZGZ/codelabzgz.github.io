@@ -31,30 +31,30 @@ color:
   secondary-light: c4daff
   secondary-dark: 194184 #233140 #A2122F
   text-secondary: ffffff
-  
+
 
 # Footer settings
 footer:
   copyright: Dr. Henry Jekyll
   location: EINA, Ada Byron
-  social: Around the Web
-  credits: Credits
+  social: Nuestros sitios
+  credits: Créditos
 
 # Social networks usernames (many more available: google-plus, flickr, dribbble, pinterest, instagram, tumblr, linkedin, etc.)
 social:
   - title: twitter
     url: https://twitter.com/codelabzgz
+  - title: paper-plane
+    url: https://t.me/codelabzgz
   - title: facebook
-    url:
-  - title: stack-overflow
-    url: http://stackoverflow.com/questions/tagged/jekyll
+    url: #sin crear
   - title: github
     url: https://github.com/CodeLabZGZ
 
 # Postal address (add as many lines as necessary)
 address:
-  - line: 3481 Melrose Place
-  - line: Beverly Hills, CA 90210
+  - line: Campus Río Ebro
+  - line: Universidad de Zaragoza
 
 # Credits content
 credits: 'Freelancer is a free to use, open source Bootstrap theme created by <a href="http://startbootstrap.com">Start Bootstrap</a>.'
