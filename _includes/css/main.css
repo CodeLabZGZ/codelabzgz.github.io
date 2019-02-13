@@ -22,7 +22,7 @@ a:focus,
 a:active,
 a.active {
     outline: 0;
-    color: #{{ site.color.secondary-dark }};
+    color: #{{ site.color.text-special }};
 }
 
 h1,
@@ -49,7 +49,7 @@ hr.star-primary {
 
 hr.star-light:after,
 hr.star-primary:after {
-    content: "\f005";
+    content: "\f0c3";
     display: inline-block;
     position: relative;
     top: -.8em;
@@ -183,7 +183,7 @@ section h2 {
 
 section.success {
     color: #fff;
-    background: #4c81db;
+    background:#{{ site.color.secondary }};
 }
 
 @media(max-width:767px) {

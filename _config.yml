@@ -1,5 +1,6 @@
 # Site settings
 title: CodeLabZGZ
+second-title: Code_Lab
 email: codelabzgz@unizar.es
 url: https://codelabzgz.github.io
 description: "Somos una asociación compuesta por más de 20 personas cuyo objetivo es la realización de actividades relacionadas con la informática."
@@ -27,9 +28,10 @@ disqus_shortname: myshortname
 color:
   primary: ffffff #80B3FF
   text-primary: '000000'
-  secondary:  4c81db #146eff #FD6E8A
+  secondary:  3957B9 #146eff #FD6E8A
   secondary-light: c4daff
   secondary-dark: 194184 #233140 #A2122F
+  text-special: 0603C0
   text-secondary: ffffff
 
 
