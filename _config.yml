@@ -29,6 +29,7 @@ color:
   primary: ffffff #80B3FF
   text-primary: '000000'
   secondary:  3957B9 #146eff #FD6E8A
+  secondary-rgb: 57, 87, 185
   secondary-light: c4daff
   secondary-dark: 194184 #233140 #A2122F
   text-special: 0603C0
