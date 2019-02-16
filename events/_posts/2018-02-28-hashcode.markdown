@@ -2,7 +2,7 @@
 layout: null
 modal-id: 2
 project-date: 28 February 2019
-title: HashCode
+title: HashCode by Google
 dir: null
-description: Intro to DockerContenedores
+description: HashCode es una competición de programación por equipos, organizado por Google, para estudiantes y profesionales alrededor del mundo.
 ---

@@ -183,7 +183,7 @@ section h2 {
 
 section.success {
     color: #fff;
-    background:#{{ site.color.secondary }};
+    background: #{{ site.color.secondary }};
 }
 
 @media(max-width:767px) {
@@ -511,8 +511,9 @@ ul.timeline > li:before {
 .event-title,
 .event-title:hover,
 .event-title:active {
-    font-size: 26px;
+    font-size: 28px;
     text-decoration: none;
+    /* text-transform: uppercase; */
     color: #{{ site.color.secondary }};
 
 }
@@ -520,12 +521,14 @@ ul.timeline > li:before {
 .event-date,
 .event-date:hover,
 .event-date:active {
-    font-size: 15px;
+    font-size: 14px;
     text-decoration: none;
+    /* text-transform: uppercase; */
     color: #{{ site.color.secondary }};
 }
 
 .event-description {
-    font-size: 15px;
+    font-size: 16px;
+    /* text-transform: uppercase; */
     color: #{{ site.color.secondary }};
 }

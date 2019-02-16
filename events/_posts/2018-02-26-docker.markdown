@@ -4,5 +4,5 @@ modal-id: 1
 project-date: 26 April 2019
 title: Docker101
 dir: null
-description: Intro to DockerContenedores
+description: Intro to Docker Contenedores
 ---
