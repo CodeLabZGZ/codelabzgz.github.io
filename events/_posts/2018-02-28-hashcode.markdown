@@ -3,6 +3,8 @@ layout: null
 modal-id: 2
 project-date: 28 Febrero 2019
 title: HashCode by Google
-dir: null
+dir: https://hashcodezgz.github.io/
+place: EINA, Betancourt, Sala Tomás Pollán
+time: 17:00-22:30
 description: HashCode es una competición de programación por equipos, organizado por Google, para estudiantes y profesionales alrededor del mundo.
 ---
