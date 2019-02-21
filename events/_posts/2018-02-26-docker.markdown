@@ -1,8 +1,0 @@
----
-layout: null
-modal-id: 1
-project-date: 26 Febrero 2019
-title: Docker101
-dir: null
-description: Introducción al uso de Contenedores Docker
----
