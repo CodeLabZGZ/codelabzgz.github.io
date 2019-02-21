@@ -4,7 +4,7 @@ modal-id: 2
 project-date: 26 Marzo 2019
 title: Taller infraestructura cloud WeTransfer
 dir: 
-place: A.0.01, Ada Byron, EINA
+place: EINA, Ada Byron, Aula 0.01
 time: 12:00-14:00
 description: Configuración de un infraestructura autoescalable y tolerante a fallos dimensionada para millones de peticiones en Amazon Web Services.
 ---

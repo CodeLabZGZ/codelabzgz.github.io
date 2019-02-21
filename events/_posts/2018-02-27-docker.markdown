@@ -4,7 +4,7 @@ modal-id: 1
 project-date: 26 Febrero 2019
 title: Docker 101
 dir: null
-place: EINA, Ada Byron, Aula 01
+place: EINA, Ada Byron, Aula 0.01
 time: 12:10-14:10
 description: Introducción al uso de la herramienta Docker a través de un taller interactivo. Docker es una herramienta que permite crear, desplegar y correr aplicaciones en contenedores, una tecnología que se está extendiendo rápidamente.
 ---
