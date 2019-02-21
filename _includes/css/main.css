@@ -72,7 +72,7 @@ hr.star-primary {
 }
 
 hr.star-primary:after {
-    color: #{{ site.color.secondary }};
+    color: #{{ site.color.secondary-dark }};
     background-color: #fff;
 }
 
@@ -514,7 +514,7 @@ ul.timeline > li:before {
     font-size: 28px;
     text-decoration: none;
     /* text-transform: uppercase; */
-    color: #{{ site.color.secondary }};
+    color: #{{ site.color.secondary-dark }};
 
 }
 
@@ -524,11 +524,11 @@ ul.timeline > li:before {
     font-size: 14px;
     text-decoration: none;
     /* text-transform: uppercase; */
-    color: #{{ site.color.secondary }};
+    color: #{{ site.color.secondary-dark }};
 }
 
 .event-description {
     font-size: 16px;
     /* text-transform: uppercase; */
-    color: #{{ site.color.secondary }};
+    color: #{{ site.color.secondary-dark }};
 }
