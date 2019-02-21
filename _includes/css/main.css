@@ -518,13 +518,27 @@ ul.timeline > li:before {
 
 }
 
-.event-date,
-.event-date:hover,
-.event-date:active {
+.event-title-url:hover {
+    color: #{{ site.color.secondary-light }};
+}
+
+.event-info {
+    margin: 0px 0px 10px 0px;
+}
+
+.event-detail,
+.event-detail:hover,
+.event-detail:active {
+    margin: 0 10px;
     font-size: 14px;
     text-decoration: none;
     /* text-transform: uppercase; */
     color: #{{ site.color.secondary-dark }};
+}
+
+/* this is for the first a in the div info (the date) */
+.event-info > a:first-child {
+    margin: 0px 10px 0px 0px;
 }
 
 .event-description {

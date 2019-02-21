@@ -12,11 +12,19 @@
                     {% for event in site.categories.events %}
                     <li>
                         {% if event.dir %}
-                        <strong><a class="event-title" href={{ event.dir }}>{{ event.title }}</a></strong>
+                        <strong><a class="event-title event-title-url" href={{ event.dir }}>{{ event.title }}</a></strong>
                         {% else %}
                         <strong><a class="event-title">{{ event.title }}</a></strong>
                         {% endif %}
-                        <p class="float-right event-date">{{ event.project-date }}</p>
+                        <div class="event-info">
+                                <a class="event-detail event-date">{{ event.project-date }}</a>
+                                {% if event.time %}
+                                <a class="event-detail event-time">{{ event.time }}</a>
+                                {% endif %}
+                                {% if event.place %}
+                                <a class="event-detail event-place">{{ event.place }}</a>
+                                {% endif %}
+                            </div>
                         <p class="event-description">{{ event.description }}</p>
                     </li>
                     {% endfor %}
