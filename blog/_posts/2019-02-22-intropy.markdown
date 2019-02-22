@@ -1,0 +1,13 @@
+---
+layout: null
+modal-id: 1
+date: 2019-02-15
+project-date: 22 Febrero 2019
+img: intropy.png
+alt: logo-codelab
+title: Intro to Python
+description: Taller de Introducción a Python, dividido en dos partes.<br/> En la primera parte,  Javier Armunia enseña las bases del lenguaje.<br/>Posteriormente, en la segunda parte vemos la resolución en python de un problema del HashCode de ejemplo, gracias a Jorge García.<br/>Todo el material utilizado en el taller se encuentra en <a href="https://github.com/CodeLabZGZ/intro-to-python">GitHub</a>
+by: alexx99gg
+rrss: https://github.com/alexx99gg
+category: Taller
+---
