@@ -16,13 +16,16 @@
                             <hr class="star-primary">
                             <img src="../img/blog/{{ post.img }}" class="img-responsive img-centered" alt="{{ post.alt }}">
                             {% if post.description %}
-                                <p>{{ post.description }}</p>
+                                <p class="text-justify">{{ post.description }}</p>
                             {% endif %}
                             <ul class="list-inline item-details">
-                                {% if post.client %}
-                                    <li>Client:
-                                        <strong><a href="">{{ post.client }}</a>
-                                        </strong>
+                                {% if post.by %}
+                                    <li>Por:
+                                        {% if post.rrss %}
+                                        <strong><a href={{ post.rrss }}>{{ post.by }}</a></strong>
+                                        {% else %}
+                                        <strong><a>{{ post.by }}</a></strong>
+                                        {% endif %}
                                     </li>
                                 {% endif %}
                                 {% if post.project-date %}
