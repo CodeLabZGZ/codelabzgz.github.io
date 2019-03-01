@@ -1,11 +1,11 @@
 ---
 layout: null
-modal-id: 1
+modal-id: 3
 date: 2019-02-28
 project-date: 28 Febrero 2019
 img: hashcode19-min.png
 alt: hashcode19
-title: Intro to Python
+title: HashCode 2019 en la EINA
 description: Concurso de programación organizado por Google en el que CodeLab y GDGZaragoza crearon un Hub en la Escuela de Ingeniería y Arquitectura. Se dieron cita <b>164 participantes</b> de <b>47 equipos</b> para resolver un reto propuesto por Google. El resultado ha sido asombroso, en el que el equipo <i>c2.py</i>, compuesto por Julia Guerrero y Sergio Herrero han logrado estar en el tercer puesto a nivel nacional, seguido muy de cerca por hasta 3 equipos del hub. En total, en los primeros 50 puestos a nivel nacional hay 4 equipos del Hub.
 by: lAngelP
 rrss: https://github.com/lAngelP
