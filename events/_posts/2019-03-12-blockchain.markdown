@@ -1,7 +1,7 @@
 ---
 layout: null
 modal-id: 4
-project-date: 26 Marzo 2019
+project-date: 30 Abril 2019
 title: Blockchain para principiantes
 dir:
 place: EINA, Ada Byron, Aula 0.01
