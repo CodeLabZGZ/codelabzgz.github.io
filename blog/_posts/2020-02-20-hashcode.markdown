@@ -1,0 +1,13 @@
+---
+layout: null
+modal-id: 5
+date: 2020-02-20
+project-date: 20 Febrero 2020
+img: hashcode20.jpg
+alt: hashcode20
+title: HashCode 2020 en la EINA
+description: Concurso de programación organizado por Google en el que CodeLab y GDGZaragoza crearon un Hub en la Escuela de Ingeniería y Arquitectura. Se dieron cita casi <b>160 participantes</b> de <b>49 equipos</b> para resolver un reto propuesto por Google. Este año Zaragoza bate el record de hubs alcanzando la cifra de <b>6</b>, 2 más que la anterior edición. El resultado ha impactado, en el que el equipo <i>Elknet</i> ha logrado estar en el primer puesto a nivel nacional durante las 3 primeras horas del evento. También lograron la 56º plaza a nivel mundial hasta que en la última hora otros equipos les alcanzaron.
+by: lAngelP
+rrss: https://github.com/lAngelP
+category: Evento
+---
