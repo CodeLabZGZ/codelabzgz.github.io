@@ -24,6 +24,10 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+env:
+  NEXT_PUBLIC_SITE_URL: https://codelabzgz.github.io
+  LOG_LEVEL: INFO
+
 jobs:
   # Build job
   build:
