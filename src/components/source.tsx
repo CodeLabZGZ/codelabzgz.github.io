@@ -2,7 +2,7 @@
 
 import { TbExternalLink } from "react-icons/tb";
 
-export function Src({text, link}) {
+export function Src({ text, link }: { text: string, link: string }) {
   return (
     <a
       href={link}

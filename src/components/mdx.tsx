@@ -78,20 +78,20 @@ export const article = function Article({
   date: string | Date
   children: React.ReactNode
 }) {
-  let heightRef = useRef<React.ElementRef<'div'>>(null)
-  let [heightAdjustment, setHeightAdjustment] = useState(0)
+  const heightRef = useRef<React.ElementRef<'div'>>(null)
+  const [heightAdjustment, setHeightAdjustment] = useState(0)
 
   useEffect(() => {
     if (!heightRef.current) {
       return
     }
 
-    let observer = new window.ResizeObserver(() => {
+    const observer = new window.ResizeObserver(() => {
       if (!heightRef.current) {
         return
       }
-      let { height } = heightRef.current.getBoundingClientRect()
-      let nextMultipleOf8 = 8 * Math.ceil(height / 8)
+      const { height } = heightRef.current.getBoundingClientRect()
+      const nextMultipleOf8 = 8 * Math.ceil(height / 8)
       setHeightAdjustment(nextMultipleOf8 - height)
     })
 

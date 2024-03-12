@@ -1,11 +1,11 @@
 import Image from 'next/image'
 import { useId } from 'react'
 
-export function Codelab(props: React.ComponentPropsWithoutRef<'svg'>) {
-  let id = useId()
+export function Codelab({ className }: { className?: string }) {
+  const id = useId()
 
   return (
-    <div className='flex items-center gap-4'>
+    <div className={`${className} flex items-center gap-4`}>
       <Image 
         key={id} 
         src="/logo.webp" 
@@ -21,7 +21,7 @@ export function Codelab(props: React.ComponentPropsWithoutRef<'svg'>) {
   )
 }
 
-export function Eina({ className }) {
+export function Eina({ className }: { className?: string }) {
   return (
     <svg className={`${className} h-auto`} version="1.0" width="729.000000pt" height="729.000000pt" viewBox="0 0 729.000000 729.000000">
       <g transform="translate(0.000000,729.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="none">
@@ -52,7 +52,7 @@ export function Dcrow({ className = 'w-full' }) {
   )
 }
 
-export function Twitch({ className }) {
+export function Twitch({ className }: { className?: string }) {
   return (
     <svg className={`${className} h-auto`} width="454.93066" height="280.76587" viewBox="0 0 454.93066 280.76587">
       <path

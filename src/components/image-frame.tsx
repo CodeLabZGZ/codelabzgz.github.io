@@ -1,10 +1,9 @@
 'use client'
 
-export function ImageFrame({
-  src,
-  alt,
-  className = '',
-}) {
+export function ImageFrame(
+  { src, alt, className }:
+  { src: string, alt: string, className: string }
+) {
   return (
     <div className="relative z-10 w-full h-auto mx-auto aspect-video">
       <div className="h-full opacity-100 isolate aspect-video rounded-2xl">

@@ -22,24 +22,6 @@
         "react"
     ],
     "rules": {
-        "indent": [
-            "error",
-            "2",
-            "space"
-        ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "quotes": [
-            "error",
-            "double"
-        ],
-        "semi": [
-            "error",
-            "never"
-        ],
-        "no-trailing-spaces": "error",
         "cypress/unsafe-to-chain-command": "off",
         "cypress/no-unnecessary-waiting": "off",
         "@next/next/no-img-element": "off"

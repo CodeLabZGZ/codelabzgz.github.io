@@ -9,6 +9,7 @@ import {
 
 import { Codelab } from '@/components/logos'
 import { IconLink } from '@/components/icon-link'
+import { type IconType } from 'react-icons'
 import Link from 'next/link'
 
 const buttons = [
@@ -27,12 +28,10 @@ const buttons = [
   }
 ]
 
-export function IntroCard({
-  href,
-  title,
-  description,
-  Icon,
-}) {
+export function IntroCard(
+  { href, title, description, Icon }:
+  { href: string, title: string, description: string, Icon: IconType }
+) {
   return (
     <a href={href} className='w-full ring-2 ring-white relative flex cursor-pointer rounded-lg border border-white p-4 shadow-sm focus:outline-none opacity-20 hover:opacity-100 duration-500 ease-in-out hover:scale-105'>
       <div className="flex flex-1">

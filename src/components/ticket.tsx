@@ -23,7 +23,7 @@ const BackgroundPattern = () => (
   </svg>
 )
 
-export function Ticket({ number, fecha, hora }) {
+export function Ticket({ fecha, hora }: { fecha: string, hora: string }) {
   return (
     <div className="relative z-10 w-full h-auto mx-auto aspect-video">
       <div className="h-full opacity-100 isolate aspect-video">
@@ -39,9 +39,9 @@ export function Ticket({ number, fecha, hora }) {
                 <div>
                   <span className="sr-only">Tickets</span>
                   <div className="relative">
-                    <Codelab className="h-auto w-[500px]" />
+                    <Codelab />
                     <div className="absolute inset-0 opacity-80 contrast-125 blur-2xl animate-pulse">
-                      <Codelab className="h-auto w-[500px]" />
+                      <Codelab />
                     </div>
                   </div>
                 </div>

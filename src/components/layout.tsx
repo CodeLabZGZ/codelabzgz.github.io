@@ -6,7 +6,7 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { useId } from 'react'
 
 function Timeline() {
-  let id = useId()
+  const id = useId()
 
   return (
     <div className="pointer-events-none absolute inset-0 z-50 overflow-hidden lg:right-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] lg:overflow-visible">
@@ -30,7 +30,7 @@ function Timeline() {
 }
 
 function Glow() {
-  let id = useId()
+  const id = useId()
 
   return (
     <div className="absolute inset-0 -z-10 overflow-hidden bg-gray-950 lg:right-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem]">
@@ -104,7 +104,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         date={'21-03-2024'}
         title="🔥 Hackathon 🔥"
         message={
-          <>Únete a nosotros el 21 de marzo para resolver retos de programación. <a href={'https://forms.gle/d1yUEwHoYQGc6heQA'} className='underline-offset-1 underline text-pink-500 brightness-125'>Registrate  →</a></>
+          <div>Únete a nosotros el 21 de marzo para resolver retos de programación. <a href={'https://forms.gle/d1yUEwHoYQGc6heQA'} className='underline-offset-1 underline text-pink-500 brightness-125'>Registrate  →</a></div>
         }
         dot
       />

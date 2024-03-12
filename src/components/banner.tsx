@@ -3,19 +3,17 @@
 import { HiXMark } from 'react-icons/hi2'
 import { useState } from 'react'
 
-export function Banner({
-  date,
-  title,
-  message,
-  dot
-}) {
+export function Banner(
+  { date, title, message, dot }:
+  { date: string, title: string, message: React.ReactNode, dot: boolean }
+) {
   const [show, setShow] = useState(true)
 
   const now = new Date().getTime()
   const [day, month, year] = date.split('-')
-  date = new Date(year, month-1, day).getTime()
+  const _date = new Date(Number(year), Number(month)-1, Number(day)).getTime()
   
-  if (now > date) return null
+  if (now > _date) return null
 
   return show && (
     <>
