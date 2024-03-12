@@ -15,7 +15,7 @@ const withMDX = nextMDX({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx'],
-  output: "standalone",
+  output: "export",
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
