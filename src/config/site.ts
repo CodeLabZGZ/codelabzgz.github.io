@@ -10,3 +10,8 @@ export const metadata: Metadata = {
     },
   },
 }
+
+export const author = {
+  name: "codelab",
+  email: "codelabzgz@unizar.es"
+}

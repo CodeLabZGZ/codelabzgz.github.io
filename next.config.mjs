@@ -16,11 +16,15 @@ const withMDX = nextMDX({
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx'],
   output: "export",
+  poweredByHeader: false,
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
     ignoreDuringBuilds: false,
   },
+  images: {
+    unoptimized: true
+  }
 }
 
 export default withMDX(nextConfig)
