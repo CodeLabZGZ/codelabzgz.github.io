@@ -20,11 +20,9 @@ const monaSans = localFont({
   weight: '200 900',
 })
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout(
+  { children }: { children: React.ReactNode}
+) {
   return (
     <html
       lang="en"
