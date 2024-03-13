@@ -1,0 +1,7 @@
+node_modules/
+build/
+out/
+dist/
+logs/
+src/content/**/*
+.next/
