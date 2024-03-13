@@ -104,7 +104,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         date={'21-03-2024'}
         title="🔥 Hackathon 🔥"
         message={
-          <div>Únete a nosotros el 21 de marzo para resolver retos de programación. <a href={'https://forms.gle/d1yUEwHoYQGc6heQA'} className='underline-offset-1 underline text-pink-500 brightness-125'>Registrate  →</a></div>
+          <>Únete a nosotros el 21 de marzo para resolver retos de programación. <a href={'https://forms.gle/d1yUEwHoYQGc6heQA'} className='underline-offset-1 underline text-pink-500 brightness-125'>Registrate  →</a></>
         }
         dot
       />
