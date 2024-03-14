@@ -1,18 +1,25 @@
 "use client"
 
-import {HiOutlinePlusCircle, HiOutlineUserPlus} from "react-icons/hi2"
+import { TbCirclePlus, TbUserPlus } from "react-icons/tb";
 
-import Button from "@/components/app/button"
+import { ButtonDialog } from "@/components/app/button"
+import { CreateTeam } from "@/components/app/dialogs/create-team";
+import { JoinTeam } from "./dialogs/join-team";
 import Navbar from "@/components/app/navbar"
 import Search from "@/components/app/search"
 import { navigation } from "@/config/app"
 import { usePathname } from "next/navigation"
+import { useState } from 'react'
 
 export default function AppLayout(
   { children }: { children: React.ReactNode}
 ) {
+  const [openJoinTeam, setOpenJoinTeam] = useState(false)
+  const [openCreateTeam, setOpenCreateTeam] = useState(false)
+
   const pathname = usePathname()
-  const showNavigation = pathname.split('/').filter(Boolean).length === 1
+  const links = navigation.flatMap(i => i.navigation.map(s => s.href))
+  const showNavigation = links.some(l => l === pathname)
 
   return (
     <div className="min-h-screen w-screen bg-gray-100 text-black overflow-hidden">
@@ -21,10 +28,10 @@ export default function AppLayout(
         {showNavigation && 
           <div className="flex items-center justify-between mb-10">
             <Search />
-            {pathname === navigation[1].href && 
+            {(pathname === "/teams/all" || pathname === "/teams/my-teams") && 
               <div className="flex items-center justify-between gap-x-2.5">
-                <Button Icon={HiOutlineUserPlus} text="join team"/>
-                <Button Icon={HiOutlinePlusCircle} text="create team"/>
+                <ButtonDialog Icon={TbUserPlus} text="join team" state={openJoinTeam} setState={setOpenJoinTeam} dialog={<JoinTeam closeFx={() => setOpenJoinTeam(false)}/>} />
+                <ButtonDialog Icon={TbCirclePlus} text="create team" state={openCreateTeam} setState={setOpenCreateTeam} dialog={<CreateTeam closeFx={() => setOpenCreateTeam(false)}/>}/>
               </div>
             }
           </div>

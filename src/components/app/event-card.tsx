@@ -7,7 +7,7 @@ export function EventCard({slug, banner, format, title, startDate, endDate}) {
   return (
     <Link 
       key={slug} 
-      href={`/events/${slug}`}
+      href={`/events/${slug}/overview`}
       className="flex flex-col overflow-hidden rounded-md shadow-lg"
     >
       <div className="flex-shrink-0">

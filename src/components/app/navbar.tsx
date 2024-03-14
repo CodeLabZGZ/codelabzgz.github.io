@@ -8,18 +8,13 @@ import {
 import { TbChevronDown, TbDoorExit, TbFlag3 } from "react-icons/tb";
 import { navigation, userNavigation } from "@/config/app"
 
-import Button from '@/components/app/button';
+import { ButtonDialog } from '@/components/app/button';
 import { Fragment } from 'react'
 import Link from 'next/link'
+import { useClerk } from "@clerk/clerk-react";
 import { usePathname } from 'next/navigation'
-import { useState } from "react"
-
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
+import { useRouter } from 'next/navigation'
+import { useUser } from "@clerk/nextjs";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -51,7 +46,9 @@ function NavItem({ href, title, description, Icon }) {
 
 export default function Navbar({ showNavigation }: { showNavigation: boolean }) {
   const pathname = usePathname()
-  const [active, setActive] = useState(0)
+  const { signOut } = useClerk();
+  const router = useRouter()
+  const { isLoaded, isSignedIn, user } = useUser();
 
   return (
     <Disclosure as="header" className="bg-white shadow">
@@ -94,96 +91,109 @@ export default function Navbar({ showNavigation }: { showNavigation: boolean }) 
                 </Disclosure.Button>
               </div>
               <div className="hidden lg:relative lg:z-10 lg:ml-4 lg:flex lg:items-center gap-x-2">
-                <Button
+                <ButtonDialog
                   Icon={TbFlag3}
                   text="post a challenge"
+                  dialog={<></>}
                 />
                 {/* Profile dropdown */}
-                <Menu as="div" className="relative inline-block text-left">
-                  <div>
-                    <Menu.Button className="inline-flex items-center w-full justify-center gap-x-2 rounded bg-white px-3 py-2 font-medium tracking-wide text-xs text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-500">
-                        <span className="text-xs font-medium leading-none text-white">HT</span>
-                      </span>
-                      Hec7orci7o
-                      <TbChevronDown className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
-                    </Menu.Button>
-                  </div>
+                {isLoaded && isSignedIn &&
+                  <Menu as="div" className="relative inline-block text-left">
+                    <div>
+                      <Menu.Button className="capitalize whitespace-nowrap inline-flex items-center w-full justify-center gap-x-2 rounded bg-white px-3 py-2 font-medium tracking-wide text-xs text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                        <img
+                          className="inline-block h-6 w-6 rounded-full"
+                          src={user.imageUrl}
+                          alt=""
+                        />
+                        {!user.imageUrl && 
+                          <span className="inline-block h-6 w-6 items-center justify-center rounded-full bg-gray-500">
+                            <span className="text-xs font-medium leading-none text-white uppercase">
+                              {user.fullName.split(" ").map(w => w[0])}
+                            </span>
+                          </span>
+                        }
+                        {user.username}
+                        <TbChevronDown className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+                      </Menu.Button>
+                    </div>
 
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items className="absolute right-0 z-10 mt-2 min-w-fit origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <div className="py-1">
-                        {userNavigation
-                        .slice(0,2)
-                        .map(({href, name, description, icon}) => (
-                          <NavItem
-                            key={name}
-                            href={href}
-                            title={name}
-                            description={description}
-                            Icon={icon}
-                          />
-                        ))}
-                      </div>
-                      <div className="py-1">
-                        {userNavigation
-                        .slice(2,5)
-                        .map(({href, name, description, icon}) => (
-                          <NavItem
-                            key={name}
-                            href={href}
-                            title={name}
-                            description={description}
-                            Icon={icon}
-                          />
-                        ))}
-                      </div>
-                      <div className="py-1">
-                        <Menu.Item>
-                          {({ active }) => (
-                            <button
-                              className={classNames(
-                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                'group flex items-center p-4 text-sm whitespace-nowrap w-full'
-                              )}
-                            >
-                              <div className="flex items-center gap-x-4">
-                                <TbDoorExit className="w-6 h-6"/>
-                                <div className="flex flex-col gap-y-1 tracking-wide">
-                                  <span className="capitalize font-semibold">Sign Out</span>
+                    <Transition
+                      as={Fragment}
+                      enter="transition ease-out duration-100"
+                      enterFrom="transform opacity-0 scale-95"
+                      enterTo="transform opacity-100 scale-100"
+                      leave="transition ease-in duration-75"
+                      leaveFrom="transform opacity-100 scale-100"
+                      leaveTo="transform opacity-0 scale-95"
+                    >
+                      <Menu.Items className="absolute right-0 z-10 mt-2 min-w-fit origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <div className="py-1">
+                          {userNavigation
+                          .slice(0,2)
+                          .map(({href, name, description, icon}) => (
+                            <NavItem
+                              key={name}
+                              href={href}
+                              title={name}
+                              description={description}
+                              Icon={icon}
+                            />
+                          ))}
+                        </div>
+                        <div className="py-1">
+                          {userNavigation
+                          .slice(2,5)
+                          .map(({href, name, description, icon}) => (
+                            <NavItem
+                              key={name}
+                              href={href}
+                              title={name}
+                              description={description}
+                              Icon={icon}
+                            />
+                          ))}
+                        </div>
+                        <div className="py-1">
+                          <Menu.Item>
+                            {({ active }) => (
+                              <button
+                                onClick={() => signOut(() => router.push("/"))}
+                                className={classNames(
+                                  active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                  'group flex items-center p-4 text-sm whitespace-nowrap w-full'
+                                )}
+                              >
+                                <div className="flex items-center gap-x-4">
+                                  <TbDoorExit className="w-6 h-6"/>
+                                  <div className="flex flex-col gap-y-1 tracking-wide">
+                                    <span className="capitalize font-semibold">Sign Out</span>
+                                  </div>
                                 </div>
-                              </div>
-                            </button>
-                          )}
-                        </Menu.Item>
-                      </div>
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
+                              </button>
+                            )}
+                          </Menu.Item>
+                        </div>
+                      </Menu.Items>
+                    </Transition>
+                  </Menu>
+                }
               </div>
             </div>
             {showNavigation &&
-              <nav className="hidden mx-auto max-w-7xl lg:flex lg:space-x-8" aria-label="Global">
-                {navigation[navigation.findIndex(item => item.href === pathname)].navigation.map((item, index) => (
-                  <button
+              <nav className="hidden mx-auto max-w-7xl lg:flex" aria-label="Global">
+                {navigation[navigation.findIndex(i => pathname.includes(i.name.toLowerCase()))].navigation.map((item) => (
+                  <Link
                     key={item.name}
-                    onClick={() => setActive(index)}
+                    href={item.href}
                     className={classNames(
-                      index === active ? 'border-indigo-500 text-indigo-700' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                      'inline-flex items-center border-b-2 px-1 pt-1 pb-2.5 text-sm font-medium capitalize'
+                      pathname === item.href ? 'border-indigo-500 text-indigo-700' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+                      'inline-flex items-center border-b-2 px-1 pt-1 pb-2.5 text-sm font-medium capitalize px-4'
                       )}
-                      aria-current={index === active ? 'page' : undefined}
+                      aria-current={pathname === item.href ? 'page' : undefined}
                   >
                     {item.name}
-                  </button>
+                  </Link>
                 ))}
               </nav>
             }
@@ -209,11 +219,11 @@ export default function Navbar({ showNavigation }: { showNavigation: boolean }) 
             <div className="border-t border-gray-200 pb-3 pt-4">
               <div className="flex items-center px-4">
                 <div className="flex-shrink-0">
-                  <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
+                  <img className="h-10 w-10 rounded-full" src={"user.imageUrl"} alt="" />
                 </div>
                 <div className="ml-3">
-                  <div className="text-base font-medium text-gray-800">{user.name}</div>
-                  <div className="text-sm font-medium text-gray-500">{user.email}</div>
+                  <div className="text-base font-medium text-gray-800">{"user.name"}</div>
+                  <div className="text-sm font-medium text-gray-500">{"user.email"}</div>
                 </div>
               </div>
               <div className="mt-3 space-y-1 px-2">

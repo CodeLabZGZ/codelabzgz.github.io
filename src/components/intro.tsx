@@ -85,7 +85,6 @@ export function Intro() {
           Icon={FaRegBuilding}
         />
       </div>
-      
     </>
   )
 }
