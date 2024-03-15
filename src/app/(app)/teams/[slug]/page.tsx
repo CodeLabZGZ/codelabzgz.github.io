@@ -6,9 +6,9 @@ import TeamSettings from "./team-settings"
 export default function Page() {
   return (
     <div>
-      {true && <TeamDetails/>}
+      {false && <TeamDetails/>}
       {false && <TeamPlayers/>}
-      {false && <TeamSettings/>}
+      {true && <TeamSettings/>}
       {false && <JoinRequest/>}
     </div>
   )
