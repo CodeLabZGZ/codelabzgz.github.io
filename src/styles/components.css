@@ -1,2 +1,20 @@
 @import './typography.css';
 @tailwind components;
+
+.potion-content::after {
+  content: "";
+  position: absolute;
+  border-radius: .5em .5em 5.563em 5.563em;
+  width: 270px;
+  height: 250px;
+  bottom: -130px;
+  left: -30px;
+  background-color: #36D8C5;
+  border-radius: 40%;
+  animation: drift 3s infinite cubic-bezier(0.5, 0.7, 0.7, 0.5); /* Cambia la duración según tus necesidades */
+}
+
+@keyframes drift {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
