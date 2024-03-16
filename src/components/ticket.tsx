@@ -8,7 +8,7 @@ import { PyramidPattern } from '@/components/patterns'
 
 export function Ticket(
   { number, date, options, brands }: 
-  { number?: number, date: string, options: Intl.DateTimeFormat, brands: React.ReactNode[] }
+  { number?: number, date: string, options: Intl.DateTimeFormatOptions, brands: React.ReactNode[] }
 ) {
 
   const dateTime = new Date(date)

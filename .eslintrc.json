@@ -21,7 +21,6 @@
         "@typescript-eslint",
         "react"
     ],
-    "ignorePatterns": ["**/*/page.mdx"],
     "rules": {
         "cypress/unsafe-to-chain-command": "off",
         "cypress/no-unnecessary-waiting": "off",
