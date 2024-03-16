@@ -7,8 +7,8 @@ export default function Page() {
   return (
     <div>
       {false && <TeamDetails/>}
-      {false && <TeamPlayers/>}
-      {true && <TeamSettings/>}
+      {true && <TeamPlayers/>}
+      {false && <TeamSettings/>}
       {false && <JoinRequest/>}
     </div>
   )

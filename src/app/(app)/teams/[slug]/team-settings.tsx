@@ -1,6 +1,7 @@
 "use client"
 
 import { Switch } from '@headlessui/react'
+import { TbUserCircle } from 'react-icons/tb'
 import { useState } from 'react'
 
 function classNames(...classes) {
@@ -8,7 +9,10 @@ function classNames(...classes) {
 }
 
 export default function Page() {
-  const [enabled, setEnabled] = useState(false)
+  const [enabledW, setEnabledWebsite] = useState()
+  const [enabledT, setEnabledTwitter] = useState()
+  const [enabledD, setEnabledDiscord] = useState()
+  const [enabledE, setEnabledEmail] = useState()
   
   return (
     <div>
@@ -16,6 +20,22 @@ export default function Page() {
         onSubmit={() => {}}
         className="space-y-6 max-w-prose mx-auto"
       >
+        <div className="col-span-full">
+          <label htmlFor="photo" className="block text-sm font-medium leading-6 text-gray-900">
+            Photo
+          </label>
+          <div className="mt-2 flex items-center gap-x-3">
+            <div className='rounded-full flex items-center justify-center bg-gray-300'>
+              <TbUserCircle className="w-16 h-16 stroke-1 text-white" aria-hidden="true" />
+            </div>
+            <button
+              type="button"
+              className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+            >
+              Change
+            </button>
+          </div>
+        </div>
         <div>
           <label htmlFor="teamName" className="block text-sm font-medium leading-6 text-gray-900">
             Team name
@@ -65,17 +85,17 @@ export default function Page() {
             </label>
             <Switch.Group as="div" className="flex items-center">
               <Switch
-                checked={enabled}
-                onChange={setEnabled}
+                checked={enabledW}
+                onChange={setEnabledWebsite}
                 className={classNames(
-                  enabled ? 'bg-indigo-600' : 'bg-gray-200',
+                  enabledW ? 'bg-indigo-600' : 'bg-gray-200',
                   'relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2'
                 )}
               >
                 <span
                   aria-hidden="true"
                   className={classNames(
-                    enabled ? 'translate-x-5' : 'translate-x-0',
+                    enabledW ? 'translate-x-5' : 'translate-x-0',
                     'pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
                   )}
                 />
@@ -105,17 +125,17 @@ export default function Page() {
             </label>
             <Switch.Group as="div" className="flex items-center">
               <Switch
-                checked={enabled}
-                onChange={setEnabled}
+                checked={enabledT}
+                onChange={setEnabledTwitter}
                 className={classNames(
-                  enabled ? 'bg-indigo-600' : 'bg-gray-200',
+                  enabledT ? 'bg-indigo-600' : 'bg-gray-200',
                   'relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2'
                 )}
               >
                 <span
                   aria-hidden="true"
                   className={classNames(
-                    enabled ? 'translate-x-5' : 'translate-x-0',
+                    enabledT ? 'translate-x-5' : 'translate-x-0',
                     'pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
                   )}
                 />
@@ -145,17 +165,17 @@ export default function Page() {
             </label>
             <Switch.Group as="div" className="flex items-center">
               <Switch
-                checked={enabled}
-                onChange={setEnabled}
+                checked={enabledD}
+                onChange={setEnabledDiscord}
                 className={classNames(
-                  enabled ? 'bg-indigo-600' : 'bg-gray-200',
+                  enabledD ? 'bg-indigo-600' : 'bg-gray-200',
                   'relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2'
                 )}
               >
                 <span
                   aria-hidden="true"
                   className={classNames(
-                    enabled ? 'translate-x-5' : 'translate-x-0',
+                    enabledD ? 'translate-x-5' : 'translate-x-0',
                     'pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
                   )}
                 />
@@ -185,17 +205,17 @@ export default function Page() {
             </label>
             <Switch.Group as="div" className="flex items-center">
               <Switch
-                checked={enabled}
-                onChange={setEnabled}
+                checked={enabledE}
+                onChange={setEnabledEmail}
                 className={classNames(
-                  enabled ? 'bg-indigo-600' : 'bg-gray-200',
+                  enabledE ? 'bg-indigo-600' : 'bg-gray-200',
                   'relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2'
                 )}
               >
                 <span
                   aria-hidden="true"
                   className={classNames(
-                    enabled ? 'translate-x-5' : 'translate-x-0',
+                    enabledE ? 'translate-x-5' : 'translate-x-0',
                     'pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
                   )}
                 />
