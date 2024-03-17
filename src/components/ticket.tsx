@@ -18,7 +18,7 @@ export function Ticket(
       <div className="h-full opacity-100 isolate aspect-video rounded-2xl">
         <div className="h-full sm:px-12 rounded-2xl">
           <Atropos id="ticket" className="block w-full h-auto mx-auto aspect-video rounded-2xl">
-            <div className="block h-full overflow-hidden border-2 border-white opacity-100 rounded-2xl" >
+            <div className="block h-full overflow-hidden border-2 border-gray-400 dark:border-white opacity-100 rounded-2xl">
               <div className="relative flex flex-col items-center justify-center h-full overflow-hidden">
                 <div className="absolute inset-0 flex items-start justify-center -z-50">
                   <div className="h-full w-full [mask-image:linear-gradient(black_10%,transparent)]">
@@ -35,7 +35,7 @@ export function Ticket(
                   </div>
                 </div>
                 <div className="relative mt-4 text-center font-display font-semibold uppercase tracking-[0.2em] z-50">
-                  <div className="absolute inset-0 shadow-inner -z-10 "/>
+                  <div className="absolute inset-0 -z-10 "/>
                   <h1 className="sr-only">Codelab</h1>
                   <time
                     dateTime={date}

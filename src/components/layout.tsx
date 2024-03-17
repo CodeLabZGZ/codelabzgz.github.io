@@ -1,6 +1,7 @@
 import { Intro, IntroFooter } from '@/components/intro'
 
 import { Banner } from '@/components/banner'
+import Link from 'next/link'
 import { StarField } from '@/components/star-field'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { useId } from 'react'
@@ -98,7 +99,14 @@ function FixedSidebar({
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <ThemeToggle />
+      <div className='absolute top-4 z-50 w-full flex items-center justify-between gap-x-4 px-6'>
+        <ThemeToggle />
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+          <Link href="/login" className="text-sm font-semibold leading-6 dark:text-white text-gray-900">
+            Log in <span aria-hidden="true">&rarr;</span>
+          </Link>
+        </div>
+      </div>
       <FixedSidebar main={<Intro />} footer={<IntroFooter />} />
       <Banner
         date={'21-03-2024'}
