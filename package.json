@@ -19,7 +19,6 @@
   },
   "browserslist": "defaults, not ie <= 11",
   "dependencies": {
-    "@clerk/nextjs": "^4.29.9",
     "@headlessui/react": "^1.7.18",
     "@mdx-js/loader": "^3.0.0",
     "@mdx-js/react": "^3.0.0",

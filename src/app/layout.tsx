@@ -1,6 +1,5 @@
 import '@/styles/tailwind.css'
 
-import { ClerkProvider } from '@clerk/nextjs'
 import { Inter } from 'next/font/google'
 import { Providers } from '@/app/providers'
 import clsx from 'clsx'
@@ -30,9 +29,7 @@ export default function RootLayout(
       className={clsx('h-full antialiased', inter.variable, monaSans.variable)}
     >
       <body className="flex min-h-full flex-col bg-white dark:bg-gray-950">
-        <ClerkProvider>
-          <Providers>{children}</Providers>
-        </ClerkProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )
