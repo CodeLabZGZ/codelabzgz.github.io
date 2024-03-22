@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 
-import { FormattedDate } from "@/components/formatted-date"
+import { FormattedDate } from "@/components/landing/formatted-date"
 import Image from "next/image"
 import Link from "next/link"
 import clsx from "clsx"

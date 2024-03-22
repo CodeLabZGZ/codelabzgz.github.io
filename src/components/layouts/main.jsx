@@ -1,8 +1,9 @@
-import { Intro, IntroFooter } from "@/components/intro"
+import { Intro, IntroFooter } from "@/components/landing/intro"
 
-import { Banner } from "@/components/banner"
-import { StarField } from "@/components/star-field"
-import { ThemeToggle } from "@/components/theme-toggle"
+import { Banner } from "@/components/landing/banner"
+import Link from "next/link"
+import { StarField } from "@/components/landing/star-field"
+import { ThemeToggle } from "@/components/landing/theme-toggle"
 import { useId } from "react"
 
 function Timeline () {
@@ -92,7 +93,12 @@ function FixedSidebar ({ main, footer }) {
 export function Layout ({ children }) {
   return (
     <div className="bg-white dark:bg-gray-950">
-      <ThemeToggle />
+      <div className="fixed top-4 z-50 w-full flex items-center justify-between px-6 lg:px-8">
+        <ThemeToggle />
+        <Link href="/auth/login" className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
+          Log in <span aria-hidden="true">&rarr;</span>
+        </Link>
+      </div>
       <FixedSidebar main={<Intro />} footer={<IntroFooter />} />
       <Banner
         date={"21-03-2024"}

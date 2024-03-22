@@ -8,7 +8,7 @@ import {
 } from "react-icons/fa6"
 
 import { Codelab } from "@/components/logos"
-import { IconLink } from "@/components/icon-link"
+import { IconLink } from "@/components/landing/icon-link"
 import Link from "next/link"
 
 const buttons = [

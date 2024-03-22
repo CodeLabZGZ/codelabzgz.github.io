@@ -1,5 +1,5 @@
-import { IconLink } from "@/components/icon-link"
-import { StarField } from "@/components/star-field"
+import { IconLink } from "@/components/landing/icon-link"
+import { StarField } from "@/components/landing/star-field"
 
 export default function NotFound () {
   return (

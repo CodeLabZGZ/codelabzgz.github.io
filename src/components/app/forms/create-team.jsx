@@ -59,13 +59,13 @@ export function CreateTeam () {
         onInteractOutside={(e) => e.preventDefault()}
       >
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>Crea tu equipo</DialogTitle>
           <DialogDescription>
-          Make changes to your profile here. Click save when you&apos;re done.
+            Comienza con la creación de tu equipo y haz que este comience a ganar reputación.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3.5">
             <FormField
               control={form.control}
               name="name"
@@ -73,10 +73,10 @@ export function CreateTeam () {
                 <FormItem>
                   <FormLabel>Nombre del equipo</FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input placeholder="Monkeys 51" {...field} />
                   </FormControl>
                   <FormDescription>
-                    This is your public display name.
+                    Este será el nombre oficial de tu equipo.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -89,10 +89,10 @@ export function CreateTeam () {
                 <FormItem>
                   <FormLabel>Apodo</FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input placeholder="Bananas" {...field} />
                   </FormControl>
                   <FormDescription>
-                    This is your public display name.
+                    Nombre por el que tu equipo se hará conocido.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -105,17 +105,17 @@ export function CreateTeam () {
                 <FormItem>
                   <FormLabel>Apodo</FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input placeholder="bananas" {...field} />
                   </FormControl>
                   <FormDescription>
-                    This is your public display name.
+                    Enlace personalizado para acceder a tu equipo.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <DialogFooter>
-              <Button type="submit">Save changes</Button>
+              <Button type="submit" className="mt-3.5">Save changes</Button>
             </DialogFooter>
           </form>
         </Form>

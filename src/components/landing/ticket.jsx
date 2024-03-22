@@ -4,7 +4,7 @@ import "atropos/css"
 
 import Atropos from "atropos/react"
 import { Codelab } from "@/components/logos"
-import { PyramidPattern } from "@/components/patterns"
+import { PyramidPattern } from "@/components/landing/patterns"
 
 export function Ticket ({ number, date, options, brands }) {
   const dateTime = new Date(date)
