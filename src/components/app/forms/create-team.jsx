@@ -100,7 +100,7 @@ export function CreateTeam () {
               name="slug"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Apodo</FormLabel>
+                  <FormLabel>Slug</FormLabel>
                   <FormControl>
                     <Input placeholder="bananas" {...field} />
                   </FormControl>
