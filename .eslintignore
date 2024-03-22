@@ -1,8 +1,0 @@
-node_modules/
-build/
-out/
-dist/
-logs/
-src/app/page.mdx
-src/content/**/*
-.next/
