@@ -49,15 +49,6 @@ import { useState } from "react"
 
 const groups = [
   {
-    label: "Personal Account",
-    teams: [
-      {
-        label: "Alicia Koch",
-        value: "personal"
-      }
-    ]
-  },
-  {
     label: "Teams",
     teams: [
       {
