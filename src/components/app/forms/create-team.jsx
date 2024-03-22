@@ -39,10 +39,7 @@ const formSchema = z.object({
 
 export function CreateTeam () {
   const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: ""
-    }
+    resolver: zodResolver(formSchema)
   })
 
   function onSubmit (values) {
