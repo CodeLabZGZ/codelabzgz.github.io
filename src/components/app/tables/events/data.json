@@ -1,0 +1,52 @@
+[
+  {
+    "id": "EV-0001",
+    "title": "You can't compress the program",
+    "format": "hackathon",
+    "type": "public",
+    "visitors": 50,
+    "location": "Remoto",
+    "startDate": "2024-03-23T12:00:00.000Z",
+    "endDate": "2024-03-23T12:00:00.000Z"
+  },
+  {
+    "id": "EV-0002",
+    "title": "Try to calculate the EXE feed, maybe it ",
+    "format": "ideathon",
+    "type": "private",
+    "visitors": 75,
+    "location": "EINA",
+    "startDate": "2024-03-23T12:00:00.000Z",
+    "endDate": "2024-03-23T12:00:00.000Z"
+  },
+  {
+    "id": "EV-0003",
+    "title": "We need to bypass the neural TCP card!",
+    "format": "ideathon",
+    "type": "public",
+    "visitors": 12,
+    "location": "Hibrido",
+    "startDate": "2024-03-23T12:00:00.000Z",
+    "endDate": "2025-03-23T12:00:00.000Z"
+  },
+  {
+    "id": "EV-0004",
+    "title": "The SAS interface is down, bypass ",
+    "format": "hackathon",
+    "type": "private",
+    "visitors": 39,
+    "location": "Remoto",
+    "startDate": "2024-03-23T12:00:00.000Z",
+    "endDate": "2024-03-23T12:00:00.000Z"
+  },
+  {
+    "id": "EV-0005",
+    "title": "I'll parse the wireless SSL protocol",
+    "format": "hackathon",
+    "type": "public",
+    "visitors": 72,
+    "location": "EINA",
+    "startDate": "2024-03-23T12:00:00.000Z",
+    "endDate": "2024-03-23T12:00:00.000Z"
+  }
+]
