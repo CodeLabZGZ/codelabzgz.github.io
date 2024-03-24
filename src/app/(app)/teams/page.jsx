@@ -27,7 +27,7 @@ export default function Page ({ children }) {
             <All columns={columns} />
           </TabsContent>
           <TabsContent value="my-teams" className="space-y-4">
-            <MyTeams />
+            <MyTeams columns={columns} />
           </TabsContent>
         </main>
       </Tabs>
