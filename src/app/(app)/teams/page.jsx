@@ -8,6 +8,7 @@ import {
 import All from "./all"
 import { CreateTeam } from "@/components/app/forms/create-team"
 import MyTeams from "./my-teams"
+import { columns } from "@/components/app/tables/teams/columns"
 
 export default function Page ({ children }) {
   return (
@@ -23,7 +24,7 @@ export default function Page ({ children }) {
         </TabsList>
         <main>
           <TabsContent value="all" className="space-y-4">
-            <All/>
+            <All columns={columns} />
           </TabsContent>
           <TabsContent value="my-teams" className="space-y-4">
             <MyTeams />
