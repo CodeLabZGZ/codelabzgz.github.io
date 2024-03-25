@@ -18,6 +18,7 @@ import { TbDoorExit, TbHelpSquare, TbUser, TbUsers } from "react-icons/tb"
 import { signOut, useSession } from "next-auth/react"
 
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import { Skeleton } from "@/components/ui/skeleton"
 
 export function UserNav () {
@@ -54,17 +55,23 @@ export function UserNav () {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem className="flex items-center gap-x-2.5 cursor-pointer">
-            <TbUser className="w-4 h-4"/>
-            My Profile
+          <DropdownMenuItem>
+            <Link href="/profile" className="w-full flex items-center gap-x-2.5">
+              <TbUser className="w-4 h-4"/>
+              My Profile
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="flex items-center gap-x-2.5 cursor-pointer">
-            <TbUsers className="w-4 h-4"/>
-            My Teams
+          <DropdownMenuItem>
+            <Link href="/teams" className="w-full flex items-center gap-x-2.5">
+              <TbUsers className="w-4 h-4"/>
+              My Teams
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="flex items-center gap-x-2.5 cursor-pointer">
-            <TbHelpSquare className="w-4 h-4"/>
-            Help
+          <DropdownMenuItem>
+            <a href="https://discord.gg/QHe9YYDtGf" className="w-full flex items-center gap-x-2.5">
+              <TbHelpSquare className="w-4 h-4"/>
+              Help
+            </a>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
