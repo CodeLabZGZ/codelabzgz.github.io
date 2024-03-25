@@ -2,6 +2,7 @@ import "@/styles/globals.css"
 
 import { Inter } from "next/font/google"
 import { Providers } from "@/app/providers"
+import { Toaster } from "@/components/ui/sonner"
 import clsx from "clsx"
 import localFont from "next/font/local"
 
@@ -38,6 +39,7 @@ export default function RootLayout ({ children }) {
     >
       <body className="flex min-h-full flex-col">
         <Providers>{children}</Providers>
+        <Toaster />
       </body>
     </html>
   )

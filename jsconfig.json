@@ -3,7 +3,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "auth": ["./src/auth.js"],
-      "db": ["./db/index.js"]
+      "db": ["./db/index.js"],
+      "db/*": ["./db/*"]
     }
   }
 }

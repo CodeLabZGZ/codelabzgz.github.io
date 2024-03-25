@@ -21,7 +21,10 @@ import {
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { createTeam } from "@/actions/create-team"
+import { toast } from "sonner"
 import { useForm } from "react-hook-form"
+import { useState } from "react"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
@@ -38,16 +41,24 @@ const formSchema = z.object({
 })
 
 export function CreateTeam () {
+  const [open, setOpen] = useState(false)
+
   const form = useForm({
     resolver: zodResolver(formSchema)
   })
 
-  function onSubmit (values) {
-    console.log(values)
+  async function onSubmit (values) {
+    const { name, motto, slug } = values
+    toast.promise(createTeam({ name, motto, slug }), {
+      loading: "Estamos creando tu equipo...",
+      success: ({ name, slug }) => <>Tu equipo <a href={`/teams/${slug}`} target="_black" referrerPolicy="no-referrer"><strong>{name}</strong></a> ha sido creado.</>,
+      error: (err) => err.message
+    })
+    setOpen(false)
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">Crear equipo</Button>
       </DialogTrigger>
@@ -62,7 +73,7 @@ export function CreateTeam () {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3.5">
+          <form action={form.handleSubmit(onSubmit)} className="space-y-3.5">
             <FormField
               control={form.control}
               name="name"

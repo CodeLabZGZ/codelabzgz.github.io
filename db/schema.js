@@ -58,7 +58,7 @@ export const verificationTokens = sqliteTable(
 )
 
 export const events = sqliteTable("events", {
-  id: text("id").primaryKey(),
+  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
   title: text("title").notNull(),
   banner: text("banner"),
   visibility: text("visibility", { enum: ["public", "private"] }).notNull(),
@@ -71,7 +71,7 @@ export const events = sqliteTable("events", {
 })
 
 export const teams = sqliteTable("teams", {
-  id: text("id").primaryKey(),
+  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
   logo: text("logo"),
   name: text("name").notNull(),
   motto: text("motto").notNull(),
