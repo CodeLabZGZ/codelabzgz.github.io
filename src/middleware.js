@@ -1,8 +1,6 @@
-import { auth } from "auth"
-
-export default auth(req => {
-  console.log("ROUTE: ", req.nextUrl.pathname)
-})
+import NextAuth from "next-auth"
+import authConfig from "./auth.config"
+export const { auth: middleware } = NextAuth(authConfig)
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"]

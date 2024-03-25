@@ -10,13 +10,19 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx ."
+    "lint": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx .",
+    "db:generate": "drizzle-kit generate:sqlite",
+    "db:introspect": "drizzle-kit introspect:sqlite",
+    "db:push": "drizzle-kit push:sqlite",
+    "db:studio": "drizzle-kit studio"
+
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx,mdx}": "npm run lint"
   },
   "browserslist": "defaults, not ie <= 11",
   "dependencies": {
+    "@auth/drizzle-adapter": "^0.8.0",
     "@hookform/resolvers": "^3.3.4",
     "@mdx-js/loader": "^3.0.0",
     "@mdx-js/react": "^3.0.0",
@@ -36,10 +42,12 @@
     "@tanstack/react-table": "^8.15.0",
     "atropos": "^2.0.2",
     "autoprefixer": "^10.4.16",
+    "better-sqlite3": "^9.4.3",
     "cheerio": "^1.0.0-rc.12",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cmdk": "^1.0.0",
+    "drizzle-orm": "^0.30.4",
     "feed": "^4.2.2",
     "mdast-util-to-string": "^4.0.0",
     "mdx-annotations": "^0.1.4",

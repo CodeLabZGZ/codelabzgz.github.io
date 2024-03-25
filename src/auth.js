@@ -1,20 +1,13 @@
-import Discord from "next-auth/providers/discord"
-import GitHub from "next-auth/providers/github"
+import { DrizzleAdapter } from "@auth/drizzle-adapter"
 import NextAuth from "next-auth"
+import authConfig from "./auth.config"
+import db from "db"
 
 export const {
   handlers: { GET, POST },
-  signIn, signOut,
   auth
 } = NextAuth({
-  providers: [
-    Discord,
-    GitHub
-  ],
-  basePath: "/api/auth",
-  pages: {
-    error: "/auth/login",
-    signIn: "/auth/login",
-    signOut: "/"
-  }
+  adapter: DrizzleAdapter(db),
+  session: { strategy: "jwt" },
+  ...authConfig
 })
