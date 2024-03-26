@@ -4,14 +4,20 @@ import {
   TabsList,
   TabsTrigger
 } from "@/components/ui/tabs"
+import { events, participations } from "db/schema"
 
 import Joined from "./joined"
 import OnGoing from "./ongoing"
 import Past from "./past"
 import UpGoing from "./upgoing"
 import { columns } from "@/components/app/tables/events/columns"
+import { db } from "db"
+import { eq } from "drizzle-orm"
 
-export default function Page () {
+export default async function Page () {
+  const records = await db.select().from(events).leftJoin(participations, eq(events.id, participations.eventId))
+  console.log(records)
+
   return (
     <>
       <div className="flex items-center justify-between space-y-2">
@@ -26,16 +32,16 @@ export default function Page () {
         </TabsList>
         <main>
           <TabsContent value="ongoing" className="space-y-4">
-            <OnGoing columns={columns} />
+            <OnGoing columns={columns} values={records} />
           </TabsContent>
           <TabsContent value="upgoing" className="space-y-4">
-            <UpGoing columns={columns} />
+            <UpGoing columns={columns} values={records} />
           </TabsContent>
           <TabsContent value="joined" className="space-y-4">
-            <Joined columns={columns} />
+            <Joined columns={columns} values={records} />
           </TabsContent>
           <TabsContent value="past" className="space-y-4">
-            <Past columns={columns} />
+            <Past columns={columns} values={records} />
           </TabsContent>
         </main>
       </Tabs>
