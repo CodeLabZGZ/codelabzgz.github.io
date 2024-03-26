@@ -2,7 +2,7 @@ import { integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core"
 import { relations, sql } from "drizzle-orm"
 
 export const users = sqliteTable("user", {
-  id: text("id").notNull().primaryKey(),
+  id: text("id").primaryKey(),
   image: text("image"),
   name: text("name"),
   username: text("username"),
@@ -37,7 +37,7 @@ export const accounts = sqliteTable(
 )
 
 export const sessions = sqliteTable("session", {
-  sessionToken: text("sessionToken").notNull().primaryKey(),
+  sessionToken: text("sessionToken").primaryKey(),
   userId: text("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
@@ -88,8 +88,8 @@ export const challenges = sqliteTable("challenges", {
 
 // Represents to which teams each user belongs
 export const members = sqliteTable("members", {
-  userId: text("userId").notNull().references(() => users.id),
-  team: text("team").notNull().references(() => teams.name),
+  userId: text("userId").references(() => users.id),
+  team: text("team").references(() => teams.name),
   role: text("role", { enum: ["admin", "member"] }).notNull()
 }, (m) => ({
   compoundKey: primaryKey({
@@ -100,8 +100,8 @@ export const members = sqliteTable("members", {
 
 // Represents the participation of users in the different events with a given team.
 export const participations = sqliteTable("participations", {
-  userId: text("userId").notNull(),
-  eventId: integer("id", { mode: "number" }).notNull(),
+  userId: text("userId"),
+  eventId: integer("eventId", { mode: "number" }),
   team: text("team")
 }, (p) => ({
   compoundKey: primaryKey({
