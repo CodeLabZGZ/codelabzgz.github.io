@@ -4,19 +4,45 @@ import {
   TabsList,
   TabsTrigger
 } from "@/components/ui/tabs"
+import { count, eq } from "drizzle-orm"
 import { events, participations } from "db/schema"
 
 import Joined from "./joined"
 import OnGoing from "./ongoing"
 import Past from "./past"
 import UpGoing from "./upgoing"
+import { auth } from "auth"
 import { columns } from "@/components/app/tables/events/columns"
 import { db } from "db"
-import { eq } from "drizzle-orm"
+
+const fechaActual = new Date()
 
 export default async function Page () {
-  const records = await db.select().from(events).leftJoin(participations, eq(events.id, participations.eventId))
-  console.log(records)
+  const { user } = await auth()
+
+  const infoEvents = await db
+    .select({
+      events,
+      people: count(participations.userId)
+    })
+    .from(events)
+    .leftJoin(participations, eq(participations.eventId, events.id))
+    .groupBy(events.id)
+
+  const userActivity = await db
+    .select()
+    .from(participations)
+    .where(eq(participations.userId, user.id))
+
+  const records = infoEvents.map(({ events, people }) => {
+    const userActivityRecord = userActivity.find(activity => activity.eventId === events.id)
+    return {
+      ...events,
+      user: userActivityRecord ? userActivityRecord.userId : null,
+      team: userActivityRecord ? userActivityRecord.team : null,
+      people
+    }
+  })
 
   return (
     <>
@@ -27,21 +53,21 @@ export default async function Page () {
         <TabsList>
           <TabsTrigger value="ongoing">En curso</TabsTrigger>
           <TabsTrigger value="upgoing">Programados</TabsTrigger>
-          <TabsTrigger value="joined">Participando</TabsTrigger>
+          <TabsTrigger value="joined">Participado</TabsTrigger>
           <TabsTrigger value="past">Pasados</TabsTrigger>
         </TabsList>
         <main>
           <TabsContent value="ongoing" className="space-y-4">
-            <OnGoing columns={columns} values={records} />
+            <OnGoing columns={columns} values={records.filter(e => new Date(e.start_date) <= fechaActual && fechaActual <= new Date(e.end_date))} />
           </TabsContent>
           <TabsContent value="upgoing" className="space-y-4">
-            <UpGoing columns={columns} values={records} />
+            <UpGoing columns={columns} values={records.filter(e => new Date(e.start_date) > fechaActual)} />
           </TabsContent>
           <TabsContent value="joined" className="space-y-4">
-            <Joined columns={columns} values={records} />
+            <Joined columns={columns} values={records.filter(e => e.user)} />
           </TabsContent>
           <TabsContent value="past" className="space-y-4">
-            <Past columns={columns} values={records} />
+            <Past columns={columns} values={records.filter(e => new Date(e.end_date) < fechaActual)} />
           </TabsContent>
         </main>
       </Tabs>

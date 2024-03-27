@@ -59,14 +59,14 @@ export const columns = [
     }
   },
   {
-    accessorKey: "visitors",
+    accessorKey: "people",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Asistentes" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex w-[100px] items-center">
-          <span>{row.getValue("visitors")}</span>
+          <span>{row.getValue("people")}</span>
         </div>
       )
     },
@@ -96,9 +96,8 @@ export const columns = [
       <DataTableColumnHeader column={column} title="Fecha" />
     ),
     cell: ({ row }) => {
-      let { startDate, endDate } = row.original
-      startDate = new Date(startDate)
-      endDate = new Date(endDate)
+      const startDate = new Date(row.original.start_date)
+      const endDate = new Date(row.original.end_date)
       const opt1 = { day: "2-digit", month: "short", year: "numeric" }
       const opt2 = { day: "2-digit", month: "short" }
       const opt3 = { hour: "2-digit", minute: "2-digit", hour12: false }
