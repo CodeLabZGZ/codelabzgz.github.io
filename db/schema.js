@@ -79,12 +79,17 @@ export const events = sqliteTable("events", {
 })
 
 export const challenges = sqliteTable("challenges", {
-  title: text("title").primaryKey(),
+  title: text("title"),
   description: text("description").notNull(),
-  difficulty: text("type", { enum: ["very easy", "easy", "medium", "hard", "insane"] }).notNull(),
+  difficulty: text("difficulty", { enum: ["very easy", "easy", "medium", "hard", "insane"] }).notNull(),
   points: integer("points", { mode: "number" }),
   eventId: integer("id", { mode: "number" }).notNull()
-})
+}, (c) => ({
+  compoundKey: primaryKey({
+    columns: [c.eventId, c.title],
+    onDelete: "cascade"
+  })
+}))
 
 // Represents to which teams each user belongs
 export const members = sqliteTable("members", {
