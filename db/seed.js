@@ -48,8 +48,7 @@ function genMembers ({ lim = 10, users, teams }) {
   })
 
   const set = new Set(values.map(JSON.stringify))
-  const arr = Array.from(set).map(JSON.parse)
-  return arr
+  return Array.from(set).map(JSON.parse)
 }
 
 function genEvents ({ lim = 10 }) {
@@ -63,8 +62,8 @@ function genEvents ({ lim = 10 }) {
       visibility: Math.random() > 0.5 ? "public" : "private",
       format: Math.random() > 0.5 ? "hackathon" : "ideathon",
       location: faker.location.direction(),
-      start_date: dateA < dateB ? dateA : dateB,
-      end_date: dateA < dateB ? dateB : dateA
+      startDate: dateA < dateB ? dateA : dateB,
+      endDate: dateA < dateB ? dateB : dateA
     })
   }
   return values

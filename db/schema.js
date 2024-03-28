@@ -8,8 +8,8 @@ export const users = sqliteTable("user", {
   username: text("username"),
   email: text("email").notNull(),
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
-  created: integer("created", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`),
-  updated: integer("updated", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`)
+  createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`)
 })
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -65,8 +65,8 @@ export const teams = sqliteTable("teams", {
   motto: text("motto").notNull(),
   slug: text("slug").unique(),
   logo: text("logo"),
-  created: integer("created", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`),
-  updated: integer("updated", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`)
+  createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`)
 })
 
 export const teamsRelations = relations(teams, ({ many }) => ({
@@ -80,10 +80,10 @@ export const events = sqliteTable("events", {
   visibility: text("visibility", { enum: ["public", "private"] }).notNull(),
   format: text("type", { enum: ["hackathon", "ideathon"] }).notNull(),
   location: text("location").notNull(),
-  start_date: integer("start_date", { mode: "timestamp_ms" }).notNull(),
-  end_date: integer("end_date", { mode: "timestamp_ms" }).notNull(),
-  created: integer("created", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`),
-  updated: integer("updated", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`)
+  startDate: integer("startDate", { mode: "timestamp_ms" }).notNull(),
+  endDate: integer("endDate", { mode: "timestamp_ms" }).notNull(),
+  createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`)
 })
 
 export const eventsRelations = relations(events, ({ many }) => ({
@@ -109,7 +109,7 @@ export const challengesRelations = relations(challenges, ({ one }) => ({
 
 export const members = sqliteTable("members", {
   user: text("user"),
-  team: text("name"),
+  team: text("team"),
   role: text("role", { enum: ["admin", "member"] }).notNull()
 }, (m) => ({
   compoundKey: primaryKey({ columns: [m.user, m.team] })
@@ -123,5 +123,15 @@ export const membersRelations = relations(members, ({ one }) => ({
   user: one(users, {
     fields: [members.user],
     references: [users.id]
+  })
+}))
+
+export const participations = sqliteTable("participations", {
+  user: text("user"),
+  event: integer("event", { mode: "number" }),
+  team: text("team")
+}, (p) => ({
+  compoundKey: primaryKey({
+    columns: [p.user, p.event]
   })
 }))
