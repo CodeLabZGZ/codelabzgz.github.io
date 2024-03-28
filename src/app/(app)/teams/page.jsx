@@ -4,8 +4,6 @@ import {
   TabsList,
   TabsTrigger
 } from "@/components/ui/tabs"
-import { count, eq } from "drizzle-orm"
-import { members, teams } from "db/schema"
 
 import All from "./all"
 import { CreateTeam } from "@/components/app/forms/create-team"
@@ -13,34 +11,26 @@ import MyTeams from "./my-teams"
 import { auth } from "auth"
 import { columns } from "@/components/app/tables/teams/columns"
 import { db } from "db"
+import { members } from "db/schema"
 
 export default async function Page () {
   const { user } = await auth()
 
-  const infoTeams = await db
-    .select()
-    .from(teams)
-
-  const numMembers = await db
-    .select({
-      team: members.team,
-      members: count(members.user)
-    })
-    .from(members)
-    .groupBy(members.team)
-
-  const userTeams = await db
-    .select()
-    .from(members)
-    .where(eq(members.user, user.id))
-
-  const records = infoTeams.map(team => {
-    return {
-      ...team,
-      members: numMembers.find(r => r.team === team.name)?.members,
-      role: userTeams.find(r => r.team === team.name)?.role,
-      awards: 0
-    }
+  let records = await db.query.teams.findMany({ with: { members } })
+  records = records.map(record => {
+    const ownership = record.members.find(m => m.user === user.id)
+    return ownership
+      ? {
+        ...record,
+        ...ownership,
+        members: record.members.length,
+        awards: 0
+      }
+      : {
+        ...record,
+        members: record.members.length,
+        awards: 0
+      }
   })
 
   return (
