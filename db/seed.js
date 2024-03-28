@@ -1,4 +1,4 @@
-import { challenges, events, members, participations, teams, users } from "./schema.js"
+import { challenges, events, members, participations, scoreboards, teams, users } from "./schema.js"
 
 import Database from "better-sqlite3"
 import { drizzle } from "drizzle-orm/better-sqlite3"
@@ -126,6 +126,30 @@ function genParticipations ({ min = 0, max = 10, members, events }) {
   return values
 }
 
+function genScoreboard ({ min = 0, max = 4, events, challenges, participations }) {
+  const values = []
+  participations.forEach(p => {
+    const event = events.find(e => e.id === p.event)
+    const problems = challenges.filter(c => c.event === p.event)
+
+    problems.forEach(challenge => {
+      const tries = Math.random() * (max - min) + min
+      for (let index = 0; index < tries; index++) {
+        const value = {
+          event: p.event,
+          challenge: challenge.title,
+          user: p.user,
+          team: p.team,
+          timestamp: faker.date.between({ from: event.startDate, to: event.endDate }),
+          points: String(Math.floor(Math.random() * 1e12) + 1)
+        }
+        values.push(value)
+        console.log(value)
+      }
+    })
+  })
+}
+
 async function main () {
   const sqlite = new Database("db/sqlite.db")
   const db = drizzle(sqlite)
@@ -138,6 +162,7 @@ async function main () {
   const challengesData = await db.insert(challenges).values(genChallenges({ max: 5, events: eventsData.map(e => e.id) })).returning()
 
   const participationsData = await db.insert(participations).values(genParticipations({ max: 7, members: users4teams, events: eventsData.map(e => e.id) })).returning()
+  const scoreboardsData = await db.insert(scoreboards).values(genScoreboard({ events: eventsData, challenges: challengesData, participations: participationsData })).returning()
 
   console.log("users: %d", usersData.length)
   console.log("teams: %d", teamsData.length)
@@ -145,6 +170,7 @@ async function main () {
   console.log("events: %d", eventsData.length)
   console.log("challenges: %d", challengesData.length)
   console.log("participations: %d", participationsData.length)
+  console.log("scoreboard: %d", scoreboardsData.length)
 }
 
 await main()

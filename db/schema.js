@@ -14,7 +14,8 @@ export const users = sqliteTable("user", {
 
 export const usersRelations = relations(users, ({ many }) => ({
   members: many(members),
-  participations: many(participations)
+  participations: many(participations),
+  scoreboards: many(scoreboards)
 }))
 
 export const accounts = sqliteTable(
@@ -72,7 +73,8 @@ export const teams = sqliteTable("teams", {
 
 export const teamsRelations = relations(teams, ({ many }) => ({
   members: many(members),
-  participations: many(participations)
+  participations: many(participations),
+  scoreboards: many(scoreboards)
 }))
 
 export const events = sqliteTable("events", {
@@ -105,11 +107,12 @@ export const challenges = sqliteTable("challenges", {
   compoundKey: primaryKey({ columns: [c.event, c.title] })
 }))
 
-export const challengesRelations = relations(challenges, ({ one }) => ({
+export const challengesRelations = relations(challenges, ({ one, many }) => ({
   event: one(events, {
     fields: [challenges.event],
     references: [events.id]
-  })
+  }),
+  scoreboards: many(scoreboards)
 }))
 
 export const members = sqliteTable("members", {
@@ -156,5 +159,33 @@ export const participationsRelations = relations(participations, ({ one }) => ({
   team: one(teams, {
     fields: [participations.team],
     references: [teams.name]
+  })
+}))
+
+export const scoreboards = sqliteTable("scoreboards", {
+  event: integer("event", { mode: "number" }).references(() => events.id),
+  challenge: text("challenge").references(() => challenges.title),
+  user: text("user").references(() => users.id),
+  team: text("team").references(() => teams.name),
+  timestamp: integer("timestamp", { mode: "timestamp_ms" }),
+  points: text("points")
+}, (sb) => ({
+  compoundKey: primaryKey({
+    columns: [sb.event, sb.challenge, sb.user, sb.timestamp]
+  })
+}))
+
+export const scoreboardsRelations = relations(scoreboards, ({ one }) => ({
+  challenge: one(challenges, {
+    fields: [scoreboards.event, scoreboards.challenge],
+    references: [challenges.event, challenges.title]
+  }),
+  team: one(teams, {
+    fields: [scoreboards.team],
+    references: [teams.name]
+  }),
+  user: one(users, {
+    fields: [scoreboards.user],
+    references: [users.id]
   })
 }))
