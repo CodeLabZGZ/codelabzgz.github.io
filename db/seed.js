@@ -128,6 +128,7 @@ function genParticipations ({ min = 0, max = 10, members, events }) {
 
 function genScoreboard ({ min = 0, max = 4, events, challenges, participations }) {
   const values = []
+
   participations.forEach(p => {
     const event = events.find(e => e.id === p.event)
     const problems = challenges.filter(c => c.event === p.event)
@@ -146,6 +147,7 @@ function genScoreboard ({ min = 0, max = 4, events, challenges, participations }
       }
     })
   })
+
   return values
 }
 
