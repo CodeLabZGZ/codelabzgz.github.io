@@ -86,6 +86,27 @@ export const events = sqliteTable("events", {
   updated: integer("updated", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`)
 })
 
+export const eventsRelations = relations(events, ({ many }) => ({
+  challenges: many(challenges)
+}))
+
+export const challenges = sqliteTable("challenges", {
+  event: integer("event", { mode: "number" }).notNull(),
+  title: text("title"),
+  description: text("description").notNull(),
+  difficulty: text("difficulty", { enum: ["very easy", "easy", "medium", "hard", "insane"] }).notNull(),
+  points: integer("points", { mode: "number" })
+}, (c) => ({
+  compoundKey: primaryKey({ columns: [c.event, c.title] })
+}))
+
+export const challengesRelations = relations(challenges, ({ one }) => ({
+  event: one(events, {
+    fields: challenges.event,
+    references: events.id
+  })
+}))
+
 export const members = sqliteTable("members", {
   user: text("user"),
   team: text("name"),
