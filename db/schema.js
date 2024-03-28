@@ -1,4 +1,4 @@
-import { integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core"
+import { foreignKey, integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core"
 import { relations, sql } from "drizzle-orm"
 
 export const users = sqliteTable("user", {
@@ -97,7 +97,6 @@ export const eventsRelations = relations(events, ({ many }) => ({
 
 export const challenges = sqliteTable("challenges", {
   event: integer("event", { mode: "number" })
-    .notNull()
     .references(() => events.id, { onDelete: "cascade" }),
   title: text("title"),
   description: text("description").notNull(),
@@ -137,12 +136,9 @@ export const membersRelations = relations(members, ({ one }) => ({
 }))
 
 export const participations = sqliteTable("participations", {
-  user: text("user")
-    .references(() => users.id, { onDelete: "cascade" }),
-  event: integer("event", { mode: "number" })
-    .references(() => events.id, { onDelete: "cascade" }),
-  team: text("team")
-    .references(() => teams.name)
+  user: text("user").references(() => users.id, { onDelete: "cascade" }),
+  event: integer("event", { mode: "number" }).references(() => events.id, { onDelete: "cascade" }),
+  team: text("team").references(() => teams.name)
 }, (p) => ({
   compoundKey: primaryKey({ columns: [p.user, p.event] })
 }))
@@ -163,8 +159,8 @@ export const participationsRelations = relations(participations, ({ one }) => ({
 }))
 
 export const scoreboards = sqliteTable("scoreboards", {
-  event: integer("event", { mode: "number" }).references(() => events.id),
-  challenge: text("challenge").references(() => challenges.title),
+  event: integer("event", { mode: "number" }),
+  challenge: text("challenge"),
   user: text("user").references(() => users.id),
   team: text("team").references(() => teams.name),
   timestamp: integer("timestamp", { mode: "timestamp_ms" }),
@@ -172,6 +168,10 @@ export const scoreboards = sqliteTable("scoreboards", {
 }, (sb) => ({
   compoundKey: primaryKey({
     columns: [sb.event, sb.challenge, sb.user, sb.timestamp]
+  }),
+  challengeReference: foreignKey({
+    columns: [sb.event, sb.challenge],
+    foreignColumns: [challenges.event, challenges.title]
   })
 }))
 

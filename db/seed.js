@@ -135,19 +135,18 @@ function genScoreboard ({ min = 0, max = 4, events, challenges, participations }
     problems.forEach(challenge => {
       const tries = Math.random() * (max - min) + min
       for (let index = 0; index < tries; index++) {
-        const value = {
+        values.push({
           event: p.event,
           challenge: challenge.title,
           user: p.user,
           team: p.team,
           timestamp: faker.date.between({ from: event.startDate, to: event.endDate }),
           points: String(Math.floor(Math.random() * 1e12) + 1)
-        }
-        values.push(value)
-        console.log(value)
+        })
       }
     })
   })
+  return values
 }
 
 async function main () {
