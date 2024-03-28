@@ -1,8 +1,9 @@
-import { challenges, events, members, teams, users } from "./schema.js"
+import { challenges, events, members, participations, teams, users } from "./schema.js"
 
 import Database from "better-sqlite3"
 import { drizzle } from "drizzle-orm/better-sqlite3"
 import { faker } from "@faker-js/faker"
+import shuffle from "just-shuffle"
 
 function genUsers ({ lim = 10 }) {
   const values = []
@@ -29,26 +30,26 @@ function genTeams ({ lim = 10 }) {
   return values
 }
 
-function genMembers ({ lim = 10, users, teams }) {
+function genMembers ({ min = 0, max = 5, users, teams }) {
   const values = []
-  for (let index = 0; index < lim; index++) {
-    values.push({
-      user: users[Math.floor(Math.random() * users.length)].id,
-      team: teams[Math.floor(Math.random() * teams.length)].name,
-      role: "member"
-    })
-  }
 
-  const teamLeaders = {}
-  values.forEach(({ user, team }, i) => {
-    if (!teamLeaders[team]) {
-      teamLeaders[team] = user
-      values[i].role = "admin"
-    }
+  teams.forEach(team => {
+    const lim = Math.random() * (max - min) + min
+    const users4team = shuffle(users).slice(0, lim)
+    users4team.forEach((user, index) => {
+      values.push({
+        team,
+        user,
+        role: index === 0
+          ? "admin"
+          : Math.random() > 0.75
+            ? "pending"
+            : "member"
+      })
+    })
   })
 
-  const set = new Set(values.map(JSON.stringify))
-  return Array.from(set).map(JSON.parse)
+  return values
 }
 
 function genEvents ({ lim = 10 }) {
@@ -95,7 +96,7 @@ function genChallenges ({ min = 0, max = 10, events }) {
     for (let index = 0; index < lim; index++) {
       const item = difficultyLevels[Math.floor(Math.random() * difficultyLevels.length)]
       values.push({
-        event: event.id,
+        event,
         title: faker.lorem.words({ min: 3, max: 8 }),
         description: faker.lorem.paragraphs({ min: 1, max: 4 }),
         difficulty: item.difficulty,
@@ -107,23 +108,40 @@ function genChallenges ({ min = 0, max = 10, events }) {
   return values
 }
 
+function genParticipations ({ min = 0, max = 10, members, events }) {
+  const values = []
+
+  events.forEach(event => {
+    const lim = Math.random() * (max - min) + min
+    const guests = shuffle(members).slice(0, lim)
+    guests.forEach(({ user, team }) => {
+      console.log({ event, user, team })
+      values.push({ event, user, team })
+    })
+  })
+
+  return values
+}
+
 async function main () {
   const sqlite = new Database("db/sqlite.db")
   const db = drizzle(sqlite)
 
   const usersData = await db.insert(users).values(genUsers({ lim: 15 })).returning()
   const teamsData = await db.insert(teams).values(genTeams({ lim: 15 })).returning()
-  const users4teams = await db.insert(members).values(genMembers({ lim: 30, users: usersData, teams: teamsData })).returning()
+  const users4teams = await db.insert(members).values(genMembers({ lim: 30, users: usersData.map(u => u.id), teams: teamsData.map(t => t.name) })).returning()
 
   const eventsData = await db.insert(events).values(genEvents({ lim: 15 })).returning()
-  const challengesData = await db.insert(challenges).values(genChallenges({ max: 5, events: eventsData })).returning()
+  const challengesData = await db.insert(challenges).values(genChallenges({ max: 5, events: eventsData.map(e => e.id) })).returning()
+
+  const participationsData = await db.insert(participations).values(genParticipations({ max: 7, members: users4teams, events: eventsData.map(e => e.id) })).returning()
 
   console.log("users: %d", usersData.length)
   console.log("teams: %d", teamsData.length)
   console.log("members: %d", users4teams.length)
-
   console.log("events: %d", eventsData.length)
   console.log("challenges: %d", challengesData.length)
+  console.log("participations: %d", participationsData.length)
 }
 
 await main()

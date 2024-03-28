@@ -13,7 +13,8 @@ export const users = sqliteTable("user", {
 })
 
 export const usersRelations = relations(users, ({ many }) => ({
-  members: many(members)
+  members: many(members),
+  participations: many(participations)
 }))
 
 export const accounts = sqliteTable(
@@ -70,7 +71,8 @@ export const teams = sqliteTable("teams", {
 })
 
 export const teamsRelations = relations(teams, ({ many }) => ({
-  members: many(members)
+  members: many(members),
+  participations: many(participations)
 }))
 
 export const events = sqliteTable("events", {
@@ -87,11 +89,14 @@ export const events = sqliteTable("events", {
 })
 
 export const eventsRelations = relations(events, ({ many }) => ({
-  challenges: many(challenges)
+  challenges: many(challenges),
+  participations: many(participations)
 }))
 
 export const challenges = sqliteTable("challenges", {
-  event: integer("event", { mode: "number" }).notNull(),
+  event: integer("event", { mode: "number" })
+    .notNull()
+    .references(() => events.id, { onDelete: "cascade" }),
   title: text("title"),
   description: text("description").notNull(),
   difficulty: text("difficulty", { enum: ["very easy", "easy", "medium", "hard", "insane"] }).notNull(),
@@ -108,9 +113,11 @@ export const challengesRelations = relations(challenges, ({ one }) => ({
 }))
 
 export const members = sqliteTable("members", {
-  user: text("user"),
-  team: text("team"),
-  role: text("role", { enum: ["admin", "member"] }).notNull()
+  user: text("user")
+    .references(() => users.id, { onDelete: "cascade" }),
+  team: text("team")
+    .references(() => teams.name, { onDelete: "cascade" }),
+  role: text("role", { enum: ["admin", "member", "pending"] }).notNull()
 }, (m) => ({
   compoundKey: primaryKey({ columns: [m.user, m.team] })
 }))
@@ -127,11 +134,27 @@ export const membersRelations = relations(members, ({ one }) => ({
 }))
 
 export const participations = sqliteTable("participations", {
-  user: text("user"),
-  event: integer("event", { mode: "number" }),
+  user: text("user")
+    .references(() => users.id, { onDelete: "cascade" }),
+  event: integer("event", { mode: "number" })
+    .references(() => events.id, { onDelete: "cascade" }),
   team: text("team")
+    .references(() => teams.name)
 }, (p) => ({
-  compoundKey: primaryKey({
-    columns: [p.user, p.event]
+  compoundKey: primaryKey({ columns: [p.user, p.event] })
+}))
+
+export const participationsRelations = relations(participations, ({ one }) => ({
+  user: one(users, {
+    fields: [participations.user],
+    references: [users.id]
+  }),
+  event: one(events, {
+    fields: [participations.event],
+    references: [events.id]
+  }),
+  team: one(teams, {
+    fields: [participations.team],
+    references: [teams.name]
   })
 }))

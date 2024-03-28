@@ -24,7 +24,7 @@ export default async function Page () {
   const numMembers = await db
     .select({
       team: members.team,
-      members: count(members.userId)
+      members: count(members.user)
     })
     .from(members)
     .groupBy(members.team)
@@ -32,7 +32,7 @@ export default async function Page () {
   const userTeams = await db
     .select()
     .from(members)
-    .where(eq(members.userId, user.id))
+    .where(eq(members.user, user.id))
 
   const records = infoTeams.map(team => {
     return {

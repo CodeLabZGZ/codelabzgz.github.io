@@ -23,22 +23,22 @@ export default async function Page () {
   const infoEvents = await db
     .select({
       events,
-      people: count(participations.userId)
+      people: count(participations.user)
     })
     .from(events)
-    .leftJoin(participations, eq(participations.eventId, events.id))
+    .leftJoin(participations, eq(participations.event, events.id))
     .groupBy(events.id)
 
   const userActivity = await db
     .select()
     .from(participations)
-    .where(eq(participations.userId, user.id))
+    .where(eq(participations.user, user.id))
 
   const records = infoEvents.map(({ events, people }) => {
-    const userActivityRecord = userActivity.find(activity => activity.eventId === events.id)
+    const userActivityRecord = userActivity.find(activity => activity.event === events.id)
     return {
       ...events,
-      user: userActivityRecord ? userActivityRecord.userId : null,
+      user: userActivityRecord ? userActivityRecord.user : null,
       team: userActivityRecord ? userActivityRecord.team : null,
       people
     }
