@@ -4,8 +4,6 @@ import {
   TabsList,
   TabsTrigger
 } from "@/components/ui/tabs"
-import { count, eq } from "drizzle-orm"
-import { events, participations } from "db/schema"
 
 import Joined from "./joined"
 import OnGoing from "./ongoing"
@@ -14,34 +12,29 @@ import UpGoing from "./upgoing"
 import { auth } from "auth"
 import { columns } from "@/components/app/tables/events/columns"
 import { db } from "db"
+import { participations } from "db/schema"
 
 const fechaActual = new Date()
 
 export default async function Page () {
   const { user } = await auth()
 
-  const infoEvents = await db
-    .select({
-      events,
-      people: count(participations.user)
-    })
-    .from(events)
-    .leftJoin(participations, eq(participations.event, events.id))
-    .groupBy(events.id)
-
-  const userActivity = await db
-    .select()
-    .from(participations)
-    .where(eq(participations.user, user.id))
-
-  const records = infoEvents.map(({ events, people }) => {
-    const userActivityRecord = userActivity.find(activity => activity.event === events.id)
-    return {
-      ...events,
-      user: userActivityRecord ? userActivityRecord.user : null,
-      team: userActivityRecord ? userActivityRecord.team : null,
-      people
-    }
+  let records = await db.query.events.findMany({ with: { participations } })
+  records = records.map(record => {
+    const people = record.participations.length
+    const item = record.participations.find(p => p.user === user.id)
+    delete record.participations
+    return item
+      ? {
+        ...record,
+        people,
+        user: item.user,
+        team: item.team
+      }
+      : {
+        ...record,
+        people
+      }
   })
 
   return (
