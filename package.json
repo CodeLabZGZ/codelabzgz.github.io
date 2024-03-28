@@ -14,7 +14,7 @@
     "db:generate": "drizzle-kit generate:sqlite",
     "db:introspect": "drizzle-kit introspect:sqlite",
     "db:push": "drizzle-kit push:sqlite",
-    "db:seed": "node db/seed.mjs",
+    "db:seed": "node db/seed.js",
     "db:studio": "drizzle-kit studio"
   },
   "lint-staged": {
@@ -88,5 +88,6 @@
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "sharp": "^0.33.1"
-  }
+  },
+  "type": "module"
 }

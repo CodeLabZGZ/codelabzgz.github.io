@@ -12,6 +12,10 @@ export const users = sqliteTable("user", {
   updated: integer("updated", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`)
 })
 
+export const usersRelations = relations(users, ({ many }) => ({
+  members: many(members)
+}))
+
 export const accounts = sqliteTable(
   "account",
   {
@@ -57,13 +61,17 @@ export const verificationTokens = sqliteTable(
 )
 
 export const teams = sqliteTable("teams", {
-  logo: text("logo"),
   name: text("name").primaryKey(),
   motto: text("motto").notNull(),
   slug: text("slug").unique(),
+  logo: text("logo"),
   created: integer("created", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`),
   updated: integer("updated", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`)
 })
+
+export const teamsRelations = relations(teams, ({ many }) => ({
+  members: many(members)
+}))
 
 export const events = sqliteTable("events", {
   id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
@@ -78,110 +86,21 @@ export const events = sqliteTable("events", {
   updated: integer("updated", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`)
 })
 
-export const challenges = sqliteTable("challenges", {
-  title: text("title"),
-  description: text("description").notNull(),
-  difficulty: text("difficulty", { enum: ["very easy", "easy", "medium", "hard", "insane"] }).notNull(),
-  points: integer("points", { mode: "number" }),
-  eventId: integer("id", { mode: "number" }).notNull()
-}, (c) => ({
-  compoundKey: primaryKey({
-    columns: [c.eventId, c.title],
-    onDelete: "cascade"
-  })
-}))
-
-// Represents to which teams each user belongs
 export const members = sqliteTable("members", {
-  userId: text("userId").references(() => users.id),
-  team: text("team").references(() => teams.name),
+  user: text("user"),
+  team: text("name"),
   role: text("role", { enum: ["admin", "member"] }).notNull()
 }, (m) => ({
-  compoundKey: primaryKey({
-    columns: [m.userId, m.team],
-    onDelete: "cascade"
-  })
-}))
-
-// Represents the participation of users in the different events with a given team.
-export const participations = sqliteTable("participations", {
-  userId: text("userId"),
-  eventId: integer("eventId", { mode: "number" }),
-  team: text("team")
-}, (p) => ({
-  compoundKey: primaryKey({
-    columns: [p.userId, p.eventId]
-  })
-}))
-
-// Represents the points that the teams have for each of the challenges of the problem posed
-export const scoreboards = sqliteTable("scoreboards", {
-  eventId: integer("id", { mode: "number" }).references(() => events.id),
-  challenge: text("challenge").references(() => challenges.title),
-  team: text("team").references(() => teams.name),
-  points: text("points")
-}, (sb) => ({
-  compoundKey: primaryKey({
-    columns: [sb.eventId, sb.challenge, sb.team]
-  })
-}))
-
-export const usersRelations = relations(users, ({ many }) => ({
-  participations: many(participations),
-  teams: many(members)
-}))
-
-export const teamsRelations = relations(teams, ({ many }) => ({
-  participations: many(participations),
-  users: many(members)
-}))
-
-export const eventsRelations = relations(events, ({ many }) => ({
-  challenges: many(challenges),
-  participations: many(participations)
-}))
-
-export const challengesRelations = relations(challenges, ({ one }) => ({
-  event: one(events, {
-    fields: [challenges.eventId],
-    references: [events.id],
-    onDelete: "cascade"
-  })
-}))
-
-export const participationsRelations = relations(participations, ({ one }) => ({
-  users: one(users, {
-    fields: [participations.userId],
-    references: [users.id]
-  }),
-  team: one(teams, {
-    fields: [participations.team],
-    references: [teams.name]
-  }),
-  event: one(events, {
-    fields: [participations.eventId],
-    references: [events.id]
-  })
+  compoundKey: primaryKey({ columns: [m.user, m.team] })
 }))
 
 export const membersRelations = relations(members, ({ one }) => ({
-  users: one(users, {
-    fields: [members.userId],
-    references: [users.id]
-  }),
   team: one(teams, {
     fields: [members.team],
     references: [teams.name]
-  })
-}))
-
-export const scoreboardsRelations = relations(scoreboards, ({ one }) => ({
-  challenges: one(challenges, {
-    fields: [scoreboards.eventId, scoreboards.challenge],
-    references: [challenges.eventId, challenges.title]
   }),
-  team: one(teams, {
-    fields: [scoreboards.team],
-    references: [teams.name]
+  user: one(users, {
+    fields: [members.user],
+    references: [users.id]
   })
 }))
