@@ -107,8 +107,8 @@ export const challenges = sqliteTable("challenges", {
 
 export const challengesRelations = relations(challenges, ({ one }) => ({
   event: one(events, {
-    fields: challenges.event,
-    references: events.id
+    fields: [challenges.event],
+    references: [events.id]
   })
 }))
 
