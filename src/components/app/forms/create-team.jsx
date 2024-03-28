@@ -40,7 +40,7 @@ const formSchema = z.object({
   })
 })
 
-export function CreateTeam () {
+export function CreateTeam ({ id }) {
   const [open, setOpen] = useState(false)
 
   const form = useForm({
@@ -49,7 +49,7 @@ export function CreateTeam () {
 
   async function onSubmit (values) {
     const { name, motto, slug } = values
-    toast.promise(createTeam({ name, motto, slug }), {
+    toast.promise(createTeam({ id, name, motto, slug }), {
       loading: "Estamos creando tu equipo...",
       success: ({ name, slug }) => <>Tu equipo <a href={`/teams/${slug}`} target="_black" referrerPolicy="no-referrer"><strong>{name}</strong></a> ha sido creado.</>,
       error: (err) => err.message

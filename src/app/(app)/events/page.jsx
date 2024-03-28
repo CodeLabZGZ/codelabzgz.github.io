@@ -58,16 +58,16 @@ export default async function Page () {
         </TabsList>
         <main>
           <TabsContent value="ongoing" className="space-y-4">
-            <OnGoing columns={columns} values={records.filter(e => new Date(e.start_date) <= fechaActual && fechaActual <= new Date(e.end_date))} />
+            <OnGoing columns={columns} values={records.filter(e => new Date(e.startDate) <= fechaActual && fechaActual <= new Date(e.endDate))} />
           </TabsContent>
           <TabsContent value="upgoing" className="space-y-4">
-            <UpGoing columns={columns} values={records.filter(e => new Date(e.start_date) > fechaActual)} />
+            <UpGoing columns={columns} values={records.filter(e => new Date(e.startDate) > fechaActual)} />
           </TabsContent>
           <TabsContent value="joined" className="space-y-4">
             <Joined columns={columns} values={records.filter(e => e.user)} />
           </TabsContent>
           <TabsContent value="past" className="space-y-4">
-            <Past columns={columns} values={records.filter(e => new Date(e.end_date) < fechaActual)} />
+            <Past columns={columns} values={records.filter(e => new Date(e.endDate) < fechaActual)} />
           </TabsContent>
         </main>
       </Tabs>

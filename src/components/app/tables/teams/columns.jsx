@@ -16,7 +16,9 @@ export const columns = [
     ),
     cell: ({ row }) => {
       const { logo, motto } = row.original
-      const letters = row.getValue("name").split(" ").slice(0, 2).map(w => w[0])
+      const letters = row.getValue("name")
+        .match(/\w+(?:-\w+)*/g)
+        .slice(0, 2).map(w => w[0])
 
       return (
         <div className="flex items-center space-x-2">

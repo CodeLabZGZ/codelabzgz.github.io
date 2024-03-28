@@ -96,8 +96,8 @@ export const columns = [
       <DataTableColumnHeader column={column} title="Fecha" />
     ),
     cell: ({ row }) => {
-      const startDate = new Date(row.original.start_date)
-      const endDate = new Date(row.original.end_date)
+      const startDate = new Date(row.original.startDate)
+      const endDate = new Date(row.original.endDate)
       const opt1 = { day: "2-digit", month: "short", year: "numeric" }
       const opt2 = { day: "2-digit", month: "short" }
       const opt3 = { hour: "2-digit", minute: "2-digit", hour12: false }

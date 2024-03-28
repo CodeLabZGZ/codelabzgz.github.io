@@ -37,7 +37,7 @@ export default async function Page () {
   const records = infoTeams.map(team => {
     return {
       ...team,
-      members: numMembers.find(r => r.team === team.name).members,
+      members: numMembers.find(r => r.team === team.name)?.members,
       role: userTeams.find(r => r.team === team.name)?.role,
       awards: 0
     }
@@ -47,7 +47,7 @@ export default async function Page () {
     <>
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Equipos</h2>
-        <CreateTeam />
+        <CreateTeam id={user.id}/>
       </div>
       <Tabs defaultValue="all" className="space-y-4">
         <TabsList>
