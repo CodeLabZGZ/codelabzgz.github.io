@@ -114,9 +114,12 @@ function genParticipations ({ min = 0, max = 10, members, events }) {
   events.forEach(event => {
     const lim = Math.random() * (max - min) + min
     const guests = shuffle(members).slice(0, lim)
+    const people = []
     guests.forEach(({ user, team }) => {
-      console.log({ event, user, team })
-      values.push({ event, user, team })
+      if (!people.includes(user)) {
+        values.push({ event, user, team })
+        people.push(user)
+      }
     })
   })
 
