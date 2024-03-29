@@ -8,6 +8,7 @@ import { members, scoreboards } from "db/schema"
 
 import All from "./all"
 import { CreateTeam } from "@/components/app/forms/create-team"
+import { JoinTeam } from "@/components/app/forms/join-team"
 import MyTeams from "./my-teams"
 import { auth } from "auth"
 import { columns } from "@/components/app/tables/teams/columns"
@@ -55,7 +56,10 @@ export default async function Page () {
     <>
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Equipos</h2>
-        <CreateTeam id={user.id}/>
+        <div className="flex items-center gap-x-2">
+          <JoinTeam id={user.id}/>
+          <CreateTeam id={user.id}/>
+        </div>
       </div>
       <Tabs defaultValue="all" className="space-y-4">
         <TabsList>
