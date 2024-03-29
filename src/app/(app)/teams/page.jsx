@@ -12,9 +12,6 @@ import MyTeams from "./my-teams"
 import { auth } from "auth"
 import { columns } from "@/components/app/tables/teams/columns"
 import { db } from "db"
-import deepMapValues from "just-deep-map-values"
-import groupBy from "just-group-by"
-import map from "just-map-values"
 import { sql } from "drizzle-orm"
 
 export default async function Page () {
@@ -35,24 +32,6 @@ export default async function Page () {
   records = records.map(record => {
     const ownership = record.members.find(m => m.user === user.id)
 
-    // Best solution for each challenge
-    const scoreboards = map(
-      groupBy(record.scoreboards, ({ event }) => event),
-      (value, key, obj) => deepMapValues(
-        groupBy(value, ({ challenge }) => challenge),
-        (history) => {
-          if (!Array.isArray(history) || history.length === 0) return null
-          return Math.max(...history.map(item => Number(item.points)))
-        }
-      )
-    )
-
-    // Sum of the best scores for each challenge
-    const points = map(
-      scoreboards,
-      (value, key, obj) => Object.values(value).reduce((prev, next) => prev + next, 0)
-    )
-
     const awards = rankings.reduce((prev, next) => {
       if (next.team === record.name) return prev + 1
       return prev
@@ -62,16 +41,12 @@ export default async function Page () {
       ? {
         ...record,
         ...ownership,
-        scoreboards,
         members: record.members.length,
-        points,
         awards
       }
       : {
         ...record,
-        scoreboards,
         members: record.members.length,
-        points,
         awards
       }
   })
