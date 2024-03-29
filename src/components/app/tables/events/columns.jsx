@@ -62,6 +62,9 @@ export const columns = [
           <Badge variant="outline" className="text-xs">{row.getValue("format")}</Badge>
         </div>
       )
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id))
     }
   },
   {
