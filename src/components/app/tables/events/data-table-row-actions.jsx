@@ -69,7 +69,7 @@ export function DataTableRowActions ({ row }) {
           </DropdownMenuItem>
         }
         {new Date(endDate) <= currentDate &&
-          <DropdownMenuItem className="flex items-center gap-x-2">
+          <DropdownMenuItem className="flex items-center gap-x-2" disabled>
             <TbCertificate className="w-4 h-4"/>
             Certificado
           </DropdownMenuItem>
