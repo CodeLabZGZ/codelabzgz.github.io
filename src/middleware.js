@@ -18,7 +18,7 @@ export default async function middleware (request) {
   const isProtectedRoute = protectedRoutes.some((prefix) => pathname.startsWith(prefix))
 
   if (!session && isProtectedRoute) {
-    const absoluteURL = new URL("/", origin)
+    const absoluteURL = new URL("/auth/login", origin)
     return NextResponse.redirect(absoluteURL.toString())
   }
 }
