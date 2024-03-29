@@ -14,7 +14,7 @@ import { columns } from "@/components/app/tables/events/columns"
 import { db } from "db"
 import { participations } from "db/schema"
 
-const fechaActual = new Date()
+const currentDate = new Date()
 
 export default async function Page () {
   const { user } = await auth()
@@ -46,21 +46,21 @@ export default async function Page () {
         <TabsList>
           <TabsTrigger value="ongoing">En curso</TabsTrigger>
           <TabsTrigger value="upgoing">Programados</TabsTrigger>
-          <TabsTrigger value="joined">Participado</TabsTrigger>
+          <TabsTrigger value="joined">Participando</TabsTrigger>
           <TabsTrigger value="past">Pasados</TabsTrigger>
         </TabsList>
         <main>
           <TabsContent value="ongoing" className="space-y-4">
-            <OnGoing columns={columns} values={records.filter(e => new Date(e.startDate) <= fechaActual && fechaActual <= new Date(e.endDate))} />
+            <OnGoing columns={columns} values={records.filter(e => new Date(e.startDate) <= currentDate && currentDate <= new Date(e.endDate))} />
           </TabsContent>
           <TabsContent value="upgoing" className="space-y-4">
-            <UpGoing columns={columns} values={records.filter(e => new Date(e.startDate) > fechaActual)} />
+            <UpGoing columns={columns} values={records.filter(e => new Date(e.startDate) > currentDate)} />
           </TabsContent>
           <TabsContent value="joined" className="space-y-4">
-            <Joined columns={columns} values={records.filter(e => e.user)} />
+            <Joined columns={columns} values={records.filter(e => e.user && new Date(e.startDate) <= currentDate && currentDate <= new Date(e.endDate))} />
           </TabsContent>
           <TabsContent value="past" className="space-y-4">
-            <Past columns={columns} values={records.filter(e => new Date(e.endDate) < fechaActual)} />
+            <Past columns={columns} values={records.filter(e => new Date(e.endDate) < currentDate)} />
           </TabsContent>
         </main>
       </Tabs>

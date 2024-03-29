@@ -4,15 +4,19 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
+import { TbCertificate, TbInfoSquare, TbTicket, TbTicketOff, TbTimeline } from "react-icons/tb"
 
 import { Button } from "@/components/ui/button"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
+import Link from "next/link"
+
+const currentDate = new Date()
 
 export function DataTableRowActions ({ row }) {
+  const { startDate, endDate, user } = row.original
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -25,14 +29,51 @@ export function DataTableRowActions ({ row }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem>Edit</DropdownMenuItem>
-        <DropdownMenuItem>Make a copy</DropdownMenuItem>
-        <DropdownMenuItem>Favorite</DropdownMenuItem>
-        <DropdownMenuSeparator />
+        {currentDate <= new Date(endDate) && (
+          !user
+            ? (
+              <DropdownMenuItem>
+                <button
+                  className="w-full flex items-center gap-x-2"
+                >
+                  <TbTicket className="w-4 h-4"/>
+                Inscribete
+                </button>
+              </DropdownMenuItem>
+            )
+            : (
+              <DropdownMenuItem>
+                <button
+                  className="w-full flex items-center gap-x-2"
+                >
+                  <TbTicketOff className="w-4 h-4"/>
+                Abandonar
+                </button>
+              </DropdownMenuItem>
+            )
+        )
+
+        }
         <DropdownMenuItem>
-          Delete
-          <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+          <Link href="/" className="w-full flex items-center gap-x-2">
+            <TbInfoSquare className="w-4 h-4"/>
+            Información
+          </Link>
         </DropdownMenuItem>
+        {new Date(startDate) <= currentDate &&
+          <DropdownMenuItem>
+            <Link href="/" className="w-full flex items-center gap-x-2">
+              <TbTimeline className="w-4 h-4"/>
+              Resultados
+            </Link>
+          </DropdownMenuItem>
+        }
+        {new Date(endDate) <= currentDate &&
+          <DropdownMenuItem className="flex items-center gap-x-2">
+            <TbCertificate className="w-4 h-4"/>
+            Certificado
+          </DropdownMenuItem>
+        }
       </DropdownMenuContent>
     </DropdownMenu>
   )

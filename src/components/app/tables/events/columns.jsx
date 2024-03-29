@@ -1,10 +1,16 @@
 "use client"
 
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger
+} from "@/components/ui/hover-card"
 import { TbLock, TbLockOpen } from "react-icons/tb"
 
 import { Badge } from "@/components/ui/badge"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
+import { formatDate } from "@/lib/utils"
 
 export const columns = [
   {
@@ -13,10 +19,10 @@ export const columns = [
       <DataTableColumnHeader column={column} title="Nombre" />
     ),
     cell: ({ row }) => {
-      const { type } = row.original
+      const { visibility } = row.original
       return (
         <div className="flex items-center space-x-1.5">
-          {type === "public"
+          {visibility === "public"
             ? <TbLockOpen className="w-3.5 h-3.5" />
             : <TbLock className="w-3.5 h-3.5" />
           }
@@ -30,14 +36,14 @@ export const columns = [
     enableHiding: false
   },
   {
-    accessorKey: "type",
+    accessorKey: "visibility",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Visibilidad" className="sr-only"/>
     ),
     cell: ({ row }) => {
       return (
         <div className="flex items-center capitalize sr-only">
-          {row.getValue("type")}
+          {row.getValue("visibility")}
         </div>
       )
     },
@@ -102,26 +108,38 @@ export const columns = [
       const opt2 = { day: "2-digit", month: "short" }
       const opt3 = { hour: "2-digit", minute: "2-digit", hour12: false }
 
+      const { timeZone } = Intl.DateTimeFormat().resolvedOptions()
+
       return (
-        <div className="flex items-center gap-x-2">
-          <div className="flex flex-col capitalize">
-            <span className="text-xs whitespace-nowrap">
-              {startDate.toLocaleString("es-ES", opt1)}
-            </span>
-            <span className="text-xs whitespace-nowrap">
-              {startDate.toLocaleString("es-ES", opt3)}
-            </span>
-          </div>
-          &rarr;
-          <div className="flex flex-col capitalize">
-            <span className="text-xs whitespace-nowrap">
-              {endDate.toLocaleString("es-ES", startDate.getFullYear() === endDate.getFullYear() ? opt2 : opt1)}
-            </span>
-            <span className="text-xs whitespace-nowrap">
-              {endDate.toLocaleString("es-ES", opt3)}
-            </span>
-          </div>
-        </div>
+        <HoverCard>
+          <HoverCardTrigger>
+            <div className="flex items-center gap-x-2">
+              <div className="flex flex-col capitalize">
+                <span className="text-xs whitespace-nowrap">
+                  {formatDate({ date: startDate, options: opt1, timeZone })}
+                </span>
+                <span className="text-xs whitespace-nowrap">
+                  {formatDate({ date: startDate, options: opt3, timeZone })}
+                </span>
+              </div>
+                &rarr;
+              <div className="flex flex-col capitalize">
+                <span className="text-xs whitespace-nowrap">
+                  {formatDate({ date: endDate, options: startDate.getFullYear() === endDate.getFullYear() ? opt2 : opt1, timeZone })}
+                </span>
+                <span className="text-xs whitespace-nowrap">
+                  {formatDate({ date: endDate, options: opt3, timeZone })}
+                </span>
+              </div>
+            </div>
+          </HoverCardTrigger>
+          <HoverCardContent>
+            <div className="text-xs">
+              La fecha mostrada se basa en tu zona horaria que es <span className="font-bold">{Intl.DateTimeFormat().resolvedOptions().timeZone}</span>.
+
+            </div>
+          </HoverCardContent>
+        </HoverCard>
       )
     },
     filterFn: (row, id, value) => {

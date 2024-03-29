@@ -1,6 +1,6 @@
 "use client"
 
-import { TbFlag, TbLock, TbLockOpen } from "react-icons/tb"
+import { TbBulb, TbFlag, TbLock, TbLockOpen } from "react-icons/tb"
 
 import { Button } from "@/components/ui/button"
 import { Cross2Icon } from "@radix-ui/react-icons"
@@ -21,9 +21,9 @@ export function DataTableToolbar ({ table }) {
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
-        {table.getColumn("type") && (
+        {table.getColumn("visibility") && (
           <DataTableFacetedFilter
-            column={table.getColumn("type")}
+            column={table.getColumn("visibility")}
             title="Visibilidad"
             options={[
               {
@@ -49,6 +49,11 @@ export function DataTableToolbar ({ table }) {
                 label: "Hackathon",
                 value: "hackathon",
                 icon: TbFlag
+              },
+              {
+                label: "Ideathon",
+                value: "ideathon",
+                icon: TbBulb
               }
             ]}
           />
