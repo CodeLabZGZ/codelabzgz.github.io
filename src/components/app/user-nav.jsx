@@ -12,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { TbDoorExit, TbHelpSquare, TbUser, TbUsers } from "react-icons/tb"
@@ -56,22 +57,34 @@ export function UserNav () {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <Link href="/profile" className="w-full flex items-center gap-x-2.5">
+            <Link href="/settings" className="w-full flex items-center gap-x-2.5">
               <TbUser className="w-4 h-4"/>
-              My Profile
+              Mi perfil
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Link href="/teams" className="w-full flex items-center gap-x-2.5">
               <TbUsers className="w-4 h-4"/>
-              My Teams
+              Mi equipo
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <a href="https://discord.gg/QHe9YYDtGf" className="w-full flex items-center gap-x-2.5">
               <TbHelpSquare className="w-4 h-4"/>
-              Help
+              Ayuda
             </a>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem>
+            Menú de comandos
+            <DropdownMenuShortcut>
+              ⌘K
+            </DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            Tema
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
@@ -80,7 +93,7 @@ export function UserNav () {
           className="flex items-center gap-x-2.5 cursor-pointer"
         >
           <TbDoorExit className="w-4 h-4"/>
-          Log out
+          Cerrar sesión
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
