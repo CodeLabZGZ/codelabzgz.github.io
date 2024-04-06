@@ -75,19 +75,19 @@ function genChallenges ({ min = 0, max = 10, events }) {
   const difficultyLevels = [
     {
       difficulty: "very easy",
-      points: 50
+      points: 15
     }, {
       difficulty: "easy",
-      points: 100
+      points: 20
     }, {
       difficulty: "medium",
-      points: 150
+      points: 30
     }, {
       difficulty: "hard",
-      points: 200
+      points: 40
     }, {
       difficulty: "insane",
-      points: 250
+      points: 50
     }
   ]
 
@@ -98,7 +98,7 @@ function genChallenges ({ min = 0, max = 10, events }) {
       values.push({
         event,
         title: faker.lorem.words({ min: 3, max: 8 }),
-        description: faker.lorem.paragraphs({ min: 1, max: 4 }),
+        statement: faker.lorem.paragraphs({ min: 1, max: 4 }),
         difficulty: item.difficulty,
         points: item.points
       })

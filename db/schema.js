@@ -99,7 +99,7 @@ export const challenges = sqliteTable("challenges", {
   event: integer("event", { mode: "number" })
     .references(() => events.id, { onDelete: "cascade" }),
   title: text("title"),
-  description: text("description").notNull(),
+  statement: text("statement").notNull(),
   difficulty: text("difficulty", { enum: ["very easy", "easy", "medium", "hard", "insane"] }).notNull(),
   points: integer("points", { mode: "number" })
 }, (c) => ({
