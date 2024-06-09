@@ -98,7 +98,6 @@ function genChallenges ({ min = 0, max = 10, events }) {
       values.push({
         event,
         title: faker.lorem.words({ min: 3, max: 8 }),
-        statement: faker.lorem.paragraphs({ min: 1, max: 4 }),
         difficulty: item.difficulty,
         points: item.points
       })
