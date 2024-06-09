@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import * as React from "react"
 
@@ -32,7 +32,7 @@ const CommandDialog = ({
         </Command>
       </DialogContent>
     </Dialog>)
-  )
+  );
 }
 
 const CommandInput = React.forwardRef(({ className, ...props }, ref) => (
@@ -86,7 +86,7 @@ const CommandItem = React.forwardRef(({ className, ...props }, ref) => (
   <CommandPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled=true]:pointer-events-none data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground data-[disabled=true]:opacity-50",
       className
     )}
     {...props} />
@@ -102,7 +102,7 @@ const CommandShortcut = ({
     (<span
       className={cn("ml-auto text-xs tracking-widest text-muted-foreground", className)}
       {...props} />)
-  )
+  );
 }
 CommandShortcut.displayName = "CommandShortcut"
 
@@ -115,5 +115,5 @@ export {
   CommandGroup,
   CommandItem,
   CommandShortcut,
-  CommandSeparator
+  CommandSeparator,
 }
