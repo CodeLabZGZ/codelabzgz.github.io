@@ -29,14 +29,14 @@ import {
 
 import { useState } from "react"
 
-const invoices = [
+const challenges = [
   {
-    challenge: "break the the door",
+    title: "break the the door",
     points: "200",
     difficulty: "medium"
   },
   {
-    challenge: "broken auth",
+    title: "broken auth",
     points: "150",
     difficulty: "easy"
   }
@@ -93,11 +93,11 @@ export default function Page () {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow key={invoice.invoice} onClick={() => setIsOpen(true)} className="cursor-pointer">
-              <TableCell className="font-medium">{invoice.challenge}</TableCell>
-              <TableCell>{invoice.points}</TableCell>
-              <TableCell>{invoice.difficulty}</TableCell>
+          {challenges.map(({title, points, difficulty}) => (
+            <TableRow key={title} onClick={() => setIsOpen(true)} className="cursor-pointer">
+              <TableCell className="font-medium">{title}</TableCell>
+              <TableCell>{points}</TableCell>
+              <TableCell>{difficulty}</TableCell>
             </TableRow>
           ))}
         </TableBody>
