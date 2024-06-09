@@ -15,7 +15,8 @@ import Link from "next/link"
 const currentDate = new Date()
 
 export function DataTableRowActions ({ row }) {
-  const { startDate, endDate, user } = row.original
+  const { startDate, endDate, user, title } = row.original
+  console.log(row.original)
 
   return (
     <DropdownMenu>
@@ -55,14 +56,14 @@ export function DataTableRowActions ({ row }) {
 
         }
         <DropdownMenuItem>
-          <Link href="/" className="w-full flex items-center gap-x-2">
+          <Link href={`/events/${title.replaceAll(" ", "-")}/info`} className="w-full flex items-center gap-x-2">
             <TbInfoSquare className="w-4 h-4"/>
             Información
           </Link>
         </DropdownMenuItem>
         {new Date(startDate) <= currentDate &&
           <DropdownMenuItem>
-            <Link href="/" className="w-full flex items-center gap-x-2">
+            <Link href={`/events/${title.replaceAll(" ", "-")}/scoreboard`} className="w-full flex items-center gap-x-2">
               <TbTimeline className="w-4 h-4"/>
               Resultados
             </Link>
