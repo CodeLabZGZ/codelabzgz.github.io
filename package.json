@@ -12,9 +12,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx .",
-    "db:generate": "drizzle-kit generate:sqlite",
-    "db:introspect": "drizzle-kit introspect:sqlite",
-    "db:push": "drizzle-kit push:sqlite",
+    "db:generate": "drizzle-kit generate",
+    "db:introspect": "drizzle-kit introspect",
+    "db:push": "drizzle-kit push",
     "db:seed": "node db/seed.js",
     "db:studio": "drizzle-kit studio"
   },
@@ -83,6 +83,7 @@
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
     "@tailwindcss/forms": "^0.5.7",
+    "dotenv": "^16.4.5",
     "drizzle-kit": "^0.22.6",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.2.3",

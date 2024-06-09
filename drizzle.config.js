@@ -1,9 +1,17 @@
+import 'dotenv/config'
+
+import path from 'path';
+
+console.log(path.resolve(__dirname, process.env.DB_URL))
+
 /** @type { import("drizzle-kit").Config } */
 export default {
+  dialect: "sqlite",
   schema: "./db/schema.js",
   out: "./db/drizzle",
-  driver: "better-sqlite",
   dbCredentials: {
-    url: process.env.DB_URL
-  }
+    url: "file:" + path.resolve(__dirname, process.env.DB_URL)
+  },
+  strict: true,
+  verbose: true
 }
