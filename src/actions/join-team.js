@@ -1,7 +1,7 @@
 "use server"
 
-import { db } from "db"
-import { members } from "db/schema"
+import { db } from "@/db"
+import { members } from "@/schema"
 
 export const joinTeam = async ({ id, name }) => {
   return new Promise((resolve, reject) => {

@@ -1,9 +1,10 @@
-import { toString } from 'mdast-util-to-string'
+import {codeToHtml, getHighlighter} from 'shiki'
+
 import { mdxAnnotations } from 'mdx-annotations'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeSlug from 'rehype-slug'
 import { remarkRehypeWrap } from 'remark-rehype-wrap'
-import shiki from 'shiki'
+import { toString } from 'mdast-util-to-string'
 import { visit } from 'unist-util-visit'
 
 let highlighter
@@ -11,7 +12,7 @@ let highlighter
 function rehypeShiki() {
   return async (tree) => {
     highlighter =
-      highlighter ?? (await shiki.getHighlighter({ theme: 'css-variables' }))
+      highlighter ?? (await getHighlighter({ theme: 'css-variables' }))
 
     visit(tree, 'element', (node, _nodeIndex, parentNode) => {
       if (node.tagName === 'code' && parentNode.tagName === 'pre') {
@@ -27,7 +28,7 @@ function rehypeShiki() {
         )
 
         node.children = []
-        node.properties.highlightedCode = shiki.renderToHtml(tokens, {
+        node.properties.highlightedCode = codeToHtml(tokens, {
           elements: {
             pre: ({ children }) => children,
             code: ({ children }) => children,

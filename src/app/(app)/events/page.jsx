@@ -11,8 +11,8 @@ import Past from "./past"
 import UpGoing from "./upgoing"
 import { auth } from "auth"
 import { columns } from "@/components/app/tables/events/columns"
-import { db } from "db"
-import { participations } from "db/schema"
+import { db } from "@/db"
+import { participations } from "@/schema"
 
 const currentDate = new Date()
 

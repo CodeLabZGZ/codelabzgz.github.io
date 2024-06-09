@@ -4,7 +4,7 @@ import {
   TabsList,
   TabsTrigger
 } from "@/components/ui/tabs"
-import { members, scoreboards } from "db/schema"
+import { members, scoreboards } from "@/schema"
 
 import All from "./all"
 import { CreateTeam } from "@/components/app/forms/create-team"
@@ -12,7 +12,7 @@ import { JoinTeam } from "@/components/app/forms/join-team"
 import MyTeams from "./my-teams"
 import { auth } from "auth"
 import { columns } from "@/components/app/tables/teams/columns"
-import { db } from "db"
+import { db } from "@/db"
 import { sql } from "drizzle-orm"
 
 export default async function Page () {

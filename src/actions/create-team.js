@@ -1,8 +1,8 @@
 "use server"
 
-import { members, teams } from "db/schema"
+import { members, teams } from "@/schema"
 
-import { db } from "db"
+import { db } from "@/db"
 
 export const createTeam = async ({ id, name, motto, slug }) => {
   return new Promise((resolve, reject) => {
