@@ -10,7 +10,7 @@ import JoinRequest from "./join-request"
 import Players from "./players"
 import Settings from "./settings"
 
-export default function Page ({ children }) {
+export default function Page () {
   return (
     <>
       <div className="flex items-center justify-between space-y-2">

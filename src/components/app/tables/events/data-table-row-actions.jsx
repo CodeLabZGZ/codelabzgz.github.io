@@ -16,7 +16,6 @@ const currentDate = new Date()
 
 export function DataTableRowActions ({ row }) {
   const { startDate, endDate, user, title } = row.original
-  console.log(row.original)
 
   return (
     <DropdownMenu>

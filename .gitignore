@@ -32,10 +32,6 @@ yarn-error.log*
 # vercel
 .vercel
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
 # database
 db/drizzle/
 db/**/*.db
