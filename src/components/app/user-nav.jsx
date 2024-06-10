@@ -6,6 +6,10 @@ import {
   AvatarImage
 } from "@/components/ui/avatar"
 import {
+   TbMoonStars as Dark,
+   TbSun as Light
+} from "react-icons/tb";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -21,9 +25,14 @@ import { signOut, useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Skeleton } from "@/components/ui/skeleton"
+import { useCmk } from "@/stores/cmdk"
+import { useTheme } from "next-themes"
 
 export function UserNav () {
   const { data: session } = useSession()
+  const { open, setOpen } = useCmk();
+  const { resolvedTheme, setTheme } = useTheme()
+  const otherTheme = resolvedTheme === "dark" ? "light" : "dark"
 
   return (
     <DropdownMenu>
@@ -77,14 +86,20 @@ export function UserNav () {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setOpen(!open)}>
             Menú de comandos
             <DropdownMenuShortcut>
               ⌘K
             </DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setTheme(otherTheme)}>
             Tema
+            <DropdownMenuShortcut>
+              {resolvedTheme === "dark" 
+                ? <Dark className="text-sm" />
+                : <Light className="text-sm" /> 
+            }
+            </DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
