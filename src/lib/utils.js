@@ -11,3 +11,30 @@ export const formatDate = ({ date, timeZone, options }) => {
     timeZone
   }).format(date)
 }
+
+export const formatDateInfoEvent = ({startDateStr, endDateStr, location}) => {
+  const startDate = new Date(startDateStr);
+  const endDate = new Date(endDateStr);
+  const locale = "es-ES"
+  
+  const startMonth = startDate.toLocaleString(locale, { month: 'short' });
+  const startDay = startDate.getDate();
+  const endMonth = endDate.toLocaleString(locale, { month: 'short' });
+  const endDay = endDate.getDate();
+  const startYear = startDate.getFullYear();
+  const endYear = endDate.getFullYear();
+
+  let result = '';
+
+  if (startYear === endYear) {
+    if (startMonth === endMonth) {
+      result = `${startMonth} ${startDay}-${endDay} ${startYear} | ${location}`;
+    } else {
+      result = `${startMonth} ${startDay}-${endMonth} ${endDay} ${startYear} | ${location}`;
+    }
+  } else {
+    result = `${startMonth} ${startDay} ${startYear}-${endMonth} ${endDay} ${endYear} | ${location}`;
+  }
+
+  return result;
+};

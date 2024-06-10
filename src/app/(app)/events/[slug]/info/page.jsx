@@ -16,16 +16,24 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { Share2Icon } from "@radix-ui/react-icons"
+import { db } from "@/db"
+import { eq } from "drizzle-orm"
+import { events } from "@/schema"
+import { formatDateInfoEvent } from "@/lib/utils"
+import { notFound } from "next/navigation"
 
-export default function Page({ params: {slug} }) {
+export default async function Page({ params: {slug} }) {
+  const [ event ] = await db.select().from(events).where(eq(events.title, slug.replaceAll("-", " ")))
+  if (!event || event.length === 0) return notFound()
+
   return (
     <div className="w-full mx-auto">
       <section className="relative w-full pt-12 md:pt-24 lg:pt-32 space-y-4">
         <div>
           <h1 className="lg:leading-tighter text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl xl:text-[3.4rem] 2xl:text-[3.75rem] capitalize">
-          {slug.replaceAll("-", " ")}
+          {event.title}
           </h1>
-          <p className="text-lg text-gray-500 dark:text-gray-400 mt-4">Dec 1-25 2024 | Zaragoza, ES</p>
+          <p className="capitalize text-lg text-gray-500 dark:text-gray-400 mt-4">{formatDateInfoEvent({endDateStr: event.endDate, startDateStr: event.startDate, location: event.location})}</p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="secondary">
@@ -43,33 +51,35 @@ export default function Page({ params: {slug} }) {
       </section>
       <section className="w-full py-12">
         <div className="space-y-12">
-          <div className="w-2/3 mx-auto mt-4">
-            <AspectRatio ratio={16 / 9} className="bg-muted aspect-video">
-              <Image
-                src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80"
-                alt="Photo by Drew Beamer"
-                fill
-                className="rounded-md object-cover w-full"
-                />
-            </AspectRatio>
-          </div>
+          {event.banner && 
+            <div className="w-2/3 mx-auto mt-4">
+              <AspectRatio ratio={16 / 9} className="bg-muted aspect-video">
+                <Image
+                  src={event.banner}
+                  alt="Photo by Drew Beamer"
+                  fill
+                  className="rounded-md object-cover w-full"
+                  />
+              </AspectRatio>
+            </div>
+          }
           <div className="mx-auto grid items-start gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
               <div className="grid gap-1">
                 <div className="flex items-center gap-2">
                   <Type/>
                   <h3 className="text-lg font-bold">Tipo de Evento</h3>
                 </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Público
+                <p className="capitalize text-sm text-gray-500 dark:text-gray-400">
+                  {event.visibility === "public" ? "Público" : "Privado"}
                 </p>
               </div>
               <div className="grid gap-1">
                 <div className="flex items-center gap-2">
                   <Format/>
-                  <h3 className="text-lg font-bold">Hackathon</h3>
+                  <h3 className="text-lg font-bold">Formato</h3>
                 </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Hackathon
+                <p className="capitalize text-sm text-gray-500 dark:text-gray-400">
+                  {event.format}
                 </p>
               </div>
               <div className="grid gap-1">
@@ -77,8 +87,8 @@ export default function Page({ params: {slug} }) {
                   <Location/>
                   <h3 className="text-lg font-bold">Localización</h3>
                 </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  EINA
+                <p className="capitalize text-sm text-gray-500 dark:text-gray-400">
+                  {event.location}
                 </p>
               </div>
               <div className="grid gap-1">
