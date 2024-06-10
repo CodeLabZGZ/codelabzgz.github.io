@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
+import { Textarea } from "@/components/ui/textarea"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -107,7 +108,11 @@ export default function Settings () {
             <FormItem>
               <FormLabel>Descripción</FormLabel>
               <FormControl>
-                <Input placeholder="Empieza aquí vuestra historia..." {...field} />
+                <Textarea 
+                  placeholder="Empieza aquí vuestra historia..." 
+                  className="h-32"
+                  {...field} 
+                />
               </FormControl>
               <FormDescription>
                 Lore del equipo que verán el resto de usuarios al visitar tu equipo.

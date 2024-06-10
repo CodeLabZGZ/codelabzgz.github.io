@@ -9,6 +9,7 @@ import Details from "./details"
 import JoinRequest from "./join-request"
 import Players from "./players"
 import Settings from "./settings"
+import { columns } from "@/components/app/tables/team-members/columns"
 
 export default function Page () {
   return (
@@ -28,7 +29,7 @@ export default function Page () {
             <Details/>
           </TabsContent>
           <TabsContent value="team-players" className="space-y-4">
-            <Players/>
+            <Players columns={columns} values={[]} />
           </TabsContent>
           <TabsContent value="settings" className="space-y-4">
             <Settings/>
