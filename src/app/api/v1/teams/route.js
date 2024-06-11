@@ -1,33 +1,22 @@
-import { NextResponse } from "next/server"
 import { db } from "@/db"
+import { errorHandler } from "@/middlewares/error-handler"
+import { response } from "@/lib/utils"
 import { teams } from "@/schema"
 
-export async function POST(request) {
+async function postHandler(request) {
   const values = request.json()
 
   const data = await db.insert(teams)
     .values(values)
     .returning()
 
-  return NextResponse.json({ 
-    data,
-    status: {
-      code: 201,
-      message: "",
-      timestamp: new Date().toISOString()
-    }
-  }, { status: 201 })
+  return response({ data, statusCode: 201 })
 }
  
-export async function GET(request) {
+async function getHandler(request) {
   const data = await db.query.teams.findMany()
-
-  return NextResponse.json({ 
-    data,
-    status: {
-      code: 200,
-      message: "",
-      timestamp: new Date().toISOString()
-    }
-  }, { status: 200 })
+  return response({ data })
 }
+
+export const POST = errorHandler(postHandler);
+export const GET = errorHandler(getHandler);

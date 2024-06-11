@@ -1,4 +1,6 @@
+import { NextResponse } from "next/server";
 import { clsx } from "clsx"
+import { message } from "statuses"
 import { twMerge } from "tailwind-merge"
 
 export function cn (...inputs) {
@@ -38,3 +40,14 @@ export const formatDateInfoEvent = ({startDateStr, endDateStr, location}) => {
 
   return result;
 };
+
+export const response = ({ data, code, statusCode=200, message: msg }) => {
+  return NextResponse.json({
+    data,
+    status: {
+      code: statusCode,
+      message: msg || message[(statusCode)],
+      timestamp: new Date().toISOString()
+    }
+  }, { status: code || statusCode });
+}

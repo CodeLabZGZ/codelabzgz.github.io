@@ -1,9 +1,11 @@
-import { NextResponse } from "next/server"
+import { NotFoundException } from "@/lib/api-errors"
 import { db } from "@/db"
 import { eq } from "drizzle-orm"
+import { errorHandler } from "@/middlewares/error-handler"
+import { response } from "@/lib/utils"
 import { teams } from "@/schema"
 
-export async function PUT(request, context) {
+async function putHandler(request, context) {
   const id = context.params.id
   const values = request.json()
   const data = await db.update(teams)
@@ -11,17 +13,11 @@ export async function PUT(request, context) {
     .where(eq(teams.id, id))
     .returning()
 
-  return NextResponse.json({ 
-    data,
-    status: {
-      code: 200,
-      message: "",
-      timestamp: new Date().toISOString()
-    }
-  }, {  status: 200  })
+  if (rows.length === 0) throw new NotFoundException()
+  return response({ data })
 }
  
-export async function PATCH(request, context) {
+async function patchHandler(request, context) {
   const id = context.params.id
   const {title, description} = request.json()
 
@@ -35,44 +31,31 @@ export async function PATCH(request, context) {
     .where(eq(teams.id, id))
     .returning()
 
-  return NextResponse.json({ 
-    data,
-    status: {
-      code: 200,
-      message: "",
-      timestamp: new Date().toISOString()
-    }
-  }, {  status: 200  })
+  if (rows.length === 0) throw new NotFoundException()
+  return response({ data })
 }
 
-export async function GET(request, context) {
+async function getHandler(request, context) {
   const id = context.params.id
   const data = await db.query.teams.findFirst({ 
-    where: eq(teams.id, id)
+    where: eq(teams.name, id)
   })
 
-  return NextResponse.json({ 
-    data,
-    status: {
-      code: 200,
-      message: "",
-      timestamp: new Date().toISOString()
-    }
-  }, {  status: 200  })
+  if (!data) throw new NotFoundException()
+  return response({ data })
 }
  
-export async function DELETE(request, context) {
+async function deleteHandler(request, context) {
   const id = context.params.id
-  const data = await db.delete(teams)
-    .where(eq(teams.id, id))
+  const rows = await db.delete(teams)
+    .where(eq(teams.name, id))
     .returning()
 
-  return NextResponse.json({ 
-    status: {
-      code: 204,
-      message: "",
-      timestamp: new Date().toISOString()
-    }
-  }, {  status: 200  })
+  if (rows.length === 0) throw new NotFoundException()
+  return response({ code: 200, statusCode: 204 })
 }
 
+export const PUT = errorHandler(putHandler);
+export const PATCH = errorHandler(patchHandler);
+export const GET = errorHandler(getHandler);
+export const DELETE = errorHandler(deleteHandler);
