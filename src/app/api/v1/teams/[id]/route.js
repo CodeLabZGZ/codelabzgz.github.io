@@ -1,30 +1,78 @@
 import { NextResponse } from "next/server"
+import { db } from "@/db"
+import { eq } from "drizzle-orm"
+import { teams } from "@/schema"
 
-export async function PUT(request) {
+export async function PUT(request, context) {
+  const id = context.params.id
+  const values = request.json()
+  const data = await db.update(teams)
+    .set(values)
+    .where(eq(teams.id, id))
+    .returning()
+
   return NextResponse.json({ 
-    data: {},
-    status: {}
+    data,
+    status: {
+      code: 200,
+      message: "",
+      timestamp: new Date().toISOString()
+    }
   }, {  status: 200  })
 }
  
-export async function PATCH(request) {
+export async function PATCH(request, context) {
+  const id = context.params.id
+  const {title, description} = request.json()
+
+  const values = {
+    ...(title && { title }),
+    ...(description && { description }),
+  }
+
+  const data = await db.update(teams)
+    .set(values)
+    .where(eq(teams.id, id))
+    .returning()
+
   return NextResponse.json({ 
-    data: {},
-    status: {}
+    data,
+    status: {
+      code: 200,
+      message: "",
+      timestamp: new Date().toISOString()
+    }
   }, {  status: 200  })
 }
 
-export async function GET(request) {
+export async function GET(request, context) {
+  const id = context.params.id
+  const data = await db.query.teams.findFirst({ 
+    where: eq(teams.id, id)
+  })
+
   return NextResponse.json({ 
-    data: {},
-    status: {}
+    data,
+    status: {
+      code: 200,
+      message: "",
+      timestamp: new Date().toISOString()
+    }
   }, {  status: 200  })
 }
  
-export async function DELETE(request) {
+export async function DELETE(request, context) {
+  const id = context.params.id
+  const data = await db.delete(teams)
+    .where(eq(teams.id, id))
+    .returning()
+
   return NextResponse.json({ 
-    data: {},
-    status: {}
+    status: {
+      code: 204,
+      message: "",
+      timestamp: new Date().toISOString()
+    }
   }, {  status: 200  })
 }
 

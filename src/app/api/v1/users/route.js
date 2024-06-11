@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server"
 import { db } from "@/db"
-import { teams } from "@/schema"
+import { users } from "@/schema"
 
 export async function POST(request) {
   const values = request.json()
 
-  const data = await db.insert(teams)
+  const data = await db.insert(users)
     .values(values)
     .returning()
 
@@ -20,7 +20,7 @@ export async function POST(request) {
 }
  
 export async function GET(request) {
-  const data = await db.query.teams.findMany()
+  const data = await db.query.users.findMany()
 
   return NextResponse.json({ 
     data,
