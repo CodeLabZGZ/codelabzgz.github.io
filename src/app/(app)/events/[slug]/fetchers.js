@@ -1,23 +1,39 @@
-import{ compileMDX } from "next-mdx-remote/rsc"
-import { error } from "console"
+import * as components from "@/components/app/mdx"
+
+import { compileMDX } from "next-mdx-remote/rsc"
 import fs from "fs"
 import path from "path"
+import { recmaPlugins } from "@/recma"
+import { rehypePlugins } from "@/rehype"
+import { remarkPlugins } from "@/remark"
 
 const contentDir = path.join(process.cwd(), "src/content")
 
-export async function getContentBySlug(eventFolder, slug) {
-  const fileName = slug + ".md"
-  const filePath = path.join(contentDir, eventFolder, fileName)
-  const fileContent = fs.readFileSync(filePath, "utf-8")
-  const { frontmatter, content } = await compileMDX({
-    source: fileContent,
-    options: {parseFrontmatter: true}
-  })
+export async function getContentBySlug(eventFolder, slug, ext=".md") {
+  try {
+    const fileName = slug + ext
+    const filePath = path.join(contentDir, eventFolder, fileName)
+    const fileContent = fs.readFileSync(filePath, "utf-8")
+    const { frontmatter, content } = await compileMDX({
+      source: fileContent,
+      options: {
+        parseFrontmatter: true,
+        mdxOptions: {
+          remarkPlugins,
+          recmaPlugins,
+          rehypePlugins
+        },
+      },
+      components
+    })
 
-  return {
-    frontmatter,
-    content,
-    slug: path.parse(fileName).name
+    return {
+      frontmatter,
+      content,
+      slug: path.parse(fileName).name
+    }
+  } catch ( error) { 
+    return null
   }
 }
 

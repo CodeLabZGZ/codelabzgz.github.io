@@ -17,9 +17,9 @@ Consider the number of unique elements of `nums` to be `k`, to get accepted, you
 
 The judge will test your solution with the following code:
 
-```cpp
+```cpp copy filename="awesome.js"
 int[] nums = [...]; // Input array
-int[] expectedNums = [...]; // The expected answer with correct length
+int[] expectedNums = [...]; // The expected answer with correct length sdasd a sda sd
 
 int k = removeDuplicates(nums); // Calls your implementation
 

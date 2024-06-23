@@ -1,50 +1,20 @@
-import {codeToHtml, getHighlighter} from 'shiki'
-
 import { mdxAnnotations } from 'mdx-annotations'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import { rehypeGithubAlerts } from "rehype-github-alerts"
+import rehypeHighlight from 'rehype-highlight'
+import rehypeKatex from 'rehype-katex'
+import rehypeMdxCodeProps from 'rehype-mdx-code-props'
 import rehypeSlug from 'rehype-slug'
 import { remarkRehypeWrap } from 'remark-rehype-wrap'
 import { toString } from 'mdast-util-to-string'
-import { visit } from 'unist-util-visit'
-
-let highlighter
-
-function rehypeShiki() {
-  return async (tree) => {
-    highlighter =
-      highlighter ?? (await getHighlighter({ theme: 'css-variables' }))
-
-    visit(tree, 'element', (node, _nodeIndex, parentNode) => {
-      if (node.tagName === 'code' && parentNode.tagName === 'pre') {
-        let language = node.properties.className?.[0]?.replace(/^language-/, '')
-
-        if (!language) {
-          return
-        }
-
-        let tokens = highlighter.codeToThemedTokens(
-          node.children[0].value,
-          language,
-        )
-
-        node.children = []
-        node.properties.highlightedCode = codeToHtml(tokens, {
-          elements: {
-            pre: ({ children }) => children,
-            code: ({ children }) => children,
-            line: ({ children }) => `<span>${children}</span>`,
-          },
-        })
-      }
-    })
-  }
-}
 
 export const rehypePlugins = [
   mdxAnnotations.rehype,
   rehypeSlug,
+  rehypeKatex,
   [rehypeAutolinkHeadings, { behavior: 'wrap', test: ['h2'] }],
-  rehypeShiki,
+  rehypeGithubAlerts,
+  rehypeHighlight,
   [
     remarkRehypeWrap,
     {
@@ -59,4 +29,5 @@ export const rehypePlugins = [
       },
     },
   ],
+  rehypeMdxCodeProps,
 ]

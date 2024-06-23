@@ -9,7 +9,6 @@ import {
   RocketIcon,
 } from "@radix-ui/react-icons"
 import {
-  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -19,12 +18,12 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@/components/ui/command"
-import { useEffect, useState } from "react"
 
 import { MainNav } from "@/components/app/main-nav"
 import { TeamSwitcher } from "@/components/app/team-switcher"
 import { UserNav } from "@/components/app/user-nav"
 import { useCmk } from "@/stores/cmdk"
+import { useEffect } from "react"
 
 export function AppLayout ({ children }) {
   const { open, setOpen } = useCmk();

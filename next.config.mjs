@@ -4,7 +4,7 @@ import { rehypePlugins } from "./mdx/rehype.mjs"
 import { remarkPlugins } from "./mdx/remark.mjs"
 
 const withMDX = nextMDX({
-  extension: /\.mdx?$/,
+  extension: /\.(md|mdx)$/,
   options: {
     remarkPlugins,
     rehypePlugins,
@@ -14,9 +14,10 @@ const withMDX = nextMDX({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  pageExtensions: ["js", "jsx", "ts", "tsx", "mdx"],
+  pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
   poweredByHeader: false,
   output: "standalone",
+  reactStrictMode: true,
   images: {
     unoptimized: true
   },

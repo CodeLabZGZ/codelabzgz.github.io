@@ -46,8 +46,8 @@ export default function PageComponent ({ values, event }) {
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <div className="flex justify-between">
-        <div className="flex items-center gap-x-2.5">
+      <div className="grid grid-cols-2 mb-4">
+        <div className="col-span-1 flex items-center gap-x-2.5">
           <Avatar>
             <AvatarImage src="#" alt="@shadcn" />
             <AvatarFallback>CN</AvatarFallback>
@@ -57,12 +57,12 @@ export default function PageComponent ({ values, event }) {
             <span className="text-xs text-muted-foreground">7 miembros</span>
           </div>
         </div>
-        <div className="flex items-center justify-between w-1/3">
-          <div className="flex flex-col items-center gap-x-2.5">
+        <div className="col-span-1 grid grid-cols-3">
+          <div className="col-span-1 flex flex-col items-center gap-x-2.5 mx-auto">
             <span className="text-muted-foreground">9.º</span>
             <span className="text-xs uppercase">puesto</span>
           </div>
-          <TooltipProvider>
+          <TooltipProvider className="col-span-1 mx-auto">
             <Tooltip>
               <TooltipTrigger>
                 <div className="flex flex-col items-center gap-x-2.5">
@@ -75,6 +75,12 @@ export default function PageComponent ({ values, event }) {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
+          <div className="col-span-1 flex items-center justify-between mx-auto">
+            <div className="flex flex-col items-center gap-x-2.5">
+              <span className="text-muted-foreground"> 0 / 9</span>
+              <span className="text-xs uppercase">retos</span>
+            </div>
+          </div>
         </div>
       </div>
       <Table>
@@ -114,7 +120,7 @@ export default function PageComponent ({ values, event }) {
             {active?.frontmatter?.description}
           </SheetDescription>
         </SheetHeader>
-        <div className="flex-grow overflow-y-auto statement">
+        <div className="flex-grow overflow-y-auto markdown-body">
           {active?.content}
         </div>
         <SheetFooter className="w-full flex items-center">
