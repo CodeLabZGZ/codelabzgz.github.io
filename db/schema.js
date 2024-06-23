@@ -5,7 +5,8 @@ export const users = sqliteTable("user", {
   id: text("id").primaryKey(),
   image: text("image"),
   name: text("name"),
-  username: text("username"),
+  status: text("status"),
+  username: text("username").notNull(),
   email: text("email").notNull(),
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
   createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`),
@@ -118,7 +119,9 @@ export const members = sqliteTable("members", {
     .references(() => users.id, { onDelete: "cascade" }),
   team: text("team")
     .references(() => teams.name, { onDelete: "cascade" }),
-  role: text("role", { enum: ["admin", "member", "pending"] }).notNull()
+  role: text("role", { enum: ["admin", "member", "pending"] }).notNull(),
+  createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`)
 }, (m) => ({
   compoundKey: primaryKey({ columns: [m.user, m.team] })
 }))

@@ -82,7 +82,7 @@ export function DataTable ({ columns, data }) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  onClick={() => router.push(`/teams/${row.original.slug}`)}
+                  onClick={() => router.push(`/teams/${row.original.name.replaceAll(" ","-")}`)}
                   className="cursor-pointer"
                 >
                   {row.getVisibleCells().map((cell) => (

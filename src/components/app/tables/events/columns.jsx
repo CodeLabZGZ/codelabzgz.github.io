@@ -139,7 +139,6 @@ export const columns = [
           <HoverCardContent>
             <div className="text-xs">
               La fecha mostrada se basa en tu zona horaria que es <span className="font-bold">{Intl.DateTimeFormat().resolvedOptions().timeZone}</span>.
-
             </div>
           </HoverCardContent>
         </HoverCard>
