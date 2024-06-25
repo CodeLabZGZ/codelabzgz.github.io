@@ -21,11 +21,6 @@ import {
 } from "@/components/ui/command"
 import {
   Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog"
 import {
@@ -33,42 +28,56 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from "@/components/ui/select"
+import { useEffect, useState } from "react"
+import useSWR, { useSWRConfig } from "swr"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { CreateTeamForm } from "@/components/app/forms/create-team"
 import { cn } from "@/lib/utils"
-import { useState } from "react"
+import { useSession } from "next-auth/react"
+import { useTeam } from "@/stores/team"
 
-const groups = [
+const GROUPS = [
   {
     label: "Teams",
-    teams: [
-      {
-        label: "Acme Inc.",
-        value: "acme-inc"
-      },
-      {
-        label: "Monsters Inc.",
-        value: "monsters"
-      }
-    ]
+    teams: []
   }
 ]
 
+const isEmptyObject = obj => obj && Object.keys(obj).length === 0;
+
 export function TeamSwitcher ({ className }) {
-  const [open, setOpen] = useState(false)
-  const [showNewTeamDialog, setShowNewTeamDialog] = useState(false)
-  const [selectedTeam, setSelectedTeam] = useState(
-    groups[0].teams[0]
-  )
+  const [ open, setOpen ] = useState(false)
+  const [ showNewTeamDialog, setShowNewTeamDialog ] = useState(false)
+  const [ groups, setGroups ] = useState(GROUPS)
+  
+  const { data: session, status } = useSession()
+  const { selectedTeam, setSelectedTeam } = useTeam()
+
+  // load config and data
+  const { fetcher } = useSWRConfig()
+  const { data } = useSWR(status !== "loading" && `/api/v1/teams?userId=${session.user.id}`, fetcher)
+
+  useEffect(() => {
+    if (!data) return 
+
+    const values = GROUPS.map(group => {
+      if (group.label === "Teams") {
+        group.teams = data.data.map(item => ({
+          image: item.team.logo,
+          label: item.team.name,
+          value: item.team.name.replaceAll(" ","-"),
+          role: item.role
+        }))
+      }
+
+      return group;
+    })
+    setGroups(values)
+
+    if (isEmptyObject(selectedTeam)) setSelectedTeam(groups.find(i => i.label === "Teams").teams[0])
+  }, [data])
+  
 
   return (
     <Dialog open={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
@@ -81,15 +90,21 @@ export function TeamSwitcher ({ className }) {
             aria-label="Select a team"
             className={cn("w-[200px] justify-between", className)}
           >
-            <Avatar className="mr-2 h-5 w-5">
-              <AvatarImage
-                src={`https://avatar.vercel.sh/${selectedTeam.value}.png`}
-                alt={selectedTeam.label}
-                className="grayscale"
-              />
-              <AvatarFallback>SC</AvatarFallback>
-            </Avatar>
-            {selectedTeam.label}
+            {selectedTeam &&
+              <Avatar className="mr-2 h-5 w-5">
+                <AvatarImage
+                  src={selectedTeam?.image}
+                  alt={selectedTeam?.label}
+                  className="grayscale"
+                />
+                <AvatarFallback className="uppercase">
+                  {selectedTeam?.label?.split(" ").map(w => w[0]).slice(0,2)}
+                </AvatarFallback>
+              </Avatar>
+            }
+            <span className="truncate">
+              {!selectedTeam ? "Sin equipo" : selectedTeam?.label}
+            </span>
             <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -99,7 +114,7 @@ export function TeamSwitcher ({ className }) {
               <CommandInput placeholder="Search team..." />
               <CommandEmpty>No team found.</CommandEmpty>
               {groups.map((group) => (
-                <CommandGroup key={group.label} heading={group.label}>
+                <CommandGroup key={group.label} heading={group.label + ` (${group.teams.length})`}>
                   {group.teams.map((team) => (
                     <CommandItem
                       key={team.value}
@@ -150,50 +165,7 @@ export function TeamSwitcher ({ className }) {
           </Command>
         </PopoverContent>
       </Popover>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Create team</DialogTitle>
-          <DialogDescription>
-            Add a new team to manage products and customers.
-          </DialogDescription>
-        </DialogHeader>
-        <div>
-          <div className="space-y-4 py-2 pb-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Team name</Label>
-              <Input id="name" placeholder="Acme Inc." />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="plan">Subscription plan</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a plan" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="free">
-                    <span className="font-medium">Free</span> -{" "}
-                    <span className="text-muted-foreground">
-                      Trial for two weeks
-                    </span>
-                  </SelectItem>
-                  <SelectItem value="pro">
-                    <span className="font-medium">Pro</span> -{" "}
-                    <span className="text-muted-foreground">
-                      $9/month per user
-                    </span>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setShowNewTeamDialog(false)}>
-            Cancel
-          </Button>
-          <Button type="submit">Continue</Button>
-        </DialogFooter>
-      </DialogContent>
+      <CreateTeamForm />
     </Dialog>
   )
 }

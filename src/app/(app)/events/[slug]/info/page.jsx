@@ -20,7 +20,7 @@ import { notFound } from "next/navigation"
 
 export default async function Page({ params: { slug }}) {
   const [ event ] = await db.select().from(events).where(eq(events.title, slug.replaceAll("-", " ")))
-  if (!event || event.length === 0) return notFound()
+  if (!event) return notFound()
   const { content } = await getContentBySlug(slug, "overview", ".mdx")
 
   return (

@@ -2,6 +2,7 @@ import "@/styles/globals.css"
 
 import { Inter } from "next/font/google"
 import { Providers } from "@/app/providers"
+import SWR from "@/components/swr"
 import { Toaster } from "@/components/ui/sonner"
 import clsx from "clsx"
 import localFont from "next/font/local"
@@ -38,8 +39,10 @@ export default function RootLayout ({ children }) {
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
-        <Providers>{children}</Providers>
-        <Toaster />
+        <SWR>
+          <Providers>{children}</Providers>
+          <Toaster />
+        </SWR>
       </body>
     </html>
   )

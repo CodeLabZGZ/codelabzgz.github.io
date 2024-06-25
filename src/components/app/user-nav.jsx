@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useCmk } from "@/stores/cmdk"
+import { useTeam } from "@/stores/team";
 import { useTheme } from "next-themes"
 
 export function UserNav () {
@@ -33,6 +34,7 @@ export function UserNav () {
   const { open, setOpen } = useCmk();
   const { resolvedTheme, setTheme } = useTheme()
   const otherTheme = resolvedTheme === "dark" ? "light" : "dark"
+  const { selectedTeam } = useTeam()
 
   return (
     <DropdownMenu>
@@ -72,7 +74,7 @@ export function UserNav () {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href="/teams" className="w-full flex items-center gap-x-2.5">
+            <Link href={selectedTeam ? `/teams/${selectedTeam?.value}` : "/teams"} className="w-full flex items-center gap-x-2.5">
               <TbUsers className="w-4 h-4"/>
               Mi equipo
             </Link>
