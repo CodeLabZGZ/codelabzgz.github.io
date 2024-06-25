@@ -12,7 +12,6 @@ const protectedRoutes = [
 
 export default async function middleware (request) {
   const session = await auth()
-
   const { pathname, origin } = request.nextUrl
 
   const isProtectedRoute = protectedRoutes.some((prefix) => pathname.startsWith(prefix))

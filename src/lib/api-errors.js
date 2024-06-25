@@ -11,3 +11,7 @@ export class HTTPException extends Error {
 export class NotFoundException extends HTTPException {
   constructor(msg) { super(404, msg); }
 }
+
+export class ConflictException extends HTTPException {
+  constructor(msg) { super(409, msg); }
+}
