@@ -11,6 +11,7 @@ import { TbCertificate, TbInfoSquare, TbTicket, TbTicketOff, TbTimeline } from "
 import { Button } from "@/components/ui/button"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import Link from "next/link"
+import { toast } from "sonner"
 import { useSWRConfig } from "swr"
 import { useTeam } from "@/stores/team"
 
@@ -39,13 +40,23 @@ export function DataTableRowActions ({ row }) {
               <DropdownMenuItem>
                 <button
                   className="w-full flex items-center gap-x-2"
-                  onClick={async () => {
-                    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events/${id}/join`, { 
+                  onClick={() => {
+                    const promise = fetch(`${process.env.NEXT_PUBLIC_API_URL}/events/${id}/join`, { 
                       method: "POST",
                       headers: { "Content-Type" : "application/json" },
                       body: JSON.stringify(selectedTeam?.id ? { team: selectedTeam.id } : {})
-                    }).then(() => {
-                      mutate()
+                    })
+
+                    toast.promise(promise, {
+                      loading: 'Loading...',
+                      success: async (res) => {
+                        const { data, status } = await res.json()
+                        return "ok"
+                      },
+                      error: async (res) => {
+                        const { status } = await res.json()
+                        return "error"
+                      },
                     })
                   }}
                 >
@@ -53,16 +64,24 @@ export function DataTableRowActions ({ row }) {
                 Inscribete
                 </button>
               </DropdownMenuItem>
-            )
-            : (
+            ) : (
               <DropdownMenuItem>
                 <button
                   className="w-full flex items-center gap-x-2"
                   onClick={async () => {
-                    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events/${id}/leave`, { method: "DELETE" })
-                      .then(() => {
-                        mutate()
-                      })
+                    const promise = fetch(`${process.env.NEXT_PUBLIC_API_URL}/events/${id}/leave`, { method: "DELETE" })
+
+                    toast.promise(promise, {
+                      loading: 'Loading...',
+                      success: async (res) => {
+                        const { data, status } = await res.json()
+                        return "ok"
+                      },
+                      error: async (res) => {
+                        const { status } = await res.json()
+                        return "error"
+                      },
+                    })
                   }}
                 >
                   <TbTicketOff className="w-4 h-4"/>

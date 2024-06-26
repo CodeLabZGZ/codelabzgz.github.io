@@ -17,8 +17,8 @@ async function deleteHandler(request, context) {
     ))
     .returning()
 
-  if (rows.length === 0) throw new NotFoundException()
-  return response({ data })
+  if (data.length === 0) throw new NotFoundException()
+  return response({ statusCode: 204 })
 }
 
 export const DELETE = errorHandler(auth(deleteHandler));

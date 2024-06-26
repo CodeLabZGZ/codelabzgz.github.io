@@ -34,7 +34,7 @@ export default async function Page({ params: { slug }}) {
         </div>
         <div className="flex items-center gap-2">
           <Button variant="secondary">
-            Apuntarse
+            Inscribete
           </Button>
           <Button
             variant="outline"
