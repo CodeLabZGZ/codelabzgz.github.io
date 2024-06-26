@@ -64,6 +64,7 @@ export function TeamSwitcher ({ className }) {
     const values = GROUPS.map(group => {
       if (group.label === "Teams") {
         group.teams = data.data.map(item => ({
+          id: item.team.id,
           image: item.team.logo,
           label: item.team.name,
           value: item.team.name.replaceAll(" ","-"),

@@ -11,11 +11,15 @@ import { TbCertificate, TbInfoSquare, TbTicket, TbTicketOff, TbTimeline } from "
 import { Button } from "@/components/ui/button"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import Link from "next/link"
+import { useSWRConfig } from "swr"
+import { useTeam } from "@/stores/team"
 
 const currentDate = new Date()
 
 export function DataTableRowActions ({ row }) {
-  const { startDate, endDate, user, title } = row.original
+  const { mutate } = useSWRConfig()
+  const { startDate, endDate, user, title, id } = row.original
+  const { selectedTeam } = useTeam()
 
   return (
     <DropdownMenu>
@@ -35,6 +39,15 @@ export function DataTableRowActions ({ row }) {
               <DropdownMenuItem>
                 <button
                   className="w-full flex items-center gap-x-2"
+                  onClick={async () => {
+                    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events/${id}/join`, { 
+                      method: "POST",
+                      headers: { "Content-Type" : "application/json" },
+                      body: JSON.stringify(selectedTeam?.id ? { team: selectedTeam.id } : {})
+                    }).then(() => {
+                      mutate()
+                    })
+                  }}
                 >
                   <TbTicket className="w-4 h-4"/>
                 Inscribete
@@ -45,6 +58,12 @@ export function DataTableRowActions ({ row }) {
               <DropdownMenuItem>
                 <button
                   className="w-full flex items-center gap-x-2"
+                  onClick={async () => {
+                    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events/${id}/leave`, { method: "DELETE" })
+                      .then(() => {
+                        mutate()
+                      })
+                  }}
                 >
                   <TbTicketOff className="w-4 h-4"/>
                 Abandonar

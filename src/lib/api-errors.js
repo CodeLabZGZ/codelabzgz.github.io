@@ -8,6 +8,10 @@ export class HTTPException extends Error {
   }
 }
 
+export class UnauthorizedException extends HTTPException {
+  constructor(msg) { super(401, msg); }
+}
+
 export class NotFoundException extends HTTPException {
   constructor(msg) { super(404, msg); }
 }

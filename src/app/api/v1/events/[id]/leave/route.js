@@ -1,20 +1,24 @@
-import { NotFoundException } from "@/lib/api-errors"
+import { and, eq } from "drizzle-orm"
+
+import { UnauthorizedException } from "@/lib/api-errors"
+import { auth } from "@/auth"
 import { db } from "@/db"
-import { eq } from "drizzle-orm"
 import { errorHandler } from "@/middlewares/error-handler"
-import { events } from "@/schema"
+import { participations } from "@/schema"
 import { response } from "@/lib/utils"
 
 async function deleteHandler(request, context) {
-  const id = context.params.id
-  const values = request.json()
-  const data = await db.update(events)
-    .set(values)
-    .where(eq(events.id, id))
+  if (!request.auth) throw new UnauthorizedException()
+    
+  const data = await db.delete(participations)
+    .where(and(
+      eq(participations.event, Number(context.params.id)),
+      eq(participations.user, request.auth.user.id)
+    ))
     .returning()
 
   if (rows.length === 0) throw new NotFoundException()
   return response({ data })
 }
 
-export const DELETE = errorHandler(deleteHandler);
+export const DELETE = errorHandler(auth(deleteHandler));
