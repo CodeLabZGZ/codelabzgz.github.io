@@ -4,7 +4,7 @@ import {
   TabsList,
   TabsTrigger
 } from "@/components/ui/tabs"
-import { members, scoreboards } from "@/schema"
+import { members, scoreboards, teams } from "@/schema"
 
 import All from "./all"
 import { CreateTeam } from "@/components/app/forms/create-team"
