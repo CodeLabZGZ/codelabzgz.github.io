@@ -8,9 +8,9 @@ export function DataTableToolbar ({ table }) {
       <div className="flex flex-1 items-center space-x-2">
         <Input
           placeholder="Buscar equipo..."
-          value={(table.getColumn("title")?.getFilterValue()) ?? ""}
+          value={(table.getColumn("team")?.getFilterValue()) ?? ""}
           onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
+            table.getColumn("team")?.setFilterValue(event.target.value)
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />

@@ -44,6 +44,8 @@ export default async function Page({ params: { slug }}) {
         FROM challenges
         GROUP BY event
       ) tr ON e.id = tr.event
+    WHERE
+      e.title = ${slug.replaceAll("-", " ")}
     GROUP BY
       e.id, te.total_teams, tp.total_people, tr.total_challenges;
   `)

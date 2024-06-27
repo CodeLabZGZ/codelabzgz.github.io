@@ -1,27 +1,17 @@
 "use client"
 
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger
-} from "@/components/ui/hover-card"
-import { TbLock, TbLockOpen } from "react-icons/tb"
-
-import { Badge } from "@/components/ui/badge"
 import { DataTableColumnHeader } from "./data-table-column-header"
-import { DataTableRowActions } from "./data-table-row-actions"
-import { formatDate } from "@/lib/utils"
 
 export const columns = [
   {
-    accessorKey: "rank",
+    accessorKey: "position",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Puesto" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex w-[100px] items-center">
-          <span>{row.getValue("people")}</span>
+          <span>{row.getValue("position")}</span>
         </div>
       )
     },
@@ -30,7 +20,7 @@ export const columns = [
     }
   },
   {
-    accessorKey: "title",
+    accessorKey: "team",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Nombre" />
     ),
@@ -38,12 +28,8 @@ export const columns = [
       const { visibility } = row.original
       return (
         <div className="flex items-center space-x-1.5">
-          {visibility === "public"
-            ? <TbLockOpen className="w-3.5 h-3.5" />
-            : <TbLock className="w-3.5 h-3.5" />
-          }
           <span className="min-w-[200px] max-w-[500px] truncate font-medium">
-            {row.getValue("title")}
+            {row.getValue("team")}
           </span>
         </div>
       )
@@ -52,14 +38,14 @@ export const columns = [
     enableHiding: false
   },
   {
-    accessorKey: "points",
+    accessorKey: "total_points",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Puntos"/>
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex items-center capitalize sr-only">
-          {row.getValue("points")}
+        <div className="flex items-center">
+          {row.getValue("total_points")}
         </div>
       )
     },
@@ -82,9 +68,5 @@ export const columns = [
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id))
     }
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => <DataTableRowActions row={row} />
   }
 ]
