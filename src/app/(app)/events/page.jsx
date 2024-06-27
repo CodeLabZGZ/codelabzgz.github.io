@@ -4,6 +4,7 @@ import {
   TabsList,
   TabsTrigger
 } from "@/components/ui/tabs"
+import { events, participations } from "@/schema"
 
 import Joined from "./joined"
 import OnGoing from "./ongoing"
@@ -12,30 +13,21 @@ import UpGoing from "./upgoing"
 import { auth } from "auth"
 import { columns } from "@/components/app/tables/events/columns"
 import { db } from "@/db"
-import { participations } from "@/schema"
+import { sql } from "drizzle-orm"
 
 const currentDate = new Date()
 
 export default async function Page () {
   const { user } = await auth()
-
-  let records = await db.query.events.findMany({ with: { participations } })
-  records = records.map(record => {
-    const people = record.participations.length
-    const item = record.participations.find(p => p.user === user.id)
-    delete record.participations
-    return item
-      ? {
-        ...record,
-        people,
-        user: item.user,
-        team: item.team
-      }
-      : {
-        ...record,
-        people
-      }
+  const records = await db.select({
+    ...events,
+    people: sql`COUNT(${participations.user})`,
+    participating: sql`MAX(CASE WHEN ${participations.user} = ${user.id} THEN 1 ELSE 0 END)`,
   })
+    .from(events)
+    .leftJoin(participations, sql`${participations.event} = ${events.id}`)
+    .groupBy(events.id, ...Object.keys(events))
+    .orderBy(events.startDate)
 
   return (
     <>
@@ -57,7 +49,7 @@ export default async function Page () {
             <UpGoing columns={columns} values={records.filter(e => new Date(e.startDate) > currentDate)} />
           </TabsContent>
           <TabsContent value="joined" className="space-y-4">
-            <Joined columns={columns} values={records.filter(e => e.user && new Date(e.startDate) <= currentDate && currentDate <= new Date(e.endDate))} />
+            <Joined columns={columns} values={records.filter(e => e.participating && new Date(e.startDate) <= currentDate && currentDate <= new Date(e.endDate))} />
           </TabsContent>
           <TabsContent value="past" className="space-y-4">
             <Past columns={columns} values={records.filter(e => new Date(e.endDate) < currentDate)} />

@@ -19,8 +19,9 @@ const currentDate = new Date()
 
 export function DataTableRowActions ({ row }) {
   const router = useRouter()
-  const { startDate, endDate, user, title, id } = row.original
   const { participation } = useParticipation()
+  
+  const { id, title, startDate, endDate, participating } = row.original
 
   return (
     <DropdownMenu>
@@ -35,7 +36,7 @@ export function DataTableRowActions ({ row }) {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
         {currentDate <= new Date(endDate) && (
-          !user
+          !participating
             ? (
               <DropdownMenuItem>
                 <button
