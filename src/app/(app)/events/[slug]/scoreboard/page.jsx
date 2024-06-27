@@ -8,6 +8,8 @@ import { sql } from "drizzle-orm"
 
 export default async function Page({ params: {slug} }) {
   const [ event ] = await db.select().from(events).where(eq(events.title, slug.replaceAll("-", " ")))
+  if (!event) return notFound()
+
 
   const records = db.all(sql`
       WITH ScoreByChallenge AS (
@@ -35,9 +37,7 @@ export default async function Page({ params: {slug} }) {
       GROUP BY sbc.team
       ORDER BY position;
     `)
-  console.log(records)
 
-  if (!event || event.length === 0) return notFound()
     
   return <DataTable columns={columns} data={records}/>
 }
