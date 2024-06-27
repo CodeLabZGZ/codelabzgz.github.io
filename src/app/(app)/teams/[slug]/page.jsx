@@ -14,7 +14,7 @@ import { db } from "@/db"
 import { sql } from "drizzle-orm"
 
 export default async function Page ({ params: { slug } }) {
-  const teamMembers = await db.all(sql`
+  const teamMembers = db.all(sql`
     SELECT u.id, u.image, u.name, u.status, u.username, m.createdAt, m.updatedAt, m.role
     FROM ${users} u
     JOIN ${members} m ON u.id = m.user

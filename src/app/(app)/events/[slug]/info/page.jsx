@@ -19,7 +19,7 @@ import { sql } from "drizzle-orm"
 
 export default async function Page({ params: { slug }}) {
   const { user } = await auth()
-  const [ event ] = await db.all(sql`
+  const [ event ] = db.all(sql`
     SELECT
       e.*,
       MAX(CASE WHEN p.user = ${user.id} THEN 1 ELSE 0 END) AS participating,
