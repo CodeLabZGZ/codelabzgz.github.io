@@ -12,15 +12,15 @@ import { Button } from "@/components/ui/button"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import Link from "next/link"
 import { toast } from "sonner"
-import { useSWRConfig } from "swr"
-import { useTeam } from "@/stores/team"
+import { useParticipation } from "@/stores/participation"
+import { useRouter } from 'next/navigation'
 
 const currentDate = new Date()
 
 export function DataTableRowActions ({ row }) {
-  const { mutate } = useSWRConfig()
+  const router = useRouter()
   const { startDate, endDate, user, title, id } = row.original
-  const { selectedTeam } = useTeam()
+  const { participation } = useParticipation()
 
   return (
     <DropdownMenu>
@@ -44,13 +44,14 @@ export function DataTableRowActions ({ row }) {
                     const promise = fetch(`${process.env.NEXT_PUBLIC_API_URL}/events/${id}/join`, { 
                       method: "POST",
                       headers: { "Content-Type" : "application/json" },
-                      body: JSON.stringify(selectedTeam?.id ? { team: selectedTeam.id } : {})
+                      body: JSON.stringify(participation?.type === "teams" ? { team: participation.label } : {})
                     })
 
                     toast.promise(promise, {
                       loading: 'Loading...',
                       success: async (res) => {
                         const { data, status } = await res.json()
+                        router.refresh()
                         return "ok"
                       },
                       error: async (res) => {
@@ -75,6 +76,7 @@ export function DataTableRowActions ({ row }) {
                       loading: 'Loading...',
                       success: async (res) => {
                         const { data, status } = await res.json()
+                        router.refresh()
                         return "ok"
                       },
                       error: async (res) => {

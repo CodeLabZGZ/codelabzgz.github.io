@@ -6,7 +6,7 @@
         "./db/*",
         "./mdx/*"
       ],
-      "auth": ["./src/auth.js"],
+      "auth": ["./src/auth.js"]
     }
   }
 }

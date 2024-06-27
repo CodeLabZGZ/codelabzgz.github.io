@@ -6,14 +6,14 @@ import {
   TbCloud as Type,
   TbUsers as Users
 } from "react-icons/tb"
+import { JoinLeaveButton, ShareButton } from "@/components/app/tables/events/info-buttons"
+import { and, eq } from "drizzle-orm"
+import { events, participations } from "@/schema"
 
 import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { Button } from "@/components/ui/button"
 import Image from "next/image"
-import { Share2Icon } from "@radix-ui/react-icons"
+import { auth } from "@/auth"
 import { db } from "@/db"
-import { eq } from "drizzle-orm"
-import { events } from "@/schema"
 import { formatDateInfoEvent } from "@/lib/utils"
 import { getContentBySlug } from "../fetchers"
 import { notFound } from "next/navigation"
@@ -21,8 +21,10 @@ import { notFound } from "next/navigation"
 export default async function Page({ params: { slug }}) {
   const [ event ] = await db.select().from(events).where(eq(events.title, slug.replaceAll("-", " ")))
   if (!event) return notFound()
-  const { content } = await getContentBySlug(slug, "overview", ".mdx")
-
+  const session = await auth()
+  const [ participation ]  = await db.select().from(participations).where(and(eq(participations.event, event.id), eq(participations.user, session.user.id)))
+  const eventContent = await getContentBySlug(slug, "overview", ".mdx")
+  
   return (
     <div className="w-full mx-auto">
       <section className="relative w-full pt-12 md:pt-24 lg:pt-32 space-y-4">
@@ -33,16 +35,8 @@ export default async function Page({ params: { slug }}) {
           <p className="capitalize text-lg text-gray-500 dark:text-gray-400 mt-4">{formatDateInfoEvent({endDateStr: event.endDate, startDateStr: event.startDate, location: event.location})}</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="secondary">
-            Inscribete
-          </Button>
-          <Button
-            variant="outline"
-            className="gap-1"
-          >
-            <Share2Icon/>
-            Compartir
-          </Button>
+          <JoinLeaveButton event={event.id} state={Boolean(participation)} />
+          <ShareButton />
         </div>
         <hr className="absolute -bottom-4 w-full "/>
       </section>
@@ -119,7 +113,7 @@ export default async function Page({ params: { slug }}) {
           </div>
       </section>
       <section className="space-y-12">
-        {content}
+        {eventContent?.content}
       </section>
     </div>
   )

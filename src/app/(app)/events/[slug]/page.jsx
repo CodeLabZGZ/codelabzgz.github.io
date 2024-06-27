@@ -4,7 +4,6 @@ import { notFound } from "next/navigation"
 
 export default async  function Page ({params: { slug }}) {
   const  { error, data: values} = await getContent(slug)
-  console.log(error)
   if (error) notFound()
 
   return (

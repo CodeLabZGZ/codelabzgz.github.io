@@ -17,8 +17,6 @@ async function postHandler(request) {
  
 async function getHandler(request) {
   const userId = request.nextUrl.searchParams.get("userId")
-  console.log(userId);
-
   
   if (userId) {
     const data = await db.query.members.findMany({

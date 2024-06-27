@@ -1,11 +1,6 @@
 "use client"
 
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage
-} from "@/components/ui/avatar"
-import {
    TbMoonStars as Dark,
    TbSun as Light
 } from "react-icons/tb";
@@ -22,6 +17,7 @@ import {
 import { TbDoorExit, TbHelpSquare, TbUser, TbUsers } from "react-icons/tb"
 import { signOut, useSession } from "next-auth/react"
 
+import { Avatar } from "@/components/avatar"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -40,20 +36,13 @@ export function UserNav () {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          {!session
-            ? (
-              <Skeleton className="rounded-full">
-                <div className="h-8 w-8 rounded-full"/>
-              </Skeleton>
-            )
-            : (
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={session?.user.image} alt="@shadcn" />
-                <AvatarFallback>{session?.user.name.split(" ")[0][0] + session?.user.name.split(" ")[1][0]}</AvatarFallback>
-              </Avatar>
-            )
+          {session &&
+            <Avatar 
+              image={session?.user.image}
+              value={session?.user.name}
+              className="w-8 h-8"
+            />
           }
-
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -73,7 +62,7 @@ export function UserNav () {
               Mi perfil
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem disabled={!selectedTeam}>
             <Link href={selectedTeam ? `/teams/${selectedTeam?.value}` : "/teams"} className="w-full flex items-center gap-x-2.5">
               <TbUsers className="w-4 h-4"/>
               Mi equipo

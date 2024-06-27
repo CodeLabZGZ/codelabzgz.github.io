@@ -1,11 +1,6 @@
 "use client"
 
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage
-} from "@/components/ui/avatar"
-import {
   CaretSortIcon,
   CheckIcon,
   PlusCircledIcon
@@ -31,16 +26,24 @@ import {
 import { useEffect, useState } from "react"
 import useSWR, { useSWRConfig } from "swr"
 
+import { Avatar } from "@/components/avatar"
 import { Button } from "@/components/ui/button"
 import { CreateTeamForm } from "@/components/app/forms/create-team"
 import { cn } from "@/lib/utils"
+import { useParticipation } from "@/stores/participation"
 import { useSession } from "next-auth/react"
 import { useTeam } from "@/stores/team"
 
 const GROUPS = [
   {
+    label: "Accounts",
+    show: false,
+    values: []
+  },
+  {
     label: "Teams",
-    teams: []
+    show: true,
+    values: []
   }
 ]
 
@@ -53,6 +56,7 @@ export function TeamSwitcher ({ className }) {
   
   const { data: session, status } = useSession()
   const { selectedTeam, setSelectedTeam } = useTeam()
+  const { participation, setParticipation } = useParticipation()
 
   // load config and data
   const { fetcher } = useSWRConfig()
@@ -62,8 +66,18 @@ export function TeamSwitcher ({ className }) {
     if (!data) return 
 
     const values = GROUPS.map(group => {
+      if (group.label === "Accounts") {
+        group.values = [{
+            id: session?.user?.id,
+            image: session?.user?.image,
+            label: session?.user?.name,
+            value: session?.user?.email,
+          }]
+       
+      }
+
       if (group.label === "Teams") {
-        group.teams = data.data.map(item => ({
+        group.values = data.data.map(item => ({
           id: item.team.id,
           image: item.team.logo,
           label: item.team.name,
@@ -76,8 +90,9 @@ export function TeamSwitcher ({ className }) {
     })
     setGroups(values)
 
-    if (isEmptyObject(selectedTeam)) setSelectedTeam(groups.find(i => i.label === "Teams").teams[0])
-  }, [data])
+    if (isEmptyObject(participation)) setParticipation(groups.find(i => i.label === "Accounts").values[0])
+    if (isEmptyObject(selectedTeam)) setSelectedTeam(groups.find(i => i.label === "Teams").values[0])
+  }, [data, session])
   
 
   return (
@@ -91,20 +106,8 @@ export function TeamSwitcher ({ className }) {
             aria-label="Select a team"
             className={cn("w-[200px] justify-between", className)}
           >
-            {selectedTeam &&
-              <Avatar className="mr-2 h-5 w-5">
-                <AvatarImage
-                  src={selectedTeam?.image}
-                  alt={selectedTeam?.label}
-                  className="grayscale"
-                />
-                <AvatarFallback className="uppercase">
-                  {selectedTeam?.label?.split(" ").map(w => w[0]).slice(0,2)}
-                </AvatarFallback>
-              </Avatar>
-            }
             <span className="truncate">
-              {!selectedTeam ? "Sin equipo" : selectedTeam?.label}
+              {!participation ? "Sin equipo" : participation?.label}
             </span>
             <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
@@ -115,29 +118,27 @@ export function TeamSwitcher ({ className }) {
               <CommandInput placeholder="Search team..." />
               <CommandEmpty>No team found.</CommandEmpty>
               {groups.map((group) => (
-                <CommandGroup key={group.label} heading={group.label + ` (${group.teams.length})`}>
-                  {group.teams.map((team) => (
+                <CommandGroup key={group.label} heading={group.show ? group.label + ` (${group.values.length})` : ""}>
+                  {group.values.map((item) => (
                     <CommandItem
-                      key={team.value}
+                      key={item.value}
                       onSelect={() => {
-                        setSelectedTeam(team)
+                        setSelectedTeam(item)
+                        setParticipation({ ...item, type: group.label.toLowerCase() })
                         setOpen(false)
                       }}
-                      className="text-sm"
+                      className="text-sm gap-2"
                     >
-                      <Avatar className="mr-2 h-5 w-5">
-                        <AvatarImage
-                          src={`https://avatar.vercel.sh/${team.value}.png`}
-                          alt={team.label}
-                          className="grayscale"
-                        />
-                        <AvatarFallback>SC</AvatarFallback>
-                      </Avatar>
-                      {team.label}
+                      <Avatar 
+                        image={item.image}
+                        value={item.label}
+                        className="w-5 h-5"
+                      />
+                      {item.label}
                       <CheckIcon
                         className={cn(
                           "ml-auto h-4 w-4",
-                          selectedTeam.value === team.value
+                          participation.value === item.value
                             ? "opacity-100"
                             : "opacity-0"
                         )}

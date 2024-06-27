@@ -47,6 +47,7 @@
     "@tanstack/react-table": "^8.17.3",
     "atropos": "^2.0.2",
     "autoprefixer": "^10.4.19",
+    "avvvatars-react": "^0.4.2",
     "better-sqlite3": "^11.0.0",
     "cheerio": "^1.0.0-rc.12",
     "class-variance-authority": "^0.7.0",
