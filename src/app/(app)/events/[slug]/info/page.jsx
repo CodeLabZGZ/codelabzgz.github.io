@@ -7,8 +7,6 @@ import {
   TbUsers as Users
 } from "react-icons/tb"
 import { JoinLeaveButton, ShareButton } from "@/components/app/tables/events/info-buttons"
-import { and, eq } from "drizzle-orm"
-import { events, participations } from "@/schema"
 
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import Image from "next/image"
@@ -17,12 +15,40 @@ import { db } from "@/db"
 import { formatDateInfoEvent } from "@/lib/utils"
 import { getContentBySlug } from "../fetchers"
 import { notFound } from "next/navigation"
+import { sql } from "drizzle-orm"
 
 export default async function Page({ params: { slug }}) {
-  const [ event ] = await db.select().from(events).where(eq(events.title, slug.replaceAll("-", " ")))
+  const { user } = await auth()
+  const [ event ] = await db.all(sql`
+    SELECT
+      e.*,
+      MAX(CASE WHEN p.user = ${user.id} THEN 1 ELSE 0 END) AS participating,
+      COALESCE(te.total_teams, 0) AS total_teams,
+      COALESCE(tp.total_people, 0) AS total_people,
+      COALESCE(tr.total_challenges, 0) AS total_challenges
+    FROM
+      events e
+      LEFT JOIN participations p ON p.event = e.id
+      LEFT JOIN (
+        SELECT event, COUNT(DISTINCT team) AS total_teams
+        FROM participations
+        GROUP BY event
+      ) te ON e.id = te.event
+      LEFT JOIN (
+        SELECT event, COUNT(DISTINCT user) AS total_people
+        FROM participations
+        GROUP BY event
+      ) tp ON e.id = tp.event
+      LEFT JOIN (
+        SELECT event, COUNT(*) AS total_challenges
+        FROM challenges
+        GROUP BY event
+      ) tr ON e.id = tr.event
+    GROUP BY
+      e.id, te.total_teams, tp.total_people, tr.total_challenges;
+  `)
+
   if (!event) return notFound()
-  const session = await auth()
-  const [ participation ]  = await db.select().from(participations).where(and(eq(participations.event, event.id), eq(participations.user, session.user.id)))
   const eventContent = await getContentBySlug(slug, "overview", ".mdx")
   
   return (
@@ -35,7 +61,7 @@ export default async function Page({ params: { slug }}) {
           <p className="capitalize text-lg text-gray-500 dark:text-gray-400 mt-4">{formatDateInfoEvent({endDateStr: event.endDate, startDateStr: event.startDate, location: event.location})}</p>
         </div>
         <div className="flex items-center gap-2">
-          <JoinLeaveButton event={event.id} state={Boolean(participation)} />
+          <JoinLeaveButton event={event.id} state={Boolean(event.participating)} />
           <ShareButton />
         </div>
         <hr className="absolute -bottom-4 w-full "/>
@@ -70,7 +96,7 @@ export default async function Page({ params: { slug }}) {
                   <h3 className="text-lg font-bold">Formato</h3>
                 </div>
                 <p className="capitalize text-sm text-gray-500 dark:text-gray-400">
-                  {event.format}
+                  {event.type}
                 </p>
               </div>
               <div className="grid gap-1">
@@ -88,7 +114,7 @@ export default async function Page({ params: { slug }}) {
                   <h3 className="text-lg font-bold">Asistentes</h3>
                 </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                <span className="font-blold text-white">15</span> personas se han unido
+                <span className="font-blold text-white">{event.total_people}</span> Personas se han unido
                 </p>
               </div>
               <div className="grid gap-1">
@@ -97,7 +123,7 @@ export default async function Page({ params: { slug }}) {
                   <h3 className="text-lg font-bold">Equipos</h3>
                 </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                <span className="font-blold text-white">4</span> equipos se han unido
+                <span className="font-blold text-white">{event.total_teams}</span> Equipos se han unido
                 </p>
               </div>
               <div className="grid gap-1">
@@ -106,7 +132,7 @@ export default async function Page({ params: { slug }}) {
                   <h3 className="text-lg font-bold">Retos</h3>
                 </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  <span className="font-blold text-white">25</span> retos repartidos en <span className="font-blold text-white">5</span> categorías
+                  <span className="font-blold text-white">{event.total_challenges}</span> Desafíos
                 </p>
               </div>
             </div>

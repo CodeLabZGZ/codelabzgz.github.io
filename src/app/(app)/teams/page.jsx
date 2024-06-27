@@ -18,39 +18,35 @@ import { sql } from "drizzle-orm"
 export default async function Page () {
   const { user } = await auth()
 
-  const rankings = await db.all(sql`
-    SELECT team, event, SUM(points) AS total_points
-    FROM (
-        SELECT team, event, challenge, points, ROW_NUMBER() OVER (PARTITION BY event ORDER BY points DESC) AS row_num
-        FROM ${scoreboards}
-    )
-    WHERE row_num <= 3
-    GROUP BY team, event
-    ORDER BY event, total_points DESC
+  const records = db.all(sql`
+    WITH
+      TeamMembers AS (
+        SELECT
+          t.*,
+          COUNT(m.user) AS members,
+          MAX(CASE WHEN m.user = ${user.id} THEN m.role ELSE NULL END) AS role
+        FROM teams t
+        LEFT JOIN members m ON m.team = t.name
+        GROUP BY t.name
+      ),
+      EventLeaderboard AS (
+        SELECT team, MAX(total_points) AS points, COUNT(*) AS podiums
+        FROM (
+          SELECT 
+            team, event, SUM(points) AS total_points, 
+            ROW_NUMBER() OVER (PARTITION BY event ORDER BY SUM(points) DESC) AS position
+          FROM scoreboards
+          GROUP BY event, team
+        ) EventScoreboard
+        WHERE position <= 3
+        GROUP BY team
+      )
+
+    SELECT tm.*, tm.members, el.points, el.podiums
+    FROM TeamMembers tm
+    LEFT JOIN EventLeaderboard el ON tm.name = el.team
+    ORDER BY tm.role DESC, el.points DESC;
   `)
-
-  let records = await db.query.teams.findMany({ with: { members, scoreboards } })
-  records = records.map(record => {
-    const ownership = record.members.find(m => m.user === user.id)
-
-    const awards = rankings.reduce((prev, next) => {
-      if (next.team === record.name) return prev + 1
-      return prev
-    }, 0)
-
-    return ownership
-      ? {
-        ...record,
-        ...ownership,
-        members: record.members.length,
-        awards
-      }
-      : {
-        ...record,
-        members: record.members.length,
-        awards
-      }
-  })
 
   return (
     <>

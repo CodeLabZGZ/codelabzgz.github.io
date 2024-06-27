@@ -64,20 +64,20 @@ export const columns = [
     cell: ({ row }) => {
       return (
         <div className="w-[100px]">
-          {row.getValue("members")}
+          {row.getValue("members") || 0}
         </div>
       )
     }
   },
   {
-    accessorKey: "awards",
+    accessorKey: "podiums",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Podios" />
     ),
     cell: ({ row }) => {
       return (
         <div className="w-[100px]">
-          {row.getValue("awards")}
+          {row.getValue("podiums") || 0}
         </div>
       )
     }
