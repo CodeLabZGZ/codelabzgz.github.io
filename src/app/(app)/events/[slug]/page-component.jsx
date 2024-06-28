@@ -1,12 +1,11 @@
 "use client"
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage
-} from "@/components/ui/avatar"
 import { Button, buttonVariants } from "@/components/ui/button"
-import { DownloadIcon, UploadIcon } from '@radix-ui/react-icons'
+import {
+  TbDownload as Download,
+  TbExternalLink as ExternalLink,
+  TbUpload as Upload
+} from "react-icons/tb";
 import {
   Sheet,
   SheetContent,
@@ -18,6 +17,7 @@ import {
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -30,17 +30,13 @@ import {
   TooltipTrigger
 } from "@/components/ui/tooltip"
 
+import { Avatar } from "@/components/avatar"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import { formatNumber } from "@/lib/utils"
 import { useState } from "react"
 
-function formatNumber (num) {
-  const units = [{ value: 1e12, suffix: "T" }, { value: 1e9, suffix: "B" }, { value: 1e6, suffix: "M" }, { value: 1e3, suffix: "K" }]
-  const result = units.find(u => num >= u.value)
-  return result ? (num / result.value).toFixed(1).replace(/\.0$/, "") + " " + result.suffix : num.toString()
-}
-
-export default function PageComponent ({ values, event }) {
+export default function PageComponent ({ values, event, data }) {
   const [isOpen, setIsOpen] = useState(false)
   const [active, setActive] = useState(null)
 
@@ -48,42 +44,45 @@ export default function PageComponent ({ values, event }) {
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <div className="grid grid-cols-2 mb-4">
         <div className="col-span-1 flex items-center gap-x-2.5">
-          <Avatar>
-            <AvatarImage src="#" alt="@shadcn" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+          <Avatar image={data.team.logo} value={data.team.name} />
           <div className="flex flex-col items-start">
-            <span className="">Canarios Navegantes</span>
-            <span className="text-xs text-muted-foreground">7 miembros</span>
+            <span className="">{data.team.name}</span>
+            <span className="text-xs text-muted-foreground">{data.team.membersPlaying} / {data.team.members} miembros</span>
           </div>
         </div>
         <div className="col-span-1 grid grid-cols-3">
           <div className="col-span-1 flex flex-col items-center gap-x-2.5 mx-auto">
-            <span className="text-muted-foreground">9.º</span>
+            <span className="text-muted-foreground">{data.position}.º</span>
             <span className="text-xs uppercase">puesto</span>
           </div>
           <TooltipProvider className="col-span-1 mx-auto">
             <Tooltip>
               <TooltipTrigger>
                 <div className="flex flex-col items-center gap-x-2.5">
-                  <span className="text-muted-foreground">{formatNumber(200000000000)}</span>
+                  <span className="text-muted-foreground">{formatNumber(data.total_points)}</span>
                   <span className="text-xs uppercase">puntos</span>
                 </div>
               </TooltipTrigger>
               <TooltipContent className="font-mono">
-                {"200000000000".toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                {data.total_points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
           <div className="col-span-1 flex items-center justify-between mx-auto">
             <div className="flex flex-col items-center gap-x-2.5">
-              <span className="text-muted-foreground"> 0 / 9</span>
+              <span className="text-muted-foreground">{data.challenges}</span>
               <span className="text-xs uppercase">retos</span>
             </div>
           </div>
         </div>
       </div>
       <Table>
+        <TableCaption>
+          <Link href={`/events/${event}/scoreboard`} className="flex items-center justify-center gap-x-2">
+            Ver resultados resultados. 
+            <ExternalLink/>
+          </Link>
+        </TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[400px]">Retos</TableHead>
@@ -128,7 +127,7 @@ export default function PageComponent ({ values, event }) {
             href="/"
             className={buttonVariants({ size: "sm", variant: "outline", className: "gap-1.5" })}
           >
-            <DownloadIcon className="w-4 h-4"/>
+            <Download className="w-4 h-4"/>
             Descargar plantilla
           </Link>
           <Button
@@ -141,7 +140,7 @@ export default function PageComponent ({ values, event }) {
             size="sm"
             className="gap-1.5"
           >
-            <UploadIcon className="w-4 h-4"/>
+            <Upload className="w-4 h-4"/>
             Subir solución
           </Button>
         </SheetFooter>

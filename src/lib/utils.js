@@ -51,3 +51,9 @@ export const response = ({ data, code=200, statusCode=200, message: msg }) => {
     }
   }, { status: code ?? statusCode });
 }
+
+export function formatNumber (num) {
+  const units = [{ value: 1e12, suffix: "T" }, { value: 1e9, suffix: "B" }, { value: 1e6, suffix: "M" }, { value: 1e3, suffix: "K" }]
+  const result = units.find(u => num >= u.value)
+  return result ? (num / result.value).toFixed(1).replace(/\.0$/, "") + " " + result.suffix : num.toString()
+}
