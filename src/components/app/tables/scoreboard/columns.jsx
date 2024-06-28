@@ -1,5 +1,12 @@
 "use client"
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from "@/components/ui/tooltip"
+import { formatNumber } from "@/lib/utils"
 import { DataTableColumnHeader } from "./data-table-column-header"
 
 export const columns = [
@@ -20,16 +27,15 @@ export const columns = [
     }
   },
   {
-    accessorKey: "team",
+    accessorKey: "participant",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Nombre" />
     ),
     cell: ({ row }) => {
-      const { visibility } = row.original
       return (
         <div className="flex items-center space-x-1.5">
           <span className="min-w-[200px] max-w-[500px] truncate font-medium">
-            {row.getValue("team")}
+            {row.getValue("participant")}
           </span>
         </div>
       )
@@ -44,7 +50,21 @@ export const columns = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex items-center">{row.getValue("total_points")}</div>
+        <TooltipProvider className="col-span-1 mx-auto">
+          <Tooltip>
+            <TooltipTrigger>
+              <span className="text-muted-foreground">
+                {formatNumber(row.getValue("total_points"))}
+              </span>
+            </TooltipTrigger>
+            <TooltipContent className="font-mono">
+              {row
+                .getValue("total_points")
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       )
     },
     filterFn: (row, id, value) => {
@@ -52,14 +72,14 @@ export const columns = [
     }
   },
   {
-    accessorKey: "challenges",
+    accessorKey: "challenges_solved",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Retos" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex w-[100px] items-center capitalize">
-          <span>{row.getValue("challenges")}</span>
+          <span>{row.getValue("challenges_solved")}</span>
         </div>
       )
     },

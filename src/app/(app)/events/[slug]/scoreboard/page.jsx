@@ -14,36 +14,23 @@ export default async function Page({ params: { slug } }) {
   if (!event) return notFound()
 
   const records = db.all(sql`
-    WITH ScoreByChallenge AS (
-      SELECT
-        COALESCE(sc.team, pt.team) AS team,
-        COALESCE(sc.challenge, NULL) AS challenge,
-        COALESCE(MAX(sc.points), 0) AS points
-      FROM participations pt
-      LEFT JOIN scoreboards sc ON pt.team = sc.team AND sc.event = ${event.id}
-      WHERE pt.event = ${event.id}
-      GROUP BY
-        COALESCE(sc.team, pt.team),
-        COALESCE(sc.challenge, 0)
-    ),
-    TotalChallenges AS (
-      SELECT
-        event,
-        COUNT(c.title) AS total_challenges
-      FROM challenges c
-      WHERE event = ${event.id}
-      GROUP BY event
-    )
-      
     SELECT
-      ROW_NUMBER() OVER ( ORDER BY SUM(sbc.points) DESC ) AS position,
-      sbc.team,
-      SUM(sbc.points) AS total_points,
-      CONCAT (COUNT(sbc.challenge), ' / ', tc.total_challenges) AS challenges
-    FROM ScoreByChallenge sbc
-    LEFT JOIN TotalChallenges tc
-    GROUP BY sbc.team
-    ORDER BY position;
+      p.event,
+      COALESCE(p.team, u.name) AS participant,
+      COALESCE(SUM(best_scores.points), 0) AS total_points,
+      COALESCE(COUNT(DISTINCT best_scores.challenge), 0) AS challenges_solved,
+      CASE WHEN p.team IS NOT NULL THEN 'team' ELSE 'user' END AS participant_type,
+      ROW_NUMBER() OVER (ORDER BY SUM(best_scores.points) DESC) AS position
+    FROM participations p
+    LEFT JOIN (
+      SELECT user, event, challenge, MAX(points) AS points
+      FROM scoreboards
+      GROUP BY user, event, challenge
+    ) AS best_scores ON p.user = best_scores.user AND p.event = best_scores.event
+    INNER JOIN user u ON p.user = u.id 
+    WHERE p.event = ${event.id}
+    GROUP BY p.event, participant, participant_type
+    ORDER BY total_points DESC;
   `)
 
   return <DataTable columns={columns} data={records} />
