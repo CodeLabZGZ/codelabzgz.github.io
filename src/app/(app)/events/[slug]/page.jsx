@@ -1,90 +1,61 @@
-import { events, members, participations, teams } from "@/schema"
-import { and, eq, sql } from "drizzle-orm"
-
 import { auth } from "@/auth"
 import { db } from "@/db"
+import { sql } from "drizzle-orm"
 import { notFound } from "next/navigation"
 import { getContent } from "./fetchers"
 import PageComponent from "./page-component"
 
 export default async function Page({ params: { slug } }) {
   const { user } = await auth()
-  const [event] = await db
-    .select({
-      id: events.id,
-      team: {
-        ...teams,
-        membersPlaying: sql`COUNT(${participations.user})`,
-        members: sql`(
-        SELECT COUNT(*)
-        FROM ${members} AS m
-        WHERE m.team = ${teams.name}
-        GROUP BY m.team
-      )`
-      },
-      participating: sql`MAX(CASE WHEN ${participations.user} = ${user.id} THEN 1 ELSE 0 END)`
-    })
-    .from(events)
-    .innerJoin(participations, sql`${participations.event} = ${events.id}`)
-    .innerJoin(teams, sql`${participations.team} = ${teams.name}`)
-    .where(
-      and(
-        eq(events.title, slug.replaceAll("-", " ")),
-        eq(participations.user, user.id)
-      )
-    )
-    .groupBy(events.id, teams.name)
+  const [participant] = db.all(sql`
+    SELECT
+      e.id as event,
+      COALESCE(t.name, u.name) AS participant,
+      CASE
+        WHEN t.name IS NOT NULL THEN 'team'
+        ELSE 'user'
+      END AS participant_type,
+      CASE
+        WHEN t.name IS NOT NULL THEN t.logo
+        ELSE u.image
+      END AS participant_image
+    FROM participations p
+    LEFT JOIN teams t ON p.team = t.name
+    LEFT JOIN user u ON p.user = u.id
+    LEFT JOIN events e ON e.id = p.event
+    WHERE e.title = ${slug.replaceAll("-", " ")} AND p.user = ${user.id};
+  `)
 
   const { error, data: values } = await getContent(slug)
-  if (!event || error || !event?.participating) return notFound()
+  if (!participant || error) return notFound()
 
-  const [record] = db.all(sql`
-    WITH ScoreByChallenge AS (
-      SELECT
-        COALESCE(sc.team, pt.team) AS team,
-        COALESCE(sc.challenge, NULL) AS challenge,
-        COALESCE(MAX(sc.points), 0) AS points
-      FROM participations pt
-      LEFT JOIN scoreboards sc ON pt.team = sc.team AND sc.event = ${event.id}
-      WHERE pt.event = ${event.id}
-      GROUP BY
-        COALESCE(sc.team, pt.team),
-        COALESCE(sc.challenge, 0)
-    ),
-    TotalChallenges AS (
-      SELECT
-        event,
-        COUNT(c.title) AS total_challenges
-      FROM challenges c
-      WHERE event = ${event.id}
-      GROUP BY event
-    )
-      
+  const [info] = db.all(sql`
     SELECT
-      ROW_NUMBER() OVER ( ORDER BY SUM(sbc.points) DESC ) AS position,
-      sbc.team,
-      SUM(sbc.points) AS total_points,
-      CONCAT (COUNT(sbc.challenge), ' / ', tc.total_challenges) AS challenges
-    FROM ScoreByChallenge sbc
-    LEFT JOIN TotalChallenges tc
-    WHERE sbc.team = ${event.team.name}
-    GROUP BY sbc.team
-    ORDER BY position;
+      COALESCE(p.team, u.name) AS participant,
+      COALESCE(SUM(best_scores.points), 0) AS total_points,
+      COALESCE(COUNT(DISTINCT best_scores.challenge), 0) AS challenges_solved,
+      CASE WHEN p.team IS NOT NULL THEN 'team' ELSE 'user' END AS participant_type,
+      ROW_NUMBER() OVER (ORDER BY SUM(best_scores.points) DESC) AS position
+    FROM participations p
+    LEFT JOIN (
+      SELECT user, event, challenge, MAX(points) AS points
+      FROM scoreboards
+      GROUP BY user, event, challenge
+    ) AS best_scores ON p.user = best_scores.user AND p.event = best_scores.event
+    INNER JOIN user u ON p.user = u.id 
+    WHERE p.event = ${participant.event} AND participant = ${participant.participant}
+    GROUP BY p.event, participant, participant_type
+    ORDER BY total_points DESC;
   `)
 
   return (
     <div className="text-white">
       <PageComponent
-        data={{
-          ...event,
-          position: record.position,
-          challenges: record.challenges,
-          total_points: record.total_points
-        }}
+        slug={slug}
+        data={{ ...participant, ...info }}
         values={values.filter(
           v => v?.frontmatter?.title && v?.frontmatter?.title !== "overview"
         )}
-        event={slug}
       />
     </div>
   )

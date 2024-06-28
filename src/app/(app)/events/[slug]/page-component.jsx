@@ -1,5 +1,7 @@
 "use client"
 
+import { Avatar } from "@/components/avatar"
+import { Badge } from "@/components/ui/badge"
 import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Sheet,
@@ -24,32 +26,27 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from "@/components/ui/tooltip"
+import { formatNumber } from "@/lib/utils"
+import Link from "next/link"
+import { useState } from "react"
 import {
   TbDownload as Download,
   TbExternalLink as ExternalLink,
   TbUpload as Upload
 } from "react-icons/tb"
 
-import { Avatar } from "@/components/avatar"
-import { Badge } from "@/components/ui/badge"
-import { formatNumber } from "@/lib/utils"
-import Link from "next/link"
-import { useState } from "react"
-
-export default function PageComponent({ values, event, data }) {
+export default function PageComponent({ values, slug, data }) {
   const [isOpen, setIsOpen] = useState(false)
   const [active, setActive] = useState(null)
 
+  console.log(data)
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <div className="mb-4 grid grid-cols-2">
         <div className="col-span-1 flex items-center gap-x-2.5">
-          <Avatar image={data.team.logo} value={data.team.name} />
+          <Avatar image={data.participant_image} value={data.participant} />
           <div className="flex flex-col items-start">
-            <span className="">{data.team.name}</span>
-            <span className="text-xs text-muted-foreground">
-              {data.team.membersPlaying} / {data.team.members} miembros
-            </span>
+            <span className="">{data.participant}</span>
           </div>
         </div>
         <div className="col-span-1 grid grid-cols-3">
@@ -76,7 +73,9 @@ export default function PageComponent({ values, event, data }) {
           </TooltipProvider>
           <div className="col-span-1 mx-auto flex items-center justify-between">
             <div className="flex flex-col items-center gap-x-2.5">
-              <span className="text-muted-foreground">{data.challenges}</span>
+              <span className="text-muted-foreground">
+                {data.challenges_solved}
+              </span>
               <span className="text-xs uppercase">retos</span>
             </div>
           </div>
@@ -85,8 +84,11 @@ export default function PageComponent({ values, event, data }) {
       <Table>
         <TableCaption>
           <Link
-            href={`/events/${event}/scoreboard`}
-            className="flex items-center justify-center gap-x-2"
+            href={`/events/${slug}/scoreboard`}
+            className={buttonVariants({
+              variant: "link",
+              className: "flex items-center justify-center gap-x-2"
+            })}
           >
             Ver resultados resultados.
             <ExternalLink />

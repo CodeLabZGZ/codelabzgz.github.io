@@ -15,7 +15,6 @@ export default async function Page({ params: { slug } }) {
 
   const records = db.all(sql`
     SELECT
-      p.event,
       COALESCE(p.team, u.name) AS participant,
       COALESCE(SUM(best_scores.points), 0) AS total_points,
       COALESCE(COUNT(DISTINCT best_scores.challenge), 0) AS challenges_solved,
