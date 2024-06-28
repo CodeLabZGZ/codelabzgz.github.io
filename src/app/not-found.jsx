@@ -21,13 +21,13 @@ export default function NotFound() {
 
       <p className="font-display text-4xl/tight font-light text-white">404</p>
       <h1 className="mt-4 font-display text-xl/8 font-semibold text-white">
-        Page not found
+        Página no encontrada
       </h1>
       <p className="mt-2 text-sm/6 text-gray-300">
-        Sorry, we couldn’t find the page you’re looking for.
+        Lo sentimos, no hemos podido encontrar la página que estabas buscando.
       </p>
       <IconLink href="/" className="mt-4">
-        Go back home
+        Regresar
       </IconLink>
     </div>
   )

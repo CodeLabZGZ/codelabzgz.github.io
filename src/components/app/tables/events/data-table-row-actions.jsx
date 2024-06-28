@@ -53,7 +53,7 @@ export function DataTableRowActions({ row }) {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       body: JSON.stringify(
-                        participation?.type === "teams"
+                        participation?.type === "team"
                           ? { team: participation.label }
                           : {}
                       )

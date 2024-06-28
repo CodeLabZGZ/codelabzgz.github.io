@@ -1,5 +1,3 @@
-"use client"
-
 import {
   Command,
   CommandEmpty,
@@ -31,7 +29,7 @@ import { useParticipation } from "@/stores/participation"
 import { useTeam } from "@/stores/team"
 import { useSession } from "next-auth/react"
 
-const GROUPS = [
+const GROUPS_INITIAL = [
   {
     label: "Accounts",
     show: false,
@@ -44,28 +42,27 @@ const GROUPS = [
   }
 ]
 
-const isEmptyObject = obj => obj && Object.keys(obj).length === 0
-
 export function TeamSwitcher({ className }) {
   const [open, setOpen] = useState(false)
   const [showNewTeamDialog, setShowNewTeamDialog] = useState(false)
-  const [groups, setGroups] = useState(GROUPS)
+  const [groups, setGroups] = useState(GROUPS_INITIAL)
 
   const { data: session, status } = useSession()
   const { selectedTeam, setSelectedTeam } = useTeam()
   const { participation, setParticipation } = useParticipation()
 
-  // load config and data
   const { fetcher } = useSWRConfig()
   const { data } = useSWR(
-    status !== "loading" && `/api/v1/teams?userId=${session.user.id}`,
+    status === "authenticated"
+      ? `/api/v1/teams?userId=${session.user.id}`
+      : null,
     fetcher
   )
 
   useEffect(() => {
     if (!data) return
 
-    const values = GROUPS.map(group => {
+    const updatedGroups = GROUPS_INITIAL.map(group => {
       if (group.label === "Accounts") {
         group.values = [
           {
@@ -89,21 +86,34 @@ export function TeamSwitcher({ className }) {
 
       return group
     })
-    setGroups(values)
 
-    if (isEmptyObject(participation))
-      setParticipation(groups.find(i => i.label === "Accounts").values[0])
-    if (isEmptyObject(selectedTeam))
-      setSelectedTeam(groups.find(i => i.label === "Teams").values[0])
-  }, [
-    data,
-    session,
-    groups,
-    participation,
-    selectedTeam,
-    setParticipation,
-    setSelectedTeam
-  ])
+    setGroups(updatedGroups)
+
+    if (isEmptyObject(participation)) {
+      const accountsValues = updatedGroups.find(
+        i => i.label === "Accounts"
+      )?.values
+      if (accountsValues && accountsValues.length > 0) {
+        setParticipation(accountsValues[0])
+      }
+    }
+
+    if (isEmptyObject(selectedTeam)) {
+      const teamsValues = updatedGroups.find(i => i.label === "Teams")?.values
+      if (teamsValues && teamsValues.length > 0) {
+        setSelectedTeam(teamsValues[0])
+      }
+    }
+  }, [data, session, setParticipation, setSelectedTeam])
+
+  const handleSelectTeam = ({ value, label }) => {
+    setSelectedTeam(value)
+    setParticipation({
+      ...value,
+      type: label === "Accounts" ? "account" : "team"
+    })
+    setOpen(false)
+  }
 
   return (
     <Dialog open={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
@@ -131,20 +141,15 @@ export function TeamSwitcher({ className }) {
                 <CommandGroup
                   key={group.label}
                   heading={
-                    group.show ? group.label + ` (${group.values.length})` : ""
+                    group.show ? `${group.label} (${group.values.length})` : ""
                   }
                 >
                   {group.values.map(item => (
                     <CommandItem
                       key={item.value}
-                      onSelect={() => {
-                        setSelectedTeam(item)
-                        setParticipation({
-                          ...item,
-                          type: group.label.toLowerCase()
-                        })
-                        setOpen(false)
-                      }}
+                      onSelect={() =>
+                        handleSelectTeam({ value: item, label: group.label })
+                      }
                       className="gap-2 text-sm"
                     >
                       <Avatar
@@ -188,4 +193,8 @@ export function TeamSwitcher({ className }) {
       <CreateTeamForm />
     </Dialog>
   )
+}
+
+function isEmptyObject(obj) {
+  return obj && Object.keys(obj).length === 0
 }

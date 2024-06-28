@@ -48,11 +48,16 @@ export default async function Page({ params: { slug } }) {
     ORDER BY total_points DESC;
   `)
 
+  const [challenges] = db.all(sql`
+    SELECT COUNT(*) AS challenges FROM challenges
+    WHERE event = ${participant.event} GROUP BY event;
+  `)
+
   return (
     <div className="text-white">
       <PageComponent
         slug={slug}
-        data={{ ...participant, ...info }}
+        data={{ ...participant, ...info, ...challenges }}
         values={values.filter(
           v => v?.frontmatter?.title && v?.frontmatter?.title !== "overview"
         )}

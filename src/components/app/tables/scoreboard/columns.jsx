@@ -79,7 +79,9 @@ export const columns = [
     cell: ({ row }) => {
       return (
         <div className="flex w-[100px] items-center capitalize">
-          <span>{row.getValue("challenges_solved")}</span>
+          <span>
+            {row.getValue("challenges_solved")} / {row.original.challenges}
+          </span>
         </div>
       )
     },

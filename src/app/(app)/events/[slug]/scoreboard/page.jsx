@@ -32,5 +32,15 @@ export default async function Page({ params: { slug } }) {
     ORDER BY total_points DESC;
   `)
 
-  return <DataTable columns={columns} data={records} />
+  const [challenges] = db.all(sql`
+    SELECT COUNT(*) AS challenges FROM challenges
+    WHERE event = ${event.id} GROUP BY event;
+  `)
+
+  return (
+    <DataTable
+      columns={columns}
+      data={records.map(i => ({ ...i, ...challenges }))}
+    />
+  )
 }

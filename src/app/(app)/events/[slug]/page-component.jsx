@@ -39,7 +39,6 @@ export default function PageComponent({ values, slug, data }) {
   const [isOpen, setIsOpen] = useState(false)
   const [active, setActive] = useState(null)
 
-  console.log(data)
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <div className="mb-4 grid grid-cols-2">
@@ -74,7 +73,7 @@ export default function PageComponent({ values, slug, data }) {
           <div className="col-span-1 mx-auto flex items-center justify-between">
             <div className="flex flex-col items-center gap-x-2.5">
               <span className="text-muted-foreground">
-                {data.challenges_solved}
+                {data.challenges_solved} / {data.challenges}
               </span>
               <span className="text-xs uppercase">retos</span>
             </div>
@@ -150,16 +149,7 @@ export default function PageComponent({ values, slug, data }) {
             <Download className="h-4 w-4" />
             Descargar plantilla
           </Link>
-          <Button
-            onClick={() => {
-              console.log({
-                event: event,
-                challenge: active?.slug
-              })
-            }}
-            size="sm"
-            className="gap-1.5"
-          >
+          <Button onClick={() => {}} size="sm" className="gap-1.5">
             <Upload className="h-4 w-4" />
             Subir solución
           </Button>
