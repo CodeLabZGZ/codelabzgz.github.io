@@ -13,11 +13,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-export function DataTableColumnHeader ({
-  column,
-  title,
-  className
-}) {
+export function DataTableColumnHeader({ column, title, className }) {
   if (!column.getCanSort()) return <div className={cn(className)}>{title}</div>
 
   return (
@@ -30,12 +26,13 @@ export function DataTableColumnHeader ({
             className="-ml-3 h-8 data-[state=open]:bg-accent"
           >
             <span>{title}</span>
-            {column.getIsSorted() === "desc"
-              ? <ArrowDownIcon className="ml-2 h-4 w-4" />
-              : column.getIsSorted() === "asc"
-                ? <ArrowUpIcon className="ml-2 h-4 w-4" />
-                : <CaretSortIcon className="ml-2 h-4 w-4" />
-            }
+            {column.getIsSorted() === "desc" ? (
+              <ArrowDownIcon className="ml-2 h-4 w-4" />
+            ) : column.getIsSorted() === "asc" ? (
+              <ArrowUpIcon className="ml-2 h-4 w-4" />
+            ) : (
+              <CaretSortIcon className="ml-2 h-4 w-4" />
+            )}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">

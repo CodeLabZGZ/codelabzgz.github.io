@@ -11,7 +11,7 @@ import { TbUserMinus, TbUserPlus } from "react-icons/tb"
 import { Button } from "@/components/ui/button"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 
-export function DataTableRowActions ({ row }) {
+export function DataTableRowActions({ row }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -24,19 +24,19 @@ export function DataTableRowActions ({ row }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem 
-          className="w-full flex items-center gap-x-2 cursor-pointer"
+        <DropdownMenuItem
+          className="flex w-full cursor-pointer items-center gap-x-2"
           onClick={() => {}}
         >
-            <TbUserPlus className="w-4 h-4"/>
-            Aceptar
+          <TbUserPlus className="h-4 w-4" />
+          Aceptar
         </DropdownMenuItem>
-        <DropdownMenuItem 
-          className="w-full flex items-center gap-x-2 cursor-pointer"
+        <DropdownMenuItem
+          className="flex w-full cursor-pointer items-center gap-x-2"
           onClick={() => {}}
         >
-            <TbUserMinus className="w-4 h-4"/>
-            Rechazar
+          <TbUserMinus className="h-4 w-4" />
+          Rechazar
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

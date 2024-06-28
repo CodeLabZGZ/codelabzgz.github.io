@@ -6,7 +6,7 @@ import { StarField } from "@/components/landing/star-field"
 import { ThemeToggle } from "@/components/landing/theme-toggle"
 import { useId } from "react"
 
-function Timeline () {
+function Timeline() {
   const id = useId()
 
   return (
@@ -19,7 +19,7 @@ function Timeline () {
           <pattern id={id} width="6" height="8" patternUnits="userSpaceOnUse">
             <path
               d="M0 0H6M0 8H6"
-              className="stroke-sky-900/10 xl:stroke-white/10 dark:stroke-white/10"
+              className="stroke-sky-900/10 dark:stroke-white/10 xl:stroke-white/10"
               fill="none"
             />
           </pattern>
@@ -30,7 +30,7 @@ function Timeline () {
   )
 }
 
-function Glow () {
+function Glow() {
   const id = useId()
 
   return (
@@ -69,7 +69,7 @@ function Glow () {
   )
 }
 
-function FixedSidebar ({ main, footer }) {
+function FixedSidebar({ main, footer }) {
   return (
     <div className="relative flex-none overflow-hidden px-6 lg:pointer-events-none lg:fixed lg:inset-0 lg:z-40 lg:flex lg:px-0">
       <Glow />
@@ -90,12 +90,15 @@ function FixedSidebar ({ main, footer }) {
   )
 }
 
-export function Layout ({ children }) {
+export function Layout({ children }) {
   return (
     <div className="bg-white dark:bg-gray-950">
-      <div className="fixed top-4 z-50 w-full flex items-center justify-between px-6 lg:px-8">
+      <div className="fixed top-4 z-50 flex w-full items-center justify-between px-6 lg:px-8">
         <ThemeToggle />
-        <Link href="/auth/login" className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
+        <Link
+          href="/auth/login"
+          className="text-sm font-semibold leading-6 text-gray-900 dark:text-white"
+        >
           Log in <span aria-hidden="true">&rarr;</span>
         </Link>
       </div>
@@ -104,7 +107,15 @@ export function Layout ({ children }) {
         date={"21-03-2024"}
         title="🔥 Hackathon 🔥"
         message={
-          <>Únete a nosotros el 21 de marzo para resolver retos de programación. <a href={"https://forms.gle/d1yUEwHoYQGc6heQA"} className='underline-offset-1 underline text-pink-500 brightness-125'>Registrate  →</a></>
+          <>
+            Únete a nosotros el 21 de marzo para resolver retos de programación.{" "}
+            <a
+              href={"https://forms.gle/d1yUEwHoYQGc6heQA"}
+              className="text-pink-500 underline underline-offset-1 brightness-125"
+            >
+              Registrate →
+            </a>
+          </>
         }
         dot
       />

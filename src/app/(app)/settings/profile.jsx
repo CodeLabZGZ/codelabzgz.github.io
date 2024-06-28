@@ -59,7 +59,7 @@ const defaultValues = {
   ]
 }
 
-export default function Profile () {
+export default function Profile() {
   const form = useForm({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
@@ -71,9 +71,7 @@ export default function Profile () {
     control: form.control
   })
 
-  function onSubmit (data) {
-
-  }
+  function onSubmit(data) {}
 
   return (
     <Form {...form}>

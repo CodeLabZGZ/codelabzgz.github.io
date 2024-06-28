@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "paths": {
-      "@/*": [
-        "./src/*",
-        "./db/*",
-        "./mdx/*"
-      ],
+      "@/*": ["./src/*", "./db/*", "./mdx/*"],
       "auth": ["./src/auth.js"]
     }
   }

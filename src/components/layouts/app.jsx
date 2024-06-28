@@ -6,7 +6,7 @@ import {
   FaceIcon,
   GearIcon,
   PersonIcon,
-  RocketIcon,
+  RocketIcon
 } from "@radix-ui/react-icons"
 import {
   CommandDialog,
@@ -16,7 +16,7 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-  CommandShortcut,
+  CommandShortcut
 } from "@/components/ui/command"
 
 import { MainNav } from "@/components/app/main-nav"
@@ -25,22 +25,22 @@ import { UserNav } from "@/components/app/user-nav"
 import { useCmk } from "@/stores/cmdk"
 import { useEffect } from "react"
 
-export function AppLayout ({ children }) {
-  const { open, setOpen } = useCmk();
-  
+export function AppLayout({ children }) {
+  const { open, setOpen } = useCmk()
+
   useEffect(() => {
-    const down = (e) => {
+    const down = e => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        setOpen(!open);
+        e.preventDefault()
+        setOpen(!open)
       }
-    };
-    document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
-  }, [open, setOpen]);
-  
+    }
+    document.addEventListener("keydown", down)
+    return () => document.removeEventListener("keydown", down)
+  }, [open, setOpen])
+
   return (
-    <div className="w-screen h-screen">
+    <div className="h-screen w-screen">
       <div className="flex flex-col">
         {/* navbar */}
         <div className="border-b">
@@ -53,8 +53,8 @@ export function AppLayout ({ children }) {
           </div>
         </div>
         {/* your content */}
-        <div className="max-w-4xl w-full mx-auto flex-1 space-y-4 p-8 pt-6">
-          { children }
+        <div className="mx-auto w-full max-w-4xl flex-1 space-y-4 p-8 pt-6">
+          {children}
         </div>
       </div>
       <CommandDialog open={open} onOpenChange={setOpen}>

@@ -66,7 +66,7 @@ const constellations = [
   ]
 ]
 
-function Star ({ blurId, point: [cx, cy, dim, blur] }) {
+function Star({ blurId, point: [cx, cy, dim, blur] }) {
   const groupRef = useRef(null)
   const ref = useRef(null)
 
@@ -119,11 +119,11 @@ function Star ({ blurId, point: [cx, cy, dim, blur] }) {
   )
 }
 
-function Constellation ({ points, blurId }) {
+function Constellation({ points, blurId }) {
   const ref = useRef(null)
   const uniquePoints = points.filter(
     (point, pointIndex) =>
-      points.findIndex((p) => String(p) === String(point)) === pointIndex
+      points.findIndex(p => String(p) === String(point)) === pointIndex
   )
   const isFilled = uniquePoints.length !== points.length
 
@@ -175,7 +175,7 @@ function Constellation ({ points, blurId }) {
   )
 }
 
-export function StarField ({ className }) {
+export function StarField({ className }) {
   const blurId = useId()
 
   return (

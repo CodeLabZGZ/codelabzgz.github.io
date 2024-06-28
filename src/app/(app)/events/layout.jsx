@@ -5,10 +5,6 @@ export const metadata = {
   description: ""
 }
 
-export default function Layout ({ children }) {
-  return (
-    <AppLayout>
-      {children}
-    </AppLayout>
-  )
+export default function Layout({ children }) {
+  return <AppLayout>{children}</AppLayout>
 }

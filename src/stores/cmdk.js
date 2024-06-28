@@ -1,6 +1,6 @@
-import { create } from 'zustand'
+import { create } from "zustand"
 
-export const useCmk = create((set) => ({
+export const useCmk = create(set => ({
   open: false,
-  setOpen: () => set((state) => ({ open: !state.open })),
+  setOpen: () => set(state => ({ open: !state.open }))
 }))

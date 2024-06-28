@@ -16,23 +16,28 @@ const buttons = [
     href: "https://github.com/CodeLabZGZ",
     icon: FaGithub,
     text: "GitHub"
-  }, {
+  },
+  {
     href: "https://www.linkedin.com/company/codelabzgz",
     icon: FaLinkedin,
     text: "LinkedIn"
-  }, {
+  },
+  {
     href: "https://www.instagram.com/codelabzgz/",
     icon: FaInstagram,
     text: "Instagram"
   }
 ]
 
-export function IntroCard ({ href, title, description, Icon }) {
+export function IntroCard({ href, title, description, Icon }) {
   return (
-    <a href={href} className='w-full ring-2 ring-white relative flex cursor-pointer rounded-lg border border-white p-4 shadow-sm focus:outline-none opacity-20 hover:opacity-100 duration-500 ease-in-out hover:scale-105'>
+    <a
+      href={href}
+      className="relative flex w-full cursor-pointer rounded-lg border border-white p-4 opacity-20 shadow-sm ring-2 ring-white duration-500 ease-in-out hover:scale-105 hover:opacity-100 focus:outline-none"
+    >
       <div className="flex flex-1">
         <div className="flex flex-col">
-          <span className="block text-sm font-medium text-gray-100 capitalize">
+          <span className="block text-sm font-medium capitalize text-gray-100">
             {title}
           </span>
           <span className="mt-1 flex items-center text-xs tracking-wide text-gray-300">
@@ -40,15 +45,12 @@ export function IntroCard ({ href, title, description, Icon }) {
           </span>
         </div>
       </div>
-      <Icon
-        className='h-5 w-5 text-gray-100'
-        aria-hidden="true"
-      />
+      <Icon className="h-5 w-5 text-gray-100" aria-hidden="true" />
     </a>
   )
 }
 
-export function Intro () {
+export function Intro() {
   return (
     <>
       <div>
@@ -85,9 +87,9 @@ export function Intro () {
   )
 }
 
-export function IntroFooter () {
+export function IntroFooter() {
   return (
-    <div className='flex flex-col items-center gap-y-2'>
+    <div className="flex flex-col items-center gap-y-2">
       <div className="flex flex-wrap justify-center gap-x-1 gap-y-3 sm:gap-x-2 lg:justify-start">
         {buttons.map(({ href, icon: Icon, text }) => (
           <IconLink key={href} href={href} icon={Icon}>

@@ -6,17 +6,15 @@ import { response } from "@/lib/utils"
 async function postHandler(request) {
   const values = request.json()
 
-  const data = await db.insert(events)
-    .values(values)
-    .returning()
+  const data = await db.insert(events).values(values).returning()
 
   return response({ data, statusCode: 201 })
 }
- 
+
 async function getHandler(request) {
   const data = await db.query.events.findMany()
   return response({ data })
 }
 
-export const POST = errorHandler(postHandler);
-export const GET = errorHandler(getHandler);
+export const POST = errorHandler(postHandler)
+export const GET = errorHandler(getHandler)

@@ -7,6 +7,6 @@ export const sites = [
   }
 ]
 
-export default function sitemap () {
+export default function sitemap() {
   return sites.sort((a, b) => Number(b.priority) - Number(a.priority))
 }

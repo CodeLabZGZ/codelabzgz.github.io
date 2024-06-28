@@ -1,5 +1,3 @@
-export default function Details () {
-  return (
-    <div>page</div>
-  )
+export default function Details() {
+  return <div>page</div>
 }

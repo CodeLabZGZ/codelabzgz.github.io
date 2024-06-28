@@ -34,19 +34,20 @@ const formSchema = z.object({
   })
 })
 
-export function JoinTeam ({ id }) {
+export function JoinTeam({ id }) {
   const [open, setOpen] = useState(false)
 
   const form = useForm({
     resolver: zodResolver(formSchema)
   })
 
-  async function onSubmit (values) {
+  async function onSubmit(values) {
     const { name } = values
     toast.promise(joinTeam({ id, name }), {
       loading: "Enviando solicitud...",
-      success: "Petición enviada con éxito. Puede que el equipo tarde en aceptar tu petición",
-      error: (err) => err.message
+      success:
+        "Petición enviada con éxito. Puede que el equipo tarde en aceptar tu petición",
+      error: err => err.message
     })
     setOpen(false)
   }
@@ -58,12 +59,14 @@ export function JoinTeam ({ id }) {
       </DialogTrigger>
       <DialogContent
         className="sm:max-w-[425px]"
-        onInteractOutside={(e) => e.preventDefault()}
+        onInteractOutside={e => e.preventDefault()}
       >
         <DialogHeader>
           <DialogTitle>Únete a un equipo</DialogTitle>
           <DialogDescription>
-            Envía una solicitud al equipo que desees y espera la admisión para iniciar tu nueva aventura.</DialogDescription>
+            Envía una solicitud al equipo que desees y espera la admisión para
+            iniciar tu nueva aventura.
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form action={form.handleSubmit(onSubmit)} className="space-y-3.5">
@@ -84,7 +87,9 @@ export function JoinTeam ({ id }) {
               )}
             />
             <DialogFooter>
-              <Button type="submit" className="mt-3.5">Enviar solicitud </Button>
+              <Button type="submit" className="mt-3.5">
+                Enviar solicitud{" "}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

@@ -15,9 +15,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { signIn } from "next-auth/react"
 
-export default function Page () {
+export default function Page() {
   return (
-    <div className="w-screen h-screen flex items-center justify-center">
+    <div className="flex h-screen w-screen items-center justify-center">
       <div className="max-w-sm px-6">
         <Card>
           <CardHeader className="space-y-1">
@@ -28,11 +28,21 @@ export default function Page () {
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className="grid grid-cols-2 gap-2">
-              <Button variant="outline" onClick={async () => await signIn("github", { callbackUrl: "/events" })}>
+              <Button
+                variant="outline"
+                onClick={async () =>
+                  await signIn("github", { callbackUrl: "/events" })
+                }
+              >
                 <TbBrandGithub className="mr-2 h-4 w-4" />
                 Github
               </Button>
-              <Button variant="outline" onClick={async () => await signIn("discord", { callbackUrl: "/events" })}>
+              <Button
+                variant="outline"
+                onClick={async () =>
+                  await signIn("discord", { callbackUrl: "/events" })
+                }
+              >
                 <TbBrandDiscord className="mr-2 h-4 w-4" />
                 Discord
               </Button>

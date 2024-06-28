@@ -9,7 +9,7 @@ import { remarkPlugins } from "@/remark"
 
 const contentDir = path.join(process.cwd(), "src/content")
 
-export async function getContentBySlug(eventFolder, slug, ext=".md") {
+export async function getContentBySlug(eventFolder, slug, ext = ".md") {
   try {
     const fileName = slug + ext
     const filePath = path.join(contentDir, eventFolder, fileName)
@@ -22,7 +22,7 @@ export async function getContentBySlug(eventFolder, slug, ext=".md") {
           remarkPlugins,
           recmaPlugins,
           rehypePlugins
-        },
+        }
       },
       components
     })
@@ -32,7 +32,7 @@ export async function getContentBySlug(eventFolder, slug, ext=".md") {
       content,
       slug: path.parse(fileName).name
     }
-  } catch ( error) { 
+  } catch (error) {
     return null
   }
 }
@@ -42,17 +42,19 @@ export async function getContent(eventFolder) {
     const filePath = path.join(contentDir, eventFolder)
     const files = fs.readdirSync(filePath)
     const values = await Promise.all(
-      files.map(async (file) => await getContentBySlug(eventFolder, path.parse(file).name))
+      files.map(
+        async file => await getContentBySlug(eventFolder, path.parse(file).name)
+      )
     )
-    return {error: null, data: values}
+    return { error: null, data: values }
   } catch (error) {
-    return {error, data: null}
+    return { error, data: null }
   }
 }
 
 export function getAllContentSlug(eventFolder) {
   const filePath = path.join(contentDir, eventFolder)
   const files = fs.readdirSync(filePath)
-  const slugs = files.map((file) => ({ slug: path.parse(file).name }))
+  const slugs = files.map(file => ({ slug: path.parse(file).name }))
   return slugs
 }

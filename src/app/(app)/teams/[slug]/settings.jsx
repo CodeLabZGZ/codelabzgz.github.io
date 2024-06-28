@@ -47,7 +47,7 @@ const formSchema = z.object({
   })
 })
 
-export default function Settings () {
+export default function Settings() {
   // 1. Define your form.
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -60,7 +60,7 @@ export default function Settings () {
   })
 
   // 2. Define a submit handler.
-  function onSubmit (values) {
+  function onSubmit(values) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values)
@@ -108,14 +108,15 @@ export default function Settings () {
             <FormItem>
               <FormLabel>Descripción</FormLabel>
               <FormControl>
-                <Textarea 
-                  placeholder="Empieza aquí vuestra historia..." 
+                <Textarea
+                  placeholder="Empieza aquí vuestra historia..."
                   className="h-32"
-                  {...field} 
+                  {...field}
                 />
               </FormControl>
               <FormDescription>
-                Lore del equipo que verán el resto de usuarios al visitar tu equipo.
+                Lore del equipo que verán el resto de usuarios al visitar tu
+                equipo.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -131,7 +132,12 @@ export default function Settings () {
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="website-switch"
-                    onChange={(e) => form.setValue("website.visibility", e.target.checked ? "private" : "public")}
+                    onChange={e =>
+                      form.setValue(
+                        "website.visibility",
+                        e.target.checked ? "private" : "public"
+                      )
+                    }
                   />
                   <Label htmlFor="website-switch">Oculto al público</Label>
                 </div>
@@ -139,9 +145,7 @@ export default function Settings () {
               <FormControl>
                 <Input placeholder="https://www.example.com" {...field} />
               </FormControl>
-              <FormDescription>
-                Página oficial de tu equipo.
-              </FormDescription>
+              <FormDescription>Página oficial de tu equipo.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -156,7 +160,12 @@ export default function Settings () {
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="twitter-switch"
-                    onChange={(e) => form.setValue("twitter.visibility", e.target.checked ? "private" : "public")}
+                    onChange={e =>
+                      form.setValue(
+                        "twitter.visibility",
+                        e.target.checked ? "private" : "public"
+                      )
+                    }
                   />
                   <Label htmlFor="twitter-switch">Oculto al público</Label>
                 </div>
@@ -181,7 +190,12 @@ export default function Settings () {
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="discord-switch"
-                    onChange={(e) => form.setValue("discord.visibility", e.target.checked ? "private" : "public")}
+                    onChange={e =>
+                      form.setValue(
+                        "discord.visibility",
+                        e.target.checked ? "private" : "public"
+                      )
+                    }
                   />
                   <Label htmlFor="discord-switch">Oculto al público</Label>
                 </div>
@@ -206,7 +220,12 @@ export default function Settings () {
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="email-switch"
-                    onChange={(e) => form.setValue("email.visibility", e.target.checked ? "private" : "public")}
+                    onChange={e =>
+                      form.setValue(
+                        "email.visibility",
+                        e.target.checked ? "private" : "public"
+                      )
+                    }
                   />
                   <Label htmlFor="email-switch">Oculto al público</Label>
                 </div>

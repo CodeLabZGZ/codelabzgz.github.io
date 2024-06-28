@@ -1,7 +1,3 @@
-export default function Container({children}) {
-  return (
-    <section className="py-12 space-y-12">
-      {children}
-    </section>
-  )
+export default function Container({ children }) {
+  return <section className="space-y-12 py-12">{children}</section>
 }

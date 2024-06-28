@@ -22,10 +22,11 @@ export const columns = [
       const { visibility } = row.original
       return (
         <div className="flex items-center space-x-1.5">
-          {visibility === "public"
-            ? <TbLockOpen className="w-3.5 h-3.5" />
-            : <TbLock className="w-3.5 h-3.5" />
-          }
+          {visibility === "public" ? (
+            <TbLockOpen className="h-3.5 w-3.5" />
+          ) : (
+            <TbLock className="h-3.5 w-3.5" />
+          )}
           <span className="max-w-[500px] truncate font-medium">
             {row.getValue("title")}
           </span>
@@ -38,11 +39,15 @@ export const columns = [
   {
     accessorKey: "visibility",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Visibilidad" className="sr-only"/>
+      <DataTableColumnHeader
+        column={column}
+        title="Visibilidad"
+        className="sr-only"
+      />
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex items-center capitalize sr-only">
+        <div className="sr-only flex items-center capitalize">
           {row.getValue("visibility")}
         </div>
       )
@@ -59,7 +64,9 @@ export const columns = [
     cell: ({ row }) => {
       return (
         <div className="flex w-[100px] items-center capitalize">
-          <Badge variant="outline" className="text-xs">{row.getValue("format")}</Badge>
+          <Badge variant="outline" className="text-xs">
+            {row.getValue("format")}
+          </Badge>
         </div>
       )
     },
@@ -118,19 +125,26 @@ export const columns = [
           <HoverCardTrigger>
             <div className="flex items-center gap-x-2">
               <div className="flex flex-col capitalize">
-                <span className="text-xs whitespace-nowrap">
+                <span className="whitespace-nowrap text-xs">
                   {formatDate({ date: startDate, options: opt1, timeZone })}
                 </span>
-                <span className="text-xs whitespace-nowrap">
+                <span className="whitespace-nowrap text-xs">
                   {formatDate({ date: startDate, options: opt3, timeZone })}
                 </span>
               </div>
-                &rarr;
+              &rarr;
               <div className="flex flex-col capitalize">
-                <span className="text-xs whitespace-nowrap">
-                  {formatDate({ date: endDate, options: startDate.getFullYear() === endDate.getFullYear() ? opt2 : opt1, timeZone })}
+                <span className="whitespace-nowrap text-xs">
+                  {formatDate({
+                    date: endDate,
+                    options:
+                      startDate.getFullYear() === endDate.getFullYear()
+                        ? opt2
+                        : opt1,
+                    timeZone
+                  })}
                 </span>
-                <span className="text-xs whitespace-nowrap">
+                <span className="whitespace-nowrap text-xs">
                   {formatDate({ date: endDate, options: opt3, timeZone })}
                 </span>
               </div>
@@ -138,7 +152,11 @@ export const columns = [
           </HoverCardTrigger>
           <HoverCardContent>
             <div className="text-xs">
-              La fecha mostrada se basa en tu zona horaria que es <span className="font-bold">{Intl.DateTimeFormat().resolvedOptions().timeZone}</span>.
+              La fecha mostrada se basa en tu zona horaria que es{" "}
+              <span className="font-bold">
+                {Intl.DateTimeFormat().resolvedOptions().timeZone}
+              </span>
+              .
             </div>
           </HoverCardContent>
         </HoverCard>

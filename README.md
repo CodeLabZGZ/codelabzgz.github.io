@@ -8,7 +8,6 @@
 [![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white)](https://eslint.org/)
 [![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 
-
 ## Getting started
 
 To get started, first install dependencies via npm:
@@ -74,7 +73,7 @@ The template is built as a pretty standard Next.js website, but using the `src` 
 - `components`: Reusable code snippets that are used throughout all of the pages
 - `context`: Encapsulates a global state that can be accessed from anywhere in the application.
 - `hooks`: Encapsulates small pieces of code that represent a certain type of logic.
-- `lib`: Chaos property, stores here functionalities that do not have to do with the rest of the mentioned sections. 
+- `lib`: Chaos property, stores here functionalities that do not have to do with the rest of the mentioned sections.
 - `public`: Static content that is publicly accessible
 - `styles`: Contains the styles of the application. Override or new styles in [`tailwind.config.ts`](tailwind.config.ts).
 

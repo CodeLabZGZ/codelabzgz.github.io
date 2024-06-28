@@ -45,27 +45,38 @@ export function CreateTeamForm() {
     resolver: zodResolver(formSchema)
   })
 
-  async function onSubmit (values) {
+  async function onSubmit(values) {
     const { name, motto, slug } = values
     toast.promise(createTeam({ id, name, motto, slug }), {
       loading: "Estamos creando tu equipo...",
-      success: ({ name, slug }) => <>Tu equipo <a href={`/teams/${slug}`} target="_black" referrerPolicy="no-referrer"><strong>{name}</strong></a> ha sido creado.</>,
-      error: (err) => err.message
+      success: ({ name, slug }) => (
+        <>
+          Tu equipo{" "}
+          <a
+            href={`/teams/${slug}`}
+            target="_black"
+            referrerPolicy="no-referrer"
+          >
+            <strong>{name}</strong>
+          </a>{" "}
+          ha sido creado.
+        </>
+      ),
+      error: err => err.message
     })
     setOpen(false)
   }
-  
+
   return (
     <DialogContent
       className="sm:max-w-[425px]"
-      onInteractOutside={(e) => e.preventDefault()}
+      onInteractOutside={e => e.preventDefault()}
     >
       <DialogHeader>
-        <DialogTitle>
-          Crea tu equipo
-        </DialogTitle>
+        <DialogTitle>Crea tu equipo</DialogTitle>
         <DialogDescription>
-          Comienza con la creación de tu equipo y haz que este comience a ganar reputación.
+          Comienza con la creación de tu equipo y haz que este comience a ganar
+          reputación.
         </DialogDescription>
       </DialogHeader>
       <Form {...form}>
@@ -119,7 +130,9 @@ export function CreateTeamForm() {
             )}
           />
           <DialogFooter>
-            <Button type="submit" className="mt-3.5">Save changes</Button>
+            <Button type="submit" className="mt-3.5">
+              Save changes
+            </Button>
           </DialogFooter>
         </form>
       </Form>
@@ -127,7 +140,7 @@ export function CreateTeamForm() {
   )
 }
 
-export function CreateTeam ({ id }) {
+export function CreateTeam({ id }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -135,7 +148,7 @@ export function CreateTeam ({ id }) {
       <DialogTrigger asChild>
         <Button variant="outline">Crear equipo</Button>
       </DialogTrigger>
-      <CreateTeamForm/>
+      <CreateTeamForm />
     </Dialog>
   )
 }

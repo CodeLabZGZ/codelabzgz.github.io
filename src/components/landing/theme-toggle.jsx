@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 
 import { useTheme } from "next-themes"
 
-function ThemeIcon (props) {
+function ThemeIcon(props) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
       <path
@@ -16,7 +16,7 @@ function ThemeIcon (props) {
   )
 }
 
-export function ThemeToggle () {
+export function ThemeToggle() {
   const [mounted, setMounted] = useState(false)
   const { resolvedTheme, setTheme } = useTheme()
   const otherTheme = resolvedTheme === "dark" ? "light" : "dark"
@@ -36,7 +36,7 @@ export function ThemeToggle () {
       onClick={() => setTheme(otherTheme)}
     >
       <span className="sr-only">Switch to {otherTheme} theme</span>
-      <ThemeIcon className="h-6 w-6 fill-white opacity-50 transition-opacity group-hover:opacity-100  lg:fill-white" />
+      <ThemeIcon className="h-6 w-6 fill-white opacity-50 transition-opacity group-hover:opacity-100 lg:fill-white" />
     </button>
   )
 }

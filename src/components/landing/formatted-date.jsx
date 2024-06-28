@@ -5,7 +5,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
   timeZone: "UTC"
 })
 
-export function FormattedDate ({ date, ...props }) {
+export function FormattedDate({ date, ...props }) {
   date = typeof date === "string" ? new Date(date) : date
 
   return (

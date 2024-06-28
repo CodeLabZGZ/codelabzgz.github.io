@@ -6,12 +6,12 @@ import { events } from "@/schema"
 import { notFound } from "next/navigation"
 import { sql } from "drizzle-orm"
 
-export default async function Page({ params: {slug} }) {
-  const [event]  = await db
+export default async function Page({ params: { slug } }) {
+  const [event] = await db
     .select()
     .from(events)
     .where(eq(events.title, slug.replaceAll("-", " ")))
-  
+
   if (!event) return notFound()
 
   const records = db.all(sql`
@@ -47,5 +47,5 @@ export default async function Page({ params: {slug} }) {
     ORDER BY position;
   `)
 
-  return <DataTable columns={columns} data={records}/>
+  return <DataTable columns={columns} data={records} />
 }

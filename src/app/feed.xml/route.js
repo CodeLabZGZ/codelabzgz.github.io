@@ -3,7 +3,7 @@ import * as cheerio from "cheerio"
 import { Feed } from "feed"
 import assert from "assert"
 
-export async function GET (req) {
+export async function GET(req) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
 
   if (!siteUrl) {
@@ -17,7 +17,8 @@ export async function GET (req) {
 
   const feed = new Feed({
     title: "CodeLab",
-    description: "¡CodeLab es la asociación de estudiantes de Informática de la EINA en Zaragoza! Eventos de alto nivel, hackatones emocionantes, meetups inspiradores y más.",
+    description:
+      "¡CodeLab es la asociación de estudiantes de Informática de la EINA en Zaragoza! Eventos de alto nivel, hackatones emocionantes, meetups inspiradores y más.",
     author,
     id: siteUrl,
     link: siteUrl,

@@ -40,13 +40,11 @@ export const columns = [
   {
     accessorKey: "total_points",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Puntos"/>
+      <DataTableColumnHeader column={column} title="Puntos" />
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex items-center">
-          {row.getValue("total_points")}
-        </div>
+        <div className="flex items-center">{row.getValue("total_points")}</div>
       )
     },
     filterFn: (row, id, value) => {

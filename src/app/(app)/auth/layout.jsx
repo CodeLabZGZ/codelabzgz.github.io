@@ -3,8 +3,6 @@ export const metadata = {
   description: ""
 }
 
-export default function Layout ({ children }) {
-  return (
-    <>{children}</>
-  )
+export default function Layout({ children }) {
+  return <>{children}</>
 }

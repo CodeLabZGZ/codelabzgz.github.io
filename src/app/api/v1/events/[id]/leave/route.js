@@ -9,16 +9,19 @@ import { response } from "@/lib/utils"
 
 async function deleteHandler(request, context) {
   if (!request.auth) throw new UnauthorizedException()
-    
-  const data = await db.delete(participations)
-    .where(and(
-      eq(participations.event, Number(context.params.id)),
-      eq(participations.user, request.auth.user.id)
-    ))
+
+  const data = await db
+    .delete(participations)
+    .where(
+      and(
+        eq(participations.event, Number(context.params.id)),
+        eq(participations.user, request.auth.user.id)
+      )
+    )
     .returning()
 
   if (data.length === 0) throw new NotFoundException()
   return response({ statusCode: 204 })
 }
 
-export const DELETE = errorHandler(auth(deleteHandler));
+export const DELETE = errorHandler(auth(deleteHandler))

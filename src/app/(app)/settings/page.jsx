@@ -1,15 +1,10 @@
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger
-} from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import Account from "./account"
 import Notifications from "./notifications"
 import Profile from "./profile"
 
-export default async function Page () {
+export default async function Page() {
   return (
     <>
       <div className="flex items-center justify-between space-y-2">
@@ -23,13 +18,13 @@ export default async function Page () {
         </TabsList>
         <main>
           <TabsContent value="profile" className="space-y-4">
-            <Profile/>
+            <Profile />
           </TabsContent>
           <TabsContent value="account" className="space-y-4">
-            <Account/>
+            <Account />
           </TabsContent>
           <TabsContent value="notifications" className="space-y-4">
-            <Notifications/>
+            <Notifications />
           </TabsContent>
         </main>
       </Tabs>

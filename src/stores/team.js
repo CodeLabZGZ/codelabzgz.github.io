@@ -1,6 +1,6 @@
-import { create } from 'zustand'
+import { create } from "zustand"
 
-export const useTeam = create((set) => ({
+export const useTeam = create(set => ({
   selectedTeam: {},
-  setSelectedTeam: (team) => set({ selectedTeam: team }),
-}));
+  setSelectedTeam: team => set({ selectedTeam: team })
+}))

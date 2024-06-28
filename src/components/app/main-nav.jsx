@@ -4,7 +4,7 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { usePathname } from "next/navigation"
 
-export function MainNav ({ className, ...props }) {
+export function MainNav({ className, ...props }) {
   const pathname = usePathname()
 
   return (
@@ -16,7 +16,9 @@ export function MainNav ({ className, ...props }) {
         href="/events"
         className={cn(
           "text-sm font-medium transition-colors",
-          pathname === "/events" ? "" : "text-muted-foreground hover:text-primary"
+          pathname === "/events"
+            ? ""
+            : "text-muted-foreground hover:text-primary"
         )}
       >
         Eventos
@@ -25,7 +27,9 @@ export function MainNav ({ className, ...props }) {
         href="/teams"
         className={cn(
           "text-sm font-medium transition-colors",
-          pathname === "/teams" ? "" : "text-muted-foreground hover:text-primary"
+          pathname === "/teams"
+            ? ""
+            : "text-muted-foreground hover:text-primary"
         )}
       >
         Equipos

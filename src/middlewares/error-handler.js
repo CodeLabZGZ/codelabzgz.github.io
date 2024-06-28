@@ -1,18 +1,18 @@
-import { HTTPException } from "@/lib/api-errors";
-import { response } from "@/lib/utils";
+import { HTTPException } from "@/lib/api-errors"
+import { response } from "@/lib/utils"
 
-export const errorHandler = (fn) => async (req, res) => {
+export const errorHandler = fn => async (req, res) => {
   try {
-    return await fn(req, res);
+    return await fn(req, res)
   } catch (error) {
     if (error instanceof HTTPException) {
       return response({
-        code: error.statusCode, 
+        code: error.statusCode,
         message: error.message,
-        statusCode: error.statusCode,
+        statusCode: error.statusCode
       })
-    } 
+    }
 
-    return response({ statusCode: 500 }) 
+    return response({ statusCode: 500 })
   }
-};
+}

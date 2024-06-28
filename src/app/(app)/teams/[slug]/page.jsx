@@ -1,9 +1,4 @@
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger
-} from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { members, users } from "@/schema"
 
 import Details from "./details"
@@ -13,7 +8,7 @@ import Settings from "./settings"
 import { db } from "@/db"
 import { sql } from "drizzle-orm"
 
-export default async function Page ({ params: { slug } }) {
+export default async function Page({ params: { slug } }) {
   const teamMembers = db.all(sql`
     SELECT u.id, u.image, u.name, u.status, u.username, m.createdAt, m.updatedAt, m.role
     FROM ${users} u
@@ -36,16 +31,20 @@ export default async function Page ({ params: { slug } }) {
         </TabsList>
         <main>
           <TabsContent value="team-details" className="space-y-4">
-            <Details/>
+            <Details />
           </TabsContent>
           <TabsContent value="team-players" className="space-y-4">
-            <Players values={teamMembers.filter(({role}) => role !== "pending")} />
+            <Players
+              values={teamMembers.filter(({ role }) => role !== "pending")}
+            />
           </TabsContent>
           <TabsContent value="settings" className="space-y-4">
-            <Settings/>
+            <Settings />
           </TabsContent>
           <TabsContent value="join-request" className="space-y-4">
-            <JoinRequest values={teamMembers.filter(({role}) => role === "pending")}/>
+            <JoinRequest
+              values={teamMembers.filter(({ role }) => role === "pending")}
+            />
           </TabsContent>
         </main>
       </Tabs>

@@ -1,9 +1,4 @@
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger
-} from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { members, scoreboards, teams } from "@/schema"
 
 import All from "./all"
@@ -15,7 +10,7 @@ import { columns } from "@/components/app/tables/teams/columns"
 import { db } from "@/db"
 import { sql } from "drizzle-orm"
 
-export default async function Page () {
+export default async function Page() {
   const { user } = await auth()
 
   const records = db.all(sql`
@@ -53,8 +48,8 @@ export default async function Page () {
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Equipos</h2>
         <div className="flex items-center gap-x-2">
-          <JoinTeam id={user.id}/>
-          <CreateTeam id={user.id}/>
+          <JoinTeam id={user.id} />
+          <CreateTeam id={user.id} />
         </div>
       </div>
       <Tabs defaultValue="all" className="space-y-4">

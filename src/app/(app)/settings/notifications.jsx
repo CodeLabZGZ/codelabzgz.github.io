@@ -34,15 +34,13 @@ const defaultValues = {
   security_emails: true
 }
 
-export default function Notifications () {
+export default function Notifications() {
   const form = useForm({
     resolver: zodResolver(notificationsFormSchema),
     defaultValues
   })
 
-  function onSubmit (data) {
-
-  }
+  function onSubmit(data) {}
 
   return (
     <Form {...form}>
@@ -77,9 +75,7 @@ export default function Notifications () {
             render={({ field }) => (
               <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                 <div className="space-y-0.5">
-                  <FormLabel className="text-base">
-                    Marketing emails
-                  </FormLabel>
+                  <FormLabel className="text-base">Marketing emails</FormLabel>
                   <FormDescription>
                     Receive emails about new products, features, and more.
                   </FormDescription>

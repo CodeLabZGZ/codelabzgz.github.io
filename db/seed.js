@@ -1,11 +1,19 @@
-import { challenges, events, members, participations, scoreboards, teams, users } from "./schema.js"
+import {
+  challenges,
+  events,
+  members,
+  participations,
+  scoreboards,
+  teams,
+  users
+} from "./schema.js"
 
 import Database from "better-sqlite3"
 import { drizzle } from "drizzle-orm/better-sqlite3"
 import { faker } from "@faker-js/faker"
 import shuffle from "just-shuffle"
 
-function genUsers ({ lim = 10 }) {
+function genUsers({ lim = 10 }) {
   const values = []
   for (let index = 0; index < lim; index++) {
     values.push({
@@ -18,7 +26,7 @@ function genUsers ({ lim = 10 }) {
   return values
 }
 
-function genTeams ({ lim = 10 }) {
+function genTeams({ lim = 10 }) {
   const values = []
   for (let index = 0; index < lim; index++) {
     values.push({
@@ -30,7 +38,7 @@ function genTeams ({ lim = 10 }) {
   return values
 }
 
-function genMembers ({ min = 0, max = 5, users, teams }) {
+function genMembers({ min = 0, max = 5, users, teams }) {
   const values = []
 
   teams.forEach(team => {
@@ -40,11 +48,8 @@ function genMembers ({ min = 0, max = 5, users, teams }) {
       values.push({
         team,
         user,
-        role: index === 0
-          ? "admin"
-          : Math.random() > 0.75
-            ? "pending"
-            : "member"
+        role:
+          index === 0 ? "admin" : Math.random() > 0.75 ? "pending" : "member"
       })
     })
   })
@@ -52,7 +57,7 @@ function genMembers ({ min = 0, max = 5, users, teams }) {
   return values
 }
 
-function genEvents ({ lim = 10 }) {
+function genEvents({ lim = 10 }) {
   const values = []
   for (let index = 0; index < lim; index++) {
     const dateA = faker.date.anytime()
@@ -70,22 +75,26 @@ function genEvents ({ lim = 10 }) {
   return values
 }
 
-function genChallenges ({ min = 0, max = 10, events }) {
+function genChallenges({ min = 0, max = 10, events }) {
   const values = []
   const difficultyLevels = [
     {
       difficulty: "very easy",
       points: 15
-    }, {
+    },
+    {
       difficulty: "easy",
       points: 20
-    }, {
+    },
+    {
       difficulty: "medium",
       points: 30
-    }, {
+    },
+    {
       difficulty: "hard",
       points: 40
-    }, {
+    },
+    {
       difficulty: "insane",
       points: 50
     }
@@ -94,7 +103,8 @@ function genChallenges ({ min = 0, max = 10, events }) {
   events.forEach(event => {
     const lim = Math.random() * (max - min) + min
     for (let index = 0; index < lim; index++) {
-      const item = difficultyLevels[Math.floor(Math.random() * difficultyLevels.length)]
+      const item =
+        difficultyLevels[Math.floor(Math.random() * difficultyLevels.length)]
       values.push({
         event,
         title: faker.lorem.words({ min: 3, max: 8 }),
@@ -107,7 +117,7 @@ function genChallenges ({ min = 0, max = 10, events }) {
   return values
 }
 
-function genParticipations ({ min = 0, max = 10, members, events }) {
+function genParticipations({ min = 0, max = 10, members, events }) {
   const values = []
 
   events.forEach(event => {
@@ -125,7 +135,13 @@ function genParticipations ({ min = 0, max = 10, members, events }) {
   return values
 }
 
-function genScoreboard ({ min = 0, max = 4, events, challenges, participations }) {
+function genScoreboard({
+  min = 0,
+  max = 4,
+  events,
+  challenges,
+  participations
+}) {
   const values = []
 
   participations.forEach(p => {
@@ -140,7 +156,10 @@ function genScoreboard ({ min = 0, max = 4, events, challenges, participations }
           challenge: challenge.title,
           user: p.user,
           team: p.team,
-          timestamp: faker.date.between({ from: event.startDate, to: event.endDate }),
+          timestamp: faker.date.between({
+            from: event.startDate,
+            to: event.endDate
+          }),
           points: String(Math.floor(Math.random() * 1e12) + 1)
         })
       }
@@ -150,19 +169,58 @@ function genScoreboard ({ min = 0, max = 4, events, challenges, participations }
   return values
 }
 
-async function main () {
+async function main() {
   const sqlite = new Database("db/sqlite.db")
   const db = drizzle(sqlite)
 
-  const usersData = await db.insert(users).values(genUsers({ lim: 15 })).returning()
-  const teamsData = await db.insert(teams).values(genTeams({ lim: 15 })).returning()
-  const users4teams = await db.insert(members).values(genMembers({ lim: 30, users: usersData.map(u => u.id), teams: teamsData.map(t => t.name) })).returning()
+  const usersData = await db
+    .insert(users)
+    .values(genUsers({ lim: 15 }))
+    .returning()
+  const teamsData = await db
+    .insert(teams)
+    .values(genTeams({ lim: 15 }))
+    .returning()
+  const users4teams = await db
+    .insert(members)
+    .values(
+      genMembers({
+        lim: 30,
+        users: usersData.map(u => u.id),
+        teams: teamsData.map(t => t.name)
+      })
+    )
+    .returning()
 
-  const eventsData = await db.insert(events).values(genEvents({ lim: 15 })).returning()
-  const challengesData = await db.insert(challenges).values(genChallenges({ max: 5, events: eventsData.map(e => e.id) })).returning()
+  const eventsData = await db
+    .insert(events)
+    .values(genEvents({ lim: 15 }))
+    .returning()
+  const challengesData = await db
+    .insert(challenges)
+    .values(genChallenges({ max: 5, events: eventsData.map(e => e.id) }))
+    .returning()
 
-  const participationsData = await db.insert(participations).values(genParticipations({ max: 7, members: users4teams, events: eventsData.map(e => e.id) })).returning()
-  const scoreboardsData = await db.insert(scoreboards).values(genScoreboard({ events: eventsData, challenges: challengesData, participations: participationsData })).returning()
+  const participationsData = await db
+    .insert(participations)
+    .values(
+      genParticipations({
+        max: 7,
+        members: users4teams,
+        events: eventsData.map(e => e.id)
+      })
+    )
+    .returning()
+  const scoreboardsData = await db
+    .insert(scoreboards)
+    .values(
+      genScoreboard({
+        events: eventsData,
+        challenges: challengesData,
+        participations: participationsData
+      })
+    )
+    .returning()
 
   console.log("users: %d", usersData.length)
   console.log("teams: %d", teamsData.length)

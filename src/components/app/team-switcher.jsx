@@ -1,11 +1,6 @@
 "use client"
 
 import {
-  CaretSortIcon,
-  CheckIcon,
-  PlusCircledIcon
-} from "@radix-ui/react-icons"
-import {
   Command,
   CommandEmpty,
   CommandGroup,
@@ -14,25 +9,27 @@ import {
   CommandList,
   CommandSeparator
 } from "@/components/ui/command"
-import {
-  Dialog,
-  DialogTrigger
-} from "@/components/ui/dialog"
+import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
+import {
+  CaretSortIcon,
+  CheckIcon,
+  PlusCircledIcon
+} from "@radix-ui/react-icons"
 import { useEffect, useState } from "react"
 import useSWR, { useSWRConfig } from "swr"
 
+import { CreateTeamForm } from "@/components/app/forms/create-team"
 import { Avatar } from "@/components/avatar"
 import { Button } from "@/components/ui/button"
-import { CreateTeamForm } from "@/components/app/forms/create-team"
 import { cn } from "@/lib/utils"
 import { useParticipation } from "@/stores/participation"
-import { useSession } from "next-auth/react"
 import { useTeam } from "@/stores/team"
+import { useSession } from "next-auth/react"
 
 const GROUPS = [
   {
@@ -47,33 +44,37 @@ const GROUPS = [
   }
 ]
 
-const isEmptyObject = obj => obj && Object.keys(obj).length === 0;
+const isEmptyObject = obj => obj && Object.keys(obj).length === 0
 
-export function TeamSwitcher ({ className }) {
-  const [ open, setOpen ] = useState(false)
-  const [ showNewTeamDialog, setShowNewTeamDialog ] = useState(false)
-  const [ groups, setGroups ] = useState(GROUPS)
-  
+export function TeamSwitcher({ className }) {
+  const [open, setOpen] = useState(false)
+  const [showNewTeamDialog, setShowNewTeamDialog] = useState(false)
+  const [groups, setGroups] = useState(GROUPS)
+
   const { data: session, status } = useSession()
   const { selectedTeam, setSelectedTeam } = useTeam()
   const { participation, setParticipation } = useParticipation()
 
   // load config and data
   const { fetcher } = useSWRConfig()
-  const { data } = useSWR(status !== "loading" && `/api/v1/teams?userId=${session.user.id}`, fetcher)
+  const { data } = useSWR(
+    status !== "loading" && `/api/v1/teams?userId=${session.user.id}`,
+    fetcher
+  )
 
   useEffect(() => {
-    if (!data) return 
+    if (!data) return
 
     const values = GROUPS.map(group => {
       if (group.label === "Accounts") {
-        group.values = [{
+        group.values = [
+          {
             id: session?.user?.id,
             image: session?.user?.image,
             label: session?.user?.name,
-            value: session?.user?.email,
-          }]
-       
+            value: session?.user?.email
+          }
+        ]
       }
 
       if (group.label === "Teams") {
@@ -81,19 +82,28 @@ export function TeamSwitcher ({ className }) {
           id: item.team.id,
           image: item.team.logo,
           label: item.team.name,
-          value: item.team.name.replaceAll(" ","-"),
+          value: item.team.name.replaceAll(" ", "-"),
           role: item.role
         }))
       }
 
-      return group;
+      return group
     })
     setGroups(values)
 
-    if (isEmptyObject(participation)) setParticipation(groups.find(i => i.label === "Accounts").values[0])
-    if (isEmptyObject(selectedTeam)) setSelectedTeam(groups.find(i => i.label === "Teams").values[0])
-  }, [data, session])
-  
+    if (isEmptyObject(participation))
+      setParticipation(groups.find(i => i.label === "Accounts").values[0])
+    if (isEmptyObject(selectedTeam))
+      setSelectedTeam(groups.find(i => i.label === "Teams").values[0])
+  }, [
+    data,
+    session,
+    groups,
+    participation,
+    selectedTeam,
+    setParticipation,
+    setSelectedTeam
+  ])
 
   return (
     <Dialog open={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
@@ -117,22 +127,30 @@ export function TeamSwitcher ({ className }) {
             <CommandList>
               <CommandInput placeholder="Search team..." />
               <CommandEmpty>No team found.</CommandEmpty>
-              {groups.map((group) => (
-                <CommandGroup key={group.label} heading={group.show ? group.label + ` (${group.values.length})` : ""}>
-                  {group.values.map((item) => (
+              {groups.map(group => (
+                <CommandGroup
+                  key={group.label}
+                  heading={
+                    group.show ? group.label + ` (${group.values.length})` : ""
+                  }
+                >
+                  {group.values.map(item => (
                     <CommandItem
                       key={item.value}
                       onSelect={() => {
                         setSelectedTeam(item)
-                        setParticipation({ ...item, type: group.label.toLowerCase() })
+                        setParticipation({
+                          ...item,
+                          type: group.label.toLowerCase()
+                        })
                         setOpen(false)
                       }}
-                      className="text-sm gap-2"
+                      className="gap-2 text-sm"
                     >
-                      <Avatar 
+                      <Avatar
                         image={item.image}
                         value={item.label}
-                        className="w-5 h-5"
+                        className="h-5 w-5"
                       />
                       {item.label}
                       <CheckIcon

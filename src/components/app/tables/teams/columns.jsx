@@ -1,10 +1,6 @@
 "use client"
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage
-} from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 import { DataTableColumnHeader } from "./data-table-column-header"
 
@@ -16,9 +12,11 @@ export const columns = [
     ),
     cell: ({ row }) => {
       const { logo, motto } = row.original
-      const letters = row.getValue("name")
+      const letters = row
+        .getValue("name")
         .match(/\w+(?:-\w+)*/g)
-        .slice(0, 2).map(w => w[0])
+        .slice(0, 2)
+        .map(w => w[0])
 
       return (
         <div className="flex items-center space-x-2">
@@ -26,13 +24,9 @@ export const columns = [
             <AvatarImage src={logo} alt="@shadcn" />
             <AvatarFallback className="uppercase">{letters}</AvatarFallback>
           </Avatar>
-          <div className="max-w-[400px] truncate flex flex-col gap-y-1">
-            <span className="font-medium">
-              {row.getValue("name")}
-            </span>
-            <span className="text-xs text-muted-foreground">
-              {motto}
-            </span>
+          <div className="flex max-w-[400px] flex-col gap-y-1 truncate">
+            <span className="font-medium">{row.getValue("name")}</span>
+            <span className="text-xs text-muted-foreground">{motto}</span>
           </div>
         </div>
       )
@@ -43,7 +37,7 @@ export const columns = [
   {
     accessorKey: "role",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Rol"/>
+      <DataTableColumnHeader column={column} title="Rol" />
     ),
     cell: ({ row }) => {
       return (
@@ -62,11 +56,7 @@ export const columns = [
       <DataTableColumnHeader column={column} title="Miembros" />
     ),
     cell: ({ row }) => {
-      return (
-        <div className="w-[100px]">
-          {row.getValue("members") || 0}
-        </div>
-      )
+      return <div className="w-[100px]">{row.getValue("members") || 0}</div>
     }
   },
   {
@@ -75,11 +65,7 @@ export const columns = [
       <DataTableColumnHeader column={column} title="Podios" />
     ),
     cell: ({ row }) => {
-      return (
-        <div className="w-[100px]">
-          {row.getValue("podiums") || 0}
-        </div>
-      )
+      return <div className="w-[100px]">{row.getValue("podiums") || 0}</div>
     }
   }
 ]

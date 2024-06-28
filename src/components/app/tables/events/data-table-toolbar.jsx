@@ -7,7 +7,7 @@ import { Cross2Icon } from "@radix-ui/react-icons"
 import { DataTableFacetedFilter } from "./data-table-faceted-filter"
 import { Input } from "@/components/ui/input"
 
-export function DataTableToolbar ({ table }) {
+export function DataTableToolbar({ table }) {
   const isFiltered = table.getState().columnFilters.length > 0
 
   return (
@@ -15,8 +15,8 @@ export function DataTableToolbar ({ table }) {
       <div className="flex flex-1 items-center space-x-2">
         <Input
           placeholder="Buscar eventos..."
-          value={(table.getColumn("title")?.getFilterValue()) ?? ""}
-          onChange={(event) =>
+          value={table.getColumn("title")?.getFilterValue() ?? ""}
+          onChange={event =>
             table.getColumn("title")?.setFilterValue(event.target.value)
           }
           className="h-8 w-[150px] lg:w-[250px]"
@@ -35,7 +35,6 @@ export function DataTableToolbar ({ table }) {
                 label: "Privado",
                 value: "private",
                 icon: TbLock
-
               }
             ]}
           />

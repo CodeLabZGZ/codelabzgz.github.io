@@ -147,11 +147,11 @@
     font-weight: theme(fontWeight.bold);
 
     &::before {
-      content: '`';
+      content: "`";
     }
 
     &::after {
-      content: '`';
+      content: "`";
     }
   }
 

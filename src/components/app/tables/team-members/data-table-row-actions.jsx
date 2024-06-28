@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { TbUserMinus } from "react-icons/tb"
 
-export function DataTableRowActions ({ row }) {
+export function DataTableRowActions({ row }) {
   const { role } = row.original
 
   return (
@@ -26,11 +26,11 @@ export function DataTableRowActions ({ row }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem 
-          className="flex items-center gap-x-2 whitespace-nowrap cursor-pointer"
+        <DropdownMenuItem
+          className="flex cursor-pointer items-center gap-x-2 whitespace-nowrap"
           onClick={() => {}}
         >
-          <TbUserMinus className="w-4 h-4"/>
+          <TbUserMinus className="h-4 w-4" />
           Echar del equipo
         </DropdownMenuItem>
       </DropdownMenuContent>

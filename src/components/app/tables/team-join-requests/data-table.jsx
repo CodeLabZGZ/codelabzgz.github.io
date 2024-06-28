@@ -23,7 +23,7 @@ import { DataTablePagination } from "./data-table-pagination"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
-export function DataTable ({ columns, data }) {
+export function DataTable({ columns, data }) {
   const router = useRouter()
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState({})
@@ -56,17 +56,17 @@ export function DataTable ({ columns, data }) {
     <div className="space-y-4">
       <Table>
         <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
+          {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
+              {headerGroup.headers.map(header => {
                 return (
                   <TableHead key={header.id} colSpan={header.colSpan}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                   </TableHead>
                 )
               })}
@@ -74,36 +74,28 @@ export function DataTable ({ columns, data }) {
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows?.length
-            ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  onClick={() => router.push(`/teams/${row.original.slug}`)}
-                  className="cursor-pointer"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            )
-            : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No se han encontrado resultados.
-                </TableCell>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map(row => (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
+                onClick={() => router.push(`/teams/${row.original.slug}`)}
+                className="cursor-pointer"
+              >
+                {row.getVisibleCells().map(cell => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
               </TableRow>
-            )}
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-24 text-center">
+                No se han encontrado resultados.
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
       <DataTablePagination table={table} />

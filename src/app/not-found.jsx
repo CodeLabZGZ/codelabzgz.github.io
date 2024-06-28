@@ -1,7 +1,7 @@
 import { IconLink } from "@/components/landing/icon-link"
 import { StarField } from "@/components/landing/star-field"
 
-export default function NotFound () {
+export default function NotFound() {
   return (
     <div className="relative isolate flex flex-auto flex-col items-center justify-center overflow-hidden bg-gray-950 text-center">
       <svg

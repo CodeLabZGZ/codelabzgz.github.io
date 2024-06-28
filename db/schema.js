@@ -1,4 +1,10 @@
-import { foreignKey, integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core"
+import {
+  foreignKey,
+  integer,
+  primaryKey,
+  sqliteTable,
+  text
+} from "drizzle-orm/sqlite-core"
 import { relations, sql } from "drizzle-orm"
 
 export const users = sqliteTable("user", {
@@ -9,8 +15,12 @@ export const users = sqliteTable("user", {
   username: text("username"),
   email: text("email").notNull(),
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
-  createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`),
-  updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`)
+  createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(
+    sql`CURRENT_TIMESTAMP`
+  ),
+  updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(
+    sql`CURRENT_TIMESTAMP`
+  )
 })
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -36,7 +46,7 @@ export const accounts = sqliteTable(
     id_token: text("id_token"),
     session_state: text("session_state")
   },
-  (account) => ({
+  account => ({
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId]
     })
@@ -58,7 +68,7 @@ export const verificationTokens = sqliteTable(
     token: text("token").notNull(),
     expires: integer("expires", { mode: "timestamp_ms" }).notNull()
   },
-  (vt) => ({
+  vt => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] })
   })
 )
@@ -68,8 +78,12 @@ export const teams = sqliteTable("teams", {
   motto: text("motto").notNull(),
   slug: text("slug").unique(),
   logo: text("logo"),
-  createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`),
-  updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`)
+  createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(
+    sql`CURRENT_TIMESTAMP`
+  ),
+  updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(
+    sql`CURRENT_TIMESTAMP`
+  )
 })
 
 export const teamsRelations = relations(teams, ({ many }) => ({
@@ -87,8 +101,12 @@ export const events = sqliteTable("events", {
   location: text("location").notNull(),
   startDate: integer("startDate", { mode: "timestamp_ms" }).notNull(),
   endDate: integer("endDate", { mode: "timestamp_ms" }).notNull(),
-  createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`),
-  updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`)
+  createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(
+    sql`CURRENT_TIMESTAMP`
+  ),
+  updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(
+    sql`CURRENT_TIMESTAMP`
+  )
 })
 
 export const eventsRelations = relations(events, ({ many }) => ({
@@ -96,15 +114,22 @@ export const eventsRelations = relations(events, ({ many }) => ({
   participations: many(participations)
 }))
 
-export const challenges = sqliteTable("challenges", {
-  event: integer("event", { mode: "number" })
-    .references(() => events.id, { onDelete: "cascade" }),
-  title: text("title"),
-  difficulty: text("difficulty", { enum: ["very easy", "easy", "medium", "hard", "insane"] }).notNull(),
-  points: integer("points", { mode: "number" })
-}, (c) => ({
-  compoundKey: primaryKey({ columns: [c.event, c.title] })
-}))
+export const challenges = sqliteTable(
+  "challenges",
+  {
+    event: integer("event", { mode: "number" }).references(() => events.id, {
+      onDelete: "cascade"
+    }),
+    title: text("title"),
+    difficulty: text("difficulty", {
+      enum: ["very easy", "easy", "medium", "hard", "insane"]
+    }).notNull(),
+    points: integer("points", { mode: "number" })
+  },
+  c => ({
+    compoundKey: primaryKey({ columns: [c.event, c.title] })
+  })
+)
 
 export const challengesRelations = relations(challenges, ({ one, many }) => ({
   event: one(events, {
@@ -114,17 +139,23 @@ export const challengesRelations = relations(challenges, ({ one, many }) => ({
   scoreboards: many(scoreboards)
 }))
 
-export const members = sqliteTable("members", {
-  user: text("user")
-    .references(() => users.id, { onDelete: "cascade" }),
-  team: text("team")
-    .references(() => teams.name, { onDelete: "cascade" }),
-  role: text("role", { enum: ["admin", "member", "pending"] }).notNull(),
-  createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`),
-  updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`)
-}, (m) => ({
-  compoundKey: primaryKey({ columns: [m.user, m.team] })
-}))
+export const members = sqliteTable(
+  "members",
+  {
+    user: text("user").references(() => users.id, { onDelete: "cascade" }),
+    team: text("team").references(() => teams.name, { onDelete: "cascade" }),
+    role: text("role", { enum: ["admin", "member", "pending"] }).notNull(),
+    createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(
+      sql`CURRENT_TIMESTAMP`
+    ),
+    updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(
+      sql`CURRENT_TIMESTAMP`
+    )
+  },
+  m => ({
+    compoundKey: primaryKey({ columns: [m.user, m.team] })
+  })
+)
 
 export const membersRelations = relations(members, ({ one }) => ({
   team: one(teams, {
@@ -137,13 +168,19 @@ export const membersRelations = relations(members, ({ one }) => ({
   })
 }))
 
-export const participations = sqliteTable("participations", {
-  user: text("user").references(() => users.id, { onDelete: "cascade" }),
-  event: integer("event", { mode: "number" }).references(() => events.id, { onDelete: "cascade" }),
-  team: text("team").references(() => teams.name)
-}, (p) => ({
-  compoundKey: primaryKey({ columns: [p.user, p.event] })
-}))
+export const participations = sqliteTable(
+  "participations",
+  {
+    user: text("user").references(() => users.id, { onDelete: "cascade" }),
+    event: integer("event", { mode: "number" }).references(() => events.id, {
+      onDelete: "cascade"
+    }),
+    team: text("team").references(() => teams.name)
+  },
+  p => ({
+    compoundKey: primaryKey({ columns: [p.user, p.event] })
+  })
+)
 
 export const participationsRelations = relations(participations, ({ one }) => ({
   user: one(users, {
@@ -160,22 +197,26 @@ export const participationsRelations = relations(participations, ({ one }) => ({
   })
 }))
 
-export const scoreboards = sqliteTable("scoreboards", {
-  event: integer("event", { mode: "number" }),
-  challenge: text("challenge"),
-  user: text("user").references(() => users.id),
-  team: text("team").references(() => teams.name),
-  timestamp: integer("timestamp", { mode: "timestamp_ms" }),
-  points: text("points")
-}, (sb) => ({
-  compoundKey: primaryKey({
-    columns: [sb.event, sb.challenge, sb.user, sb.timestamp]
-  }),
-  challengeReference: foreignKey({
-    columns: [sb.event, sb.challenge],
-    foreignColumns: [challenges.event, challenges.title]
+export const scoreboards = sqliteTable(
+  "scoreboards",
+  {
+    event: integer("event", { mode: "number" }),
+    challenge: text("challenge"),
+    user: text("user").references(() => users.id),
+    team: text("team").references(() => teams.name),
+    timestamp: integer("timestamp", { mode: "timestamp_ms" }),
+    points: text("points")
+  },
+  sb => ({
+    compoundKey: primaryKey({
+      columns: [sb.event, sb.challenge, sb.user, sb.timestamp]
+    }),
+    challengeReference: foreignKey({
+      columns: [sb.event, sb.challenge],
+      foreignColumns: [challenges.event, challenges.title]
+    })
   })
-}))
+)
 
 export const scoreboardsRelations = relations(scoreboards, ({ one }) => ({
   challenge: one(challenges, {

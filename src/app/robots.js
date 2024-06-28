@@ -1,4 +1,4 @@
-export default function robots () {
+export default function robots() {
   return {
     rules: {
       userAgent: "*",

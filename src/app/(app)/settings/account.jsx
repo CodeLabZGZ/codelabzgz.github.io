@@ -62,15 +62,13 @@ const defaultValues = {
   // dob: new Date("2023-01-23"),
 }
 
-export default function Account () {
+export default function Account() {
   const form = useForm({
     resolver: zodResolver(accountFormSchema),
     defaultValues
   })
 
-  function onSubmit (data) {
-
-  }
+  function onSubmit(data) {}
 
   return (
     <Form {...form}>
@@ -111,8 +109,8 @@ export default function Account () {
                     >
                       {field.value
                         ? languages.find(
-                          (language) => language.value === field.value
-                        )?.label
+                            language => language.value === field.value
+                          )?.label
                         : "Select language"}
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
@@ -123,7 +121,7 @@ export default function Account () {
                     <CommandInput placeholder="Search language..." />
                     <CommandEmpty>No language found.</CommandEmpty>
                     <CommandGroup>
-                      {languages.map((language) => (
+                      {languages.map(language => (
                         <CommandItem
                           value={language.label}
                           key={language.value}

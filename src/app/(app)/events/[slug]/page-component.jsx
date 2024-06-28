@@ -5,14 +5,14 @@ import {
   TbDownload as Download,
   TbExternalLink as ExternalLink,
   TbUpload as Upload
-} from "react-icons/tb";
+} from "react-icons/tb"
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetFooter,
   SheetHeader,
-  SheetTitle,
+  SheetTitle
 } from "@/components/ui/sheet"
 import {
   Table,
@@ -36,22 +36,24 @@ import Link from "next/link"
 import { formatNumber } from "@/lib/utils"
 import { useState } from "react"
 
-export default function PageComponent ({ values, event, data }) {
+export default function PageComponent({ values, event, data }) {
   const [isOpen, setIsOpen] = useState(false)
   const [active, setActive] = useState(null)
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <div className="grid grid-cols-2 mb-4">
+      <div className="mb-4 grid grid-cols-2">
         <div className="col-span-1 flex items-center gap-x-2.5">
           <Avatar image={data.team.logo} value={data.team.name} />
           <div className="flex flex-col items-start">
             <span className="">{data.team.name}</span>
-            <span className="text-xs text-muted-foreground">{data.team.membersPlaying} / {data.team.members} miembros</span>
+            <span className="text-xs text-muted-foreground">
+              {data.team.membersPlaying} / {data.team.members} miembros
+            </span>
           </div>
         </div>
         <div className="col-span-1 grid grid-cols-3">
-          <div className="col-span-1 flex flex-col items-center gap-x-2.5 mx-auto">
+          <div className="col-span-1 mx-auto flex flex-col items-center gap-x-2.5">
             <span className="text-muted-foreground">{data.position}.º</span>
             <span className="text-xs uppercase">puesto</span>
           </div>
@@ -59,16 +61,20 @@ export default function PageComponent ({ values, event, data }) {
             <Tooltip>
               <TooltipTrigger>
                 <div className="flex flex-col items-center gap-x-2.5">
-                  <span className="text-muted-foreground">{formatNumber(data.total_points)}</span>
+                  <span className="text-muted-foreground">
+                    {formatNumber(data.total_points)}
+                  </span>
                   <span className="text-xs uppercase">puntos</span>
                 </div>
               </TooltipTrigger>
               <TooltipContent className="font-mono">
-                {data.total_points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                {data.total_points
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <div className="col-span-1 flex items-center justify-between mx-auto">
+          <div className="col-span-1 mx-auto flex items-center justify-between">
             <div className="flex flex-col items-center gap-x-2.5">
               <span className="text-muted-foreground">{data.challenges}</span>
               <span className="text-xs uppercase">retos</span>
@@ -78,9 +84,12 @@ export default function PageComponent ({ values, event, data }) {
       </div>
       <Table>
         <TableCaption>
-          <Link href={`/events/${event}/scoreboard`} className="flex items-center justify-center gap-x-2">
-            Ver resultados resultados. 
-            <ExternalLink/>
+          <Link
+            href={`/events/${event}/scoreboard`}
+            className="flex items-center justify-center gap-x-2"
+          >
+            Ver resultados resultados.
+            <ExternalLink />
           </Link>
         </TableCaption>
         <TableHeader>
@@ -91,43 +100,52 @@ export default function PageComponent ({ values, event, data }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {values?.map(({frontmatter: {title, points,  difficulty}}, index) => (
-            <TableRow 
-              key={title} 
-              onClick={() => {
-                setIsOpen(true)
-                setActive(values[index])
-              }} 
-              className="cursor-pointer"
-            >
-              <TableCell className="font-medium">{title}</TableCell>
-              <TableCell>{points}</TableCell>
-              <TableCell>{difficulty}</TableCell>
-            </TableRow>
-          ))}
+          {values?.map(
+            ({ frontmatter: { title, points, difficulty } }, index) => (
+              <TableRow
+                key={title}
+                onClick={() => {
+                  setIsOpen(true)
+                  setActive(values[index])
+                }}
+                className="cursor-pointer"
+              >
+                <TableCell className="font-medium">{title}</TableCell>
+                <TableCell>{points}</TableCell>
+                <TableCell>{difficulty}</TableCell>
+              </TableRow>
+            )
+          )}
         </TableBody>
       </Table>
-      <SheetContent side="left" className="h-full flex flex-col overflow-y-hidden min-w-[30%]">
+      <SheetContent
+        side="left"
+        className="flex h-full min-w-[30%] flex-col overflow-y-hidden"
+      >
         <SheetHeader>
           <SheetTitle className="flex items-center gap-x-2">
             {active?.frontmatter?.title}
-            <Badge variant="secondary" className="uppercase cursor-default">
-            {active?.frontmatter?.difficulty}
+            <Badge variant="secondary" className="cursor-default uppercase">
+              {active?.frontmatter?.difficulty}
             </Badge>
           </SheetTitle>
           <SheetDescription>
             {active?.frontmatter?.description}
           </SheetDescription>
         </SheetHeader>
-        <div className="flex-grow overflow-y-auto markdown-body">
+        <div className="markdown-body flex-grow overflow-y-auto">
           {active?.content}
         </div>
-        <SheetFooter className="w-full flex items-center">
-          <Link 
+        <SheetFooter className="flex w-full items-center">
+          <Link
             href="/"
-            className={buttonVariants({ size: "sm", variant: "outline", className: "gap-1.5" })}
+            className={buttonVariants({
+              size: "sm",
+              variant: "outline",
+              className: "gap-1.5"
+            })}
           >
-            <Download className="w-4 h-4"/>
+            <Download className="h-4 w-4" />
             Descargar plantilla
           </Link>
           <Button
@@ -140,7 +158,7 @@ export default function PageComponent ({ values, event, data }) {
             size="sm"
             className="gap-1.5"
           >
-            <Upload className="w-4 h-4"/>
+            <Upload className="h-4 w-4" />
             Subir solución
           </Button>
         </SheetFooter>

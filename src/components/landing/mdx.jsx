@@ -9,7 +9,7 @@ import clsx from "clsx"
 
 export const a = Link
 
-export const img = function Img (props) {
+export const img = function Img(props) {
   return (
     <div className="relative mt-8 overflow-hidden rounded-xl bg-gray-50 dark:bg-gray-900 [&+*]:mt-8">
       <Image
@@ -22,7 +22,7 @@ export const img = function Img (props) {
   )
 }
 
-function ContentWrapper ({ className, ...props }) {
+function ContentWrapper({ className, ...props }) {
   return (
     <div className="mx-auto max-w-7xl px-6 lg:flex lg:px-8">
       <div className="lg:ml-96 lg:flex lg:w-full lg:justify-end lg:pl-32">
@@ -38,7 +38,7 @@ function ContentWrapper ({ className, ...props }) {
   )
 }
 
-function ArticleHeader ({ id, date }) {
+function ArticleHeader({ id, date }) {
   return (
     <header className="relative mb-10 xl:mb-0">
       <div className="pointer-events-none absolute left-[max(-0.5rem,calc(50%-18.625rem))] top-0 z-50 flex h-4 items-center justify-end gap-x-2 lg:left-0 lg:right-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] xl:h-8">
@@ -55,7 +55,7 @@ function ArticleHeader ({ id, date }) {
           <Link href={`#${id}`} className="inline-flex">
             <FormattedDate
               date={date}
-              className="text-2xs/4 font-medium text-gray-500 xl:hidden dark:text-white/50"
+              className="text-2xs/4 font-medium text-gray-500 dark:text-white/50 xl:hidden"
             />
           </Link>
         </div>
@@ -64,7 +64,7 @@ function ArticleHeader ({ id, date }) {
   )
 }
 
-export const article = function Article ({ id, date, children }) {
+export const article = function Article({ id, date, children }) {
   const heightRef = useRef(null)
   const [heightAdjustment, setHeightAdjustment] = useState(0)
 
@@ -105,7 +105,7 @@ export const article = function Article ({ id, date, children }) {
   )
 }
 
-export const code = function Code ({ highlightedCode, ...props }) {
+export const code = function Code({ highlightedCode, ...props }) {
   if (highlightedCode) {
     return (
       <code {...props} dangerouslySetInnerHTML={{ __html: highlightedCode }} />

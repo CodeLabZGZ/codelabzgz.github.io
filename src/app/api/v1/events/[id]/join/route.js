@@ -10,7 +10,8 @@ async function postHandler(request, context) {
   if (!request.auth) throw new UnauthorizedException()
 
   const team = await request.json()
-  const data = await db.insert(participations)
+  const data = await db
+    .insert(participations)
     .values({
       event: Number(context.params.id),
       user: request.auth.user.id,
@@ -20,9 +21,9 @@ async function postHandler(request, context) {
     .catch(error => {
       if (error.message.includes("UNIQUE")) throw new ConflictException()
     })
-      
+
   if (data.length === 0) throw new NotFoundException()
   return response({ data })
 }
 
-export const POST = errorHandler(auth(postHandler));
+export const POST = errorHandler(auth(postHandler))

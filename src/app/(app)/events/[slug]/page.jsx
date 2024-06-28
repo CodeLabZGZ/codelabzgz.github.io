@@ -7,35 +7,38 @@ import { db } from "@/db"
 import { getContent } from "./fetchers"
 import { notFound } from "next/navigation"
 
-export default async  function Page ({params: { slug }}) {
+export default async function Page({ params: { slug } }) {
   const { user } = await auth()
-  const [ event ] = await db.select({
-    id: events.id,
-    team: {
-      ...teams,
-      membersPlaying: sql`COUNT(${participations.user})`,
-      members: sql`(
+  const [event] = await db
+    .select({
+      id: events.id,
+      team: {
+        ...teams,
+        membersPlaying: sql`COUNT(${participations.user})`,
+        members: sql`(
         SELECT COUNT(*)
         FROM ${members} AS m
         WHERE m.team = ${teams.name}
         GROUP BY m.team
       )`
-    },
-    participating: sql`MAX(CASE WHEN ${participations.user} = ${user.id} THEN 1 ELSE 0 END)`,
-  })
-  .from(events)
-  .innerJoin(participations, sql`${participations.event} = ${events.id}`)
-  .innerJoin(teams, sql`${participations.team} = ${teams.name}`)
-  .where(and(
-    eq(events.title, slug.replaceAll("-", " ")),
-    eq(participations.user, user.id)
-  ))
-  .groupBy(events.id, teams.name);
+      },
+      participating: sql`MAX(CASE WHEN ${participations.user} = ${user.id} THEN 1 ELSE 0 END)`
+    })
+    .from(events)
+    .innerJoin(participations, sql`${participations.event} = ${events.id}`)
+    .innerJoin(teams, sql`${participations.team} = ${teams.name}`)
+    .where(
+      and(
+        eq(events.title, slug.replaceAll("-", " ")),
+        eq(participations.user, user.id)
+      )
+    )
+    .groupBy(events.id, teams.name)
 
-  const  { error, data: values} = await getContent(slug)
+  const { error, data: values } = await getContent(slug)
   if (!event || error || !event?.participating) return notFound()
 
-  const [ record ] = db.all(sql`
+  const [record] = db.all(sql`
     WITH ScoreByChallenge AS (
       SELECT
         COALESCE(sc.team, pt.team) AS team,
@@ -71,14 +74,16 @@ export default async  function Page ({params: { slug }}) {
 
   return (
     <div className="text-white">
-      <PageComponent 
+      <PageComponent
         data={{
           ...event,
           position: record.position,
           challenges: record.challenges,
           total_points: record.total_points
         }}
-        values={values.filter(v => v?.frontmatter?.title && v?.frontmatter?.title !== "overview")} 
+        values={values.filter(
+          v => v?.frontmatter?.title && v?.frontmatter?.title !== "overview"
+        )}
         event={slug}
       />
     </div>

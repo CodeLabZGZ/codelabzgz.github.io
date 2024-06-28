@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
 
-export function DataTableFacetedFilter ({ column, title, options }) {
+export function DataTableFacetedFilter({ column, title, options }) {
   const facets = column?.getFacetedUniqueValues()
   const selectedValues = new Set(column?.getFilterValue())
 
@@ -39,28 +39,26 @@ export function DataTableFacetedFilter ({ column, title, options }) {
                 {selectedValues.size}
               </Badge>
               <div className="hidden space-x-1 lg:flex">
-                {selectedValues.size > 2
-                  ? (
-                    <Badge
-                      variant="secondary"
-                      className="rounded-sm px-1 font-normal"
-                    >
-                      {selectedValues.size} selected
-                    </Badge>
-                  )
-                  : (
-                    options
-                      .filter((option) => selectedValues.has(option.value))
-                      .map((option) => (
-                        <Badge
-                          variant="secondary"
-                          key={option.value}
-                          className="rounded-sm px-1 font-normal"
-                        >
-                          {option.label}
-                        </Badge>
-                      ))
-                  )}
+                {selectedValues.size > 2 ? (
+                  <Badge
+                    variant="secondary"
+                    className="rounded-sm px-1 font-normal"
+                  >
+                    {selectedValues.size} selected
+                  </Badge>
+                ) : (
+                  options
+                    .filter(option => selectedValues.has(option.value))
+                    .map(option => (
+                      <Badge
+                        variant="secondary"
+                        key={option.value}
+                        className="rounded-sm px-1 font-normal"
+                      >
+                        {option.label}
+                      </Badge>
+                    ))
+                )}
               </div>
             </>
           )}
@@ -72,7 +70,7 @@ export function DataTableFacetedFilter ({ column, title, options }) {
           <CommandList>
             <CommandEmpty>No se encontraron resultados.</CommandEmpty>
             <CommandGroup>
-              {options.map((option) => {
+              {options.map(option => {
                 const isSelected = selectedValues.has(option.value)
                 return (
                   <CommandItem

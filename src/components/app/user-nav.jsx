@@ -1,9 +1,6 @@
 "use client"
 
-import {
-   TbMoonStars as Dark,
-   TbSun as Light
-} from "react-icons/tb";
+import { TbMoonStars as Dark, TbSun as Light } from "react-icons/tb"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,12 +19,12 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useCmk } from "@/stores/cmdk"
-import { useTeam } from "@/stores/team";
+import { useTeam } from "@/stores/team"
 import { useTheme } from "next-themes"
 
-export function UserNav () {
+export function UserNav() {
   const { data: session } = useSession()
-  const { open, setOpen } = useCmk();
+  const { open, setOpen } = useCmk()
   const { resolvedTheme, setTheme } = useTheme()
   const otherTheme = resolvedTheme === "dark" ? "light" : "dark"
   const { selectedTeam } = useTeam()
@@ -36,19 +33,21 @@ export function UserNav () {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          {session &&
-            <Avatar 
+          {session && (
+            <Avatar
               image={session?.user.image}
               value={session?.user.name}
-              className="w-8 h-8"
+              className="h-8 w-8"
             />
-          }
+          )}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{session?.user.name}</p>
+            <p className="text-sm font-medium leading-none">
+              {session?.user.name}
+            </p>
             <p className="text-xs leading-none text-muted-foreground">
               {session?.user.email}
             </p>
@@ -57,20 +56,29 @@ export function UserNav () {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <Link href="/settings" className="w-full flex items-center gap-x-2.5">
-              <TbUser className="w-4 h-4"/>
+            <Link
+              href="/settings"
+              className="flex w-full items-center gap-x-2.5"
+            >
+              <TbUser className="h-4 w-4" />
               Mi perfil
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem disabled={!selectedTeam}>
-            <Link href={selectedTeam ? `/teams/${selectedTeam?.value}` : "/teams"} className="w-full flex items-center gap-x-2.5">
-              <TbUsers className="w-4 h-4"/>
+            <Link
+              href={selectedTeam ? `/teams/${selectedTeam?.value}` : "/teams"}
+              className="flex w-full items-center gap-x-2.5"
+            >
+              <TbUsers className="h-4 w-4" />
               Mi equipo
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <a href="https://discord.gg/QHe9YYDtGf" className="w-full flex items-center gap-x-2.5">
-              <TbHelpSquare className="w-4 h-4"/>
+            <a
+              href="https://discord.gg/QHe9YYDtGf"
+              className="flex w-full items-center gap-x-2.5"
+            >
+              <TbHelpSquare className="h-4 w-4" />
               Ayuda
             </a>
           </DropdownMenuItem>
@@ -79,26 +87,25 @@ export function UserNav () {
         <DropdownMenuGroup>
           <DropdownMenuItem onClick={() => setOpen(!open)}>
             Menú de comandos
-            <DropdownMenuShortcut>
-              ⌘K
-            </DropdownMenuShortcut>
+            <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setTheme(otherTheme)}>
             Tema
             <DropdownMenuShortcut>
-              {resolvedTheme === "dark" 
-                ? <Dark className="text-sm" />
-                : <Light className="text-sm" /> 
-            }
+              {resolvedTheme === "dark" ? (
+                <Dark className="text-sm" />
+              ) : (
+                <Light className="text-sm" />
+              )}
             </DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={async () => await signOut({ callbackUrl: "/" })}
-          className="flex items-center gap-x-2.5 cursor-pointer"
+          className="flex cursor-pointer items-center gap-x-2.5"
         >
-          <TbDoorExit className="w-4 h-4"/>
+          <TbDoorExit className="h-4 w-4" />
           Cerrar sesión
         </DropdownMenuItem>
       </DropdownMenuContent>

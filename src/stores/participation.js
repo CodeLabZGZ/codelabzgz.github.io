@@ -1,6 +1,6 @@
-import { create } from 'zustand'
+import { create } from "zustand"
 
-export const useParticipation = create((set) => ({
+export const useParticipation = create(set => ({
   participation: {},
-  setParticipation: (accountOrTeam) => set({ participation: accountOrTeam }),
-}));
+  setParticipation: accountOrTeam => set({ participation: accountOrTeam })
+}))

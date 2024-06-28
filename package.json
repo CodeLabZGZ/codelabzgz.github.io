@@ -11,7 +11,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx .",
+    "lint": "prettier . --write && next lint --no-cache --fix",
     "db:generate": "drizzle-kit generate",
     "db:introspect": "drizzle-kit introspect",
     "db:push": "drizzle-kit push",
@@ -93,9 +93,13 @@
     "@tailwindcss/forms": "^0.5.7",
     "dotenv": "^16.4.5",
     "drizzle-kit": "^0.22.6",
+    "eslint-config-next": "14.2.4",
+    "eslint-config-prettier": "^9.1.0",
     "husky": "^9.0.11",
     "just-shuffle": "^4.2.0",
     "lint-staged": "^15.2.5",
+    "prettier": "3.3.2",
+    "prettier-plugin-tailwindcss": "^0.6.5",
     "sharp": "^0.33.4"
   }
 }
