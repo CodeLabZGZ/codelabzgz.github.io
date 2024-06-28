@@ -1,6 +1,6 @@
 import { db } from "@/db"
-import { errorHandler } from "@/middlewares/error-handler"
 import { response } from "@/lib/utils"
+import { errorHandler } from "@/middlewares/error-handler"
 import { users } from "@/schema"
 
 async function postHandler(request) {

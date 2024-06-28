@@ -1,10 +1,10 @@
 import "@/styles/globals.css"
 
-import { Inter } from "next/font/google"
 import { Providers } from "@/app/providers"
 import SWR from "@/components/swr"
 import { Toaster } from "@/components/ui/sonner"
 import clsx from "clsx"
+import { Inter } from "next/font/google"
 import localFont from "next/font/local"
 
 const inter = Inter({
@@ -32,6 +32,7 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
+  const a = 12
   return (
     <html
       lang="es"

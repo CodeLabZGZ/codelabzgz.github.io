@@ -19,14 +19,14 @@ import {
   FormMessage
 } from "@/components/ui/form"
 
+import { createTeam } from "@/actions/create-team"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { createTeam } from "@/actions/create-team"
-import { toast } from "sonner"
-import { useForm } from "react-hook-form"
-import { useState } from "react"
-import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { z } from "zod"
 
 const formSchema = z.object({
   name: z.string().min(2, {

@@ -8,9 +8,9 @@ import {
   users
 } from "./schema.js"
 
+import { faker } from "@faker-js/faker"
 import Database from "better-sqlite3"
 import { drizzle } from "drizzle-orm/better-sqlite3"
-import { faker } from "@faker-js/faker"
 import shuffle from "just-shuffle"
 
 function genUsers({ lim = 10 }) {

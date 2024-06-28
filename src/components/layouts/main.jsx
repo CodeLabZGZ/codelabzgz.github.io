@@ -1,9 +1,9 @@
 import { Intro, IntroFooter } from "@/components/landing/intro"
 
 import { Banner } from "@/components/landing/banner"
-import Link from "next/link"
 import { StarField } from "@/components/landing/star-field"
 import { ThemeToggle } from "@/components/landing/theme-toggle"
+import Link from "next/link"
 import { useId } from "react"
 
 function Timeline() {

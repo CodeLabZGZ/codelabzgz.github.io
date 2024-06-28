@@ -3,9 +3,9 @@
 import { TbBulb, TbFlag, TbLock, TbLockOpen } from "react-icons/tb"
 
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Cross2Icon } from "@radix-ui/react-icons"
 import { DataTableFacetedFilter } from "./data-table-faceted-filter"
-import { Input } from "@/components/ui/input"
 
 export function DataTableToolbar({ table }) {
   const isFiltered = table.getState().columnFilters.length > 0

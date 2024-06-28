@@ -1,3 +1,14 @@
 {
-  "extends": ["next", "next/core-web-vitals", "prettier"]
+  "extends": ["next", "next/core-web-vitals", "prettier"],
+  "rules": {
+    "no-unused-vars": [
+      "warn",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "caughtErrors": "all",
+        "ignoreRestSiblings": false
+      }
+    ]
+  }
 }

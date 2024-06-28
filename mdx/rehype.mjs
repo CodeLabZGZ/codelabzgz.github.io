@@ -1,3 +1,4 @@
+import { toString } from "mdast-util-to-string"
 import { mdxAnnotations } from "mdx-annotations"
 import rehypeAutolinkHeadings from "rehype-autolink-headings"
 import { rehypeGithubAlerts } from "rehype-github-alerts"
@@ -6,7 +7,6 @@ import rehypeKatex from "rehype-katex"
 import rehypeMdxCodeProps from "rehype-mdx-code-props"
 import rehypeSlug from "rehype-slug"
 import { remarkRehypeWrap } from "remark-rehype-wrap"
-import { toString } from "mdast-util-to-string"
 
 export const rehypePlugins = [
   mdxAnnotations.rehype,

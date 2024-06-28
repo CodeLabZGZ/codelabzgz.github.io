@@ -1,11 +1,11 @@
-import { and, eq, sql } from "drizzle-orm"
 import { events, members, participations, teams } from "@/schema"
+import { and, eq, sql } from "drizzle-orm"
 
-import PageComponent from "./page-component"
 import { auth } from "@/auth"
 import { db } from "@/db"
-import { getContent } from "./fetchers"
 import { notFound } from "next/navigation"
+import { getContent } from "./fetchers"
+import PageComponent from "./page-component"
 
 export default async function Page({ params: { slug } }) {
   const { user } = await auth()

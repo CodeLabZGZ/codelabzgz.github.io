@@ -19,13 +19,11 @@ import {
   useReactTable
 } from "@tanstack/react-table"
 
+import { useState } from "react"
 import { DataTablePagination } from "./data-table-pagination"
 import { DataTableToolbar } from "./data-table-toolbar"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
 
 export function DataTable({ columns, data }) {
-  const router = useRouter()
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState({})
   const [columnFilters, setColumnFilters] = useState([])

@@ -8,9 +8,9 @@ import {
 import { TbLock, TbLockOpen } from "react-icons/tb"
 
 import { Badge } from "@/components/ui/badge"
+import { formatDate } from "@/lib/utils"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
-import { formatDate } from "@/lib/utils"
 
 export const columns = [
   {

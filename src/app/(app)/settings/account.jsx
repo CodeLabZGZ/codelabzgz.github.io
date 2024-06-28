@@ -1,6 +1,5 @@
 "use client"
 
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 import {
   Command,
   CommandEmpty,
@@ -22,13 +21,14 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
 
 const languages = [
   { label: "English", value: "en" },

@@ -1,7 +1,7 @@
 import { db } from "@/db"
+import { response } from "@/lib/utils"
 import { errorHandler } from "@/middlewares/error-handler"
 import { events } from "@/schema"
-import { response } from "@/lib/utils"
 
 async function postHandler(request) {
   const values = request.json()

@@ -19,10 +19,10 @@ import {
   useReactTable
 } from "@tanstack/react-table"
 
-import { DataTablePagination } from "./data-table-pagination"
-import { DataTableToolbar } from "./data-table-toolbar"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { DataTablePagination } from "./data-table-pagination"
+import { DataTableToolbar } from "./data-table-toolbar"
 
 export function DataTable({ columns, data }) {
   const router = useRouter()

@@ -1,6 +1,5 @@
 "use client"
 
-import { TbMoonStars as Dark, TbSun as Light } from "react-icons/tb"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,16 +10,22 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
-import { TbDoorExit, TbHelpSquare, TbUser, TbUsers } from "react-icons/tb"
 import { signOut, useSession } from "next-auth/react"
+import {
+  TbMoonStars as Dark,
+  TbSun as Light,
+  TbDoorExit,
+  TbHelpSquare,
+  TbUser,
+  TbUsers
+} from "react-icons/tb"
 
 import { Avatar } from "@/components/avatar"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import { Skeleton } from "@/components/ui/skeleton"
 import { useCmk } from "@/stores/cmdk"
 import { useTeam } from "@/stores/team"
 import { useTheme } from "next-themes"
+import Link from "next/link"
 
 export function UserNav() {
   const { data: session } = useSession()

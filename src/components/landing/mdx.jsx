@@ -3,9 +3,9 @@
 import { useEffect, useRef, useState } from "react"
 
 import { FormattedDate } from "@/components/landing/formatted-date"
+import clsx from "clsx"
 import Image from "next/image"
 import Link from "next/link"
-import clsx from "clsx"
 
 export const a = Link
 

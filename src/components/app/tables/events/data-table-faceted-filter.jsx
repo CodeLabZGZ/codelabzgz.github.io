@@ -1,4 +1,3 @@
-import { CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons"
 import {
   Command,
   CommandEmpty,
@@ -13,6 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
+import { CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"

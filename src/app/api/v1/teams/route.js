@@ -1,9 +1,9 @@
 import { members, teams } from "@/schema"
 
 import { db } from "@/db"
-import { eq } from "drizzle-orm"
-import { errorHandler } from "@/middlewares/error-handler"
 import { response } from "@/lib/utils"
+import { errorHandler } from "@/middlewares/error-handler"
+import { eq } from "drizzle-orm"
 
 async function postHandler(request) {
   const values = request.json()

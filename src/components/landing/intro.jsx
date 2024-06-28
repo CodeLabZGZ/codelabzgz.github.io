@@ -7,8 +7,8 @@ import {
   FaXTwitter
 } from "react-icons/fa6"
 
-import { Codelab } from "@/components/logos"
 import { IconLink } from "@/components/landing/icon-link"
+import { Codelab } from "@/components/logos"
 import Link from "next/link"
 
 const buttons = [

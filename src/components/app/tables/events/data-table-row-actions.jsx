@@ -15,11 +15,11 @@ import {
 } from "react-icons/tb"
 
 import { Button } from "@/components/ui/button"
+import { useParticipation } from "@/stores/participation"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import Link from "next/link"
-import { toast } from "sonner"
-import { useParticipation } from "@/stores/participation"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 const currentDate = new Date()
 

@@ -2,9 +2,9 @@
 
 import "atropos/css"
 
-import Atropos from "atropos/react"
-import { Codelab } from "@/components/logos"
 import { PyramidPattern } from "@/components/landing/patterns"
+import { Codelab } from "@/components/logos"
+import Atropos from "atropos/react"
 
 export function Ticket({ number, date, options, brands }) {
   const dateTime = new Date(date)

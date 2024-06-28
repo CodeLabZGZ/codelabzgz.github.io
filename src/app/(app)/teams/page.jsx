@@ -1,14 +1,13 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { members, scoreboards, teams } from "@/schema"
 
-import All from "./all"
 import { CreateTeam } from "@/components/app/forms/create-team"
 import { JoinTeam } from "@/components/app/forms/join-team"
-import MyTeams from "./my-teams"
-import { auth } from "auth"
 import { columns } from "@/components/app/tables/teams/columns"
 import { db } from "@/db"
+import { auth } from "auth"
 import { sql } from "drizzle-orm"
+import All from "./all"
+import MyTeams from "./my-teams"
 
 export default async function Page() {
   const { user } = await auth()

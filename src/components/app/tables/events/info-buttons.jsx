@@ -1,11 +1,10 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Share2Icon } from "@radix-ui/react-icons"
-import { toast } from "sonner"
 import { useParticipation } from "@/stores/participation"
-import { usePathname } from "next/navigation"
-import { useRouter } from "next/navigation"
+import { Share2Icon } from "@radix-ui/react-icons"
+import { usePathname, useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 export function JoinLeaveButton({ event, state }) {
   const router = useRouter()

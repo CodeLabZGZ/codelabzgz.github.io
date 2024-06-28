@@ -1,14 +1,6 @@
 "use client"
 
 import {
-  CalendarIcon,
-  EnvelopeClosedIcon,
-  FaceIcon,
-  GearIcon,
-  PersonIcon,
-  RocketIcon
-} from "@radix-ui/react-icons"
-import {
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -18,6 +10,14 @@ import {
   CommandSeparator,
   CommandShortcut
 } from "@/components/ui/command"
+import {
+  CalendarIcon,
+  EnvelopeClosedIcon,
+  FaceIcon,
+  GearIcon,
+  PersonIcon,
+  RocketIcon
+} from "@radix-ui/react-icons"
 
 import { MainNav } from "@/components/app/main-nav"
 import { TeamSwitcher } from "@/components/app/team-switcher"

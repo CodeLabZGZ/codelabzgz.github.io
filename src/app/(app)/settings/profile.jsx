@@ -20,11 +20,11 @@ import { useFieldArray, useForm } from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import Link from "next/link"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
-import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import Link from "next/link"
+import { z } from "zod"
 
 const profileFormSchema = z.object({
   username: z

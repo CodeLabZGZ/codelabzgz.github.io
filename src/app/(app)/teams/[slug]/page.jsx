@@ -1,12 +1,12 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { members, users } from "@/schema"
 
+import { db } from "@/db"
+import { sql } from "drizzle-orm"
 import Details from "./details"
 import JoinRequest from "./join-request"
 import Players from "./players"
 import Settings from "./settings"
-import { db } from "@/db"
-import { sql } from "drizzle-orm"
 
 export default async function Page({ params: { slug } }) {
   const teamMembers = db.all(sql`

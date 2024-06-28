@@ -1,11 +1,11 @@
 import * as components from "@/components/app/mdx"
 
-import { compileMDX } from "next-mdx-remote/rsc"
-import fs from "fs"
-import path from "path"
 import { recmaPlugins } from "@/recma"
 import { rehypePlugins } from "@/rehype"
 import { remarkPlugins } from "@/remark"
+import fs from "fs"
+import { compileMDX } from "next-mdx-remote/rsc"
+import path from "path"
 
 const contentDir = path.join(process.cwd(), "src/content")
 

@@ -1,9 +1,9 @@
-import { NotFoundException } from "@/lib/api-errors"
 import { db } from "@/db"
-import { eq } from "drizzle-orm"
-import { errorHandler } from "@/middlewares/error-handler"
+import { NotFoundException } from "@/lib/api-errors"
 import { response } from "@/lib/utils"
+import { errorHandler } from "@/middlewares/error-handler"
 import { teams } from "@/schema"
+import { eq } from "drizzle-orm"
 
 async function putHandler(request, context) {
   const id = context.params.id

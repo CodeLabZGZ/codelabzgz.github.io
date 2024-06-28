@@ -1,4 +1,8 @@
 import {
+  JoinLeaveButton,
+  ShareButton
+} from "@/components/app/tables/events/info-buttons"
+import {
   TbPuzzle as Challenge,
   TbFlag2 as Format,
   TbMapPin as Location,
@@ -6,19 +10,15 @@ import {
   TbCloud as Type,
   TbUsers as Users
 } from "react-icons/tb"
-import {
-  JoinLeaveButton,
-  ShareButton
-} from "@/components/app/tables/events/info-buttons"
 
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import Image from "next/image"
 import { auth } from "@/auth"
+import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { db } from "@/db"
 import { formatDateInfoEvent } from "@/lib/utils"
-import { getContentBySlug } from "../fetchers"
-import { notFound } from "next/navigation"
 import { sql } from "drizzle-orm"
+import Image from "next/image"
+import { notFound } from "next/navigation"
+import { getContentBySlug } from "../fetchers"
 
 export default async function Page({ params: { slug } }) {
   const { user } = await auth()

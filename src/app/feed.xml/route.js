@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio"
 
-import { Feed } from "feed"
 import assert from "assert"
+import { Feed } from "feed"
 
 export async function GET(req) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL

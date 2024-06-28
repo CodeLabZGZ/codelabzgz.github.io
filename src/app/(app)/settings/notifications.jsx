@@ -11,9 +11,9 @@ import {
 
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
 
 const notificationsFormSchema = z.object({
   type: z.enum(["all", "mentions", "none"], {

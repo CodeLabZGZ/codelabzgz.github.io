@@ -1,14 +1,14 @@
 import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  CaretSortIcon
-} from "@radix-ui/react-icons"
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  CaretSortIcon
+} from "@radix-ui/react-icons"
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"

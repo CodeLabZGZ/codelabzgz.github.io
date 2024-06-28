@@ -1,11 +1,11 @@
 import { and, eq } from "drizzle-orm"
 
-import { UnauthorizedException } from "@/lib/api-errors"
 import { auth } from "@/auth"
 import { db } from "@/db"
+import { UnauthorizedException } from "@/lib/api-errors"
+import { response } from "@/lib/utils"
 import { errorHandler } from "@/middlewares/error-handler"
 import { participations } from "@/schema"
-import { response } from "@/lib/utils"
 
 async function deleteHandler(request, context) {
   if (!request.auth) throw new UnauthorizedException()

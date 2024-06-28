@@ -1,7 +1,7 @@
 "use client"
 
-import { HiXMark } from "react-icons/hi2"
 import { useState } from "react"
+import { HiXMark } from "react-icons/hi2"
 
 export function Banner({ date, title, message, dot }) {
   const [show, setShow] = useState(true)

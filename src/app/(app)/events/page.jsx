@@ -1,14 +1,14 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { events, participations } from "@/schema"
 
+import { columns } from "@/components/app/tables/events/columns"
+import { db } from "@/db"
+import { auth } from "auth"
+import { sql } from "drizzle-orm"
 import Joined from "./joined"
 import OnGoing from "./ongoing"
 import Past from "./past"
 import UpGoing from "./upgoing"
-import { auth } from "auth"
-import { columns } from "@/components/app/tables/events/columns"
-import { db } from "@/db"
-import { sql } from "drizzle-orm"
 
 const currentDate = new Date()
 

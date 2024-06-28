@@ -1,10 +1,9 @@
-import { DataTable } from "@/components/app/tables/scoreboard/data-table"
 import { columns } from "@/components/app/tables/scoreboard/columns"
+import { DataTable } from "@/components/app/tables/scoreboard/data-table"
 import { db } from "@/db"
-import { eq } from "drizzle-orm"
 import { events } from "@/schema"
+import { eq, sql } from "drizzle-orm"
 import { notFound } from "next/navigation"
-import { sql } from "drizzle-orm"
 
 export default async function Page({ params: { slug } }) {
   const [event] = await db

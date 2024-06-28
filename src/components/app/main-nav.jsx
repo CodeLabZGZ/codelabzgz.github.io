@@ -1,7 +1,7 @@
 "use client"
 
-import Link from "next/link"
 import { cn } from "@/lib/utils"
+import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 export function MainNav({ className, ...props }) {

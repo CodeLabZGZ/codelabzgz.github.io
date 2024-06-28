@@ -1,3 +1,4 @@
+import { relations, sql } from "drizzle-orm"
 import {
   foreignKey,
   integer,
@@ -5,7 +6,6 @@ import {
   sqliteTable,
   text
 } from "drizzle-orm/sqlite-core"
-import { relations, sql } from "drizzle-orm"
 
 export const users = sqliteTable("user", {
   id: text("id").primaryKey(),
