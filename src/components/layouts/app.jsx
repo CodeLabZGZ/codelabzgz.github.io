@@ -1,5 +1,8 @@
 "use client"
 
+import { MainNav } from "@/components/app/main-nav"
+import { TeamSwitcher } from "@/components/app/team-switcher"
+import { UserNav } from "@/components/app/user-nav"
 import {
   CommandDialog,
   CommandEmpty,
@@ -10,34 +13,47 @@ import {
   CommandSeparator,
   CommandShortcut
 } from "@/components/ui/command"
-import {
-  CalendarIcon,
-  EnvelopeClosedIcon,
-  FaceIcon,
-  GearIcon,
-  PersonIcon,
-  RocketIcon
-} from "@radix-ui/react-icons"
-
-import { MainNav } from "@/components/app/main-nav"
-import { TeamSwitcher } from "@/components/app/team-switcher"
-import { UserNav } from "@/components/app/user-nav"
+import { useShortcut } from "@/hooks/shortcut"
 import { useCmk } from "@/stores/cmdk"
-import { useEffect } from "react"
+import { useTeam } from "@/stores/team"
+import { useTheme } from "next-themes"
+import { Link } from "next-view-transitions"
+import { useRouter } from "next/navigation"
+import {
+  TbNotebook as Blog,
+  TbCalendarMonth as Calendar,
+  TbMoonStars as Dark,
+  TbHelpSquare as Help,
+  TbSun as Light,
+  TbSettings as Settings,
+  TbUsers as Team,
+  TbUsersGroup as Teams,
+  TbUser as User
+} from "react-icons/tb"
 
 export function AppLayout({ children }) {
+  const router = useRouter()
   const { open, setOpen } = useCmk()
-
-  useEffect(() => {
-    const down = e => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault()
-        setOpen(!open)
-      }
-    }
-    document.addEventListener("keydown", down)
-    return () => document.removeEventListener("keydown", down)
-  }, [open, setOpen])
+  const { resolvedTheme, setTheme } = useTheme()
+  const { selectedTeam } = useTeam()
+  const otherTheme = resolvedTheme === "dark" ? "light" : "dark"
+  useShortcut({
+    key: "k",
+    callback: () => setOpen(!open)
+  })
+  useShortcut({
+    key: "p",
+    callback: () => router.push("/settings")
+  })
+  useShortcut({
+    key: "t",
+    callback: () =>
+      router.push(selectedTeam ? `/teams/${selectedTeam?.value}` : "/teams")
+  })
+  useShortcut({
+    key: "s",
+    callback: () => router.push("/settings")
+  })
 
   return (
     <div className="h-screen w-screen">
@@ -58,39 +74,82 @@ export function AppLayout({ children }) {
         </div>
       </div>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type a command or search..." />
+        <CommandInput placeholder="Escribe una opción o busca..." />
         <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Suggestions">
+          <CommandEmpty>No se han encontrado resultados.</CommandEmpty>
+          <CommandGroup heading="Sugerencias">
             <CommandItem>
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              <span>Calendar</span>
+              <Link href="/events" className="flex w-full items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                <span>Eventos</span>
+              </Link>
             </CommandItem>
             <CommandItem>
-              <FaceIcon className="mr-2 h-4 w-4" />
-              <span>Search Emoji</span>
+              <Link href="/teams" className="flex w-full items-center gap-2">
+                <Teams className="h-4 w-4" />
+                <span>Equipos</span>
+              </Link>
             </CommandItem>
             <CommandItem>
-              <RocketIcon className="mr-2 h-4 w-4" />
-              <span>Launch</span>
+              <Link href="/blog" className="flex w-full items-center gap-2">
+                <Blog className="h-4 w-4" />
+                <span>Blog</span>
+              </Link>
             </CommandItem>
           </CommandGroup>
           <CommandSeparator />
-          <CommandGroup heading="Settings">
+          <CommandGroup heading="Ajustes">
             <CommandItem>
-              <PersonIcon className="mr-2 h-4 w-4" />
-              <span>Profile</span>
-              <CommandShortcut>⌘P</CommandShortcut>
+              <Link href="/settings" className="flex w-full items-center gap-2">
+                <User className="h-4 w-4" />
+                <span>Mi perfil</span>
+                <CommandShortcut>⌘P</CommandShortcut>
+              </Link>
+            </CommandItem>
+            <CommandItem disabled={!selectedTeam}>
+              <Link
+                href={selectedTeam ? `/teams/${selectedTeam?.value}` : "/teams"}
+                className="flex w-full items-center gap-2"
+              >
+                <Team className="h-4 w-4" />
+                <span>Mi equipo</span>
+                <CommandShortcut>⌘T</CommandShortcut>
+              </Link>
             </CommandItem>
             <CommandItem>
-              <EnvelopeClosedIcon className="mr-2 h-4 w-4" />
-              <span>Mail</span>
-              <CommandShortcut>⌘B</CommandShortcut>
+              <Link href="/settings" className="flex w-full items-center gap-2">
+                <Settings className="h-4 w-4" />
+                <span>Ajustes</span>
+                <CommandShortcut>⌘S</CommandShortcut>
+              </Link>
+            </CommandItem>
+          </CommandGroup>
+          <CommandSeparator />
+          <CommandGroup heading="Misc">
+            <CommandItem>
+              <a
+                href="https://discord.gg/QHe9YYDtGf"
+                className="flex w-full items-center gap-2"
+              >
+                <Help className="h-4 w-4" />
+                Ayuda
+              </a>
             </CommandItem>
             <CommandItem>
-              <GearIcon className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-              <CommandShortcut>⌘S</CommandShortcut>
+              <button
+                className="flex w-full items-center gap-2"
+                onClick={() => {
+                  console.log("hola")
+                  setTheme(otherTheme)
+                }}
+              >
+                {resolvedTheme === "dark" ? (
+                  <Dark className="h-4 w-4" />
+                ) : (
+                  <Light className="h-4 w-4" />
+                )}
+                <span>Cambiar tema</span>
+              </button>
             </CommandItem>
           </CommandGroup>
         </CommandList>

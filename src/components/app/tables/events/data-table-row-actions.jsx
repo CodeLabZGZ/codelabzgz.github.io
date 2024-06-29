@@ -17,7 +17,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { useParticipation } from "@/stores/participation"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
-import Link from "next/link"
+import { Link } from "next-view-transitions"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 

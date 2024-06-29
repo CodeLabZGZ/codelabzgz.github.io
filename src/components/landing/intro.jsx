@@ -2,7 +2,7 @@
 
 import { IconLink } from "@/components/landing/icon-link"
 import { Codelab } from "@/components/logos"
-import Link from "next/link"
+import { Link } from "next-view-transitions"
 import { useState } from "react"
 import {
   FaDiscord,

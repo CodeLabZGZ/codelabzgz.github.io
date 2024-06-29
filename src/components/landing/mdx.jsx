@@ -5,8 +5,8 @@ import { useEffect, useRef, useState } from "react"
 import { FormattedDate } from "@/components/landing/formatted-date"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import clsx from "clsx"
+import { Link } from "next-view-transitions"
 import Image from "next/image"
-import Link from "next/link"
 
 export const a = Link
 

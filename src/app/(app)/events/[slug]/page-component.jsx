@@ -27,7 +27,7 @@ import {
   TooltipTrigger
 } from "@/components/ui/tooltip"
 import { formatNumber } from "@/lib/utils"
-import Link from "next/link"
+import { Link } from "next-view-transitions"
 import { useState } from "react"
 import {
   TbDownload as Download,
@@ -89,7 +89,7 @@ export default function PageComponent({ values, slug, data }) {
               className: "flex items-center justify-center gap-x-2"
             })}
           >
-            Ver resultados resultados.
+            Ver resultados.
             <ExternalLink />
           </Link>
         </TableCaption>

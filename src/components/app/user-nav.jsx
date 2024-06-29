@@ -25,7 +25,7 @@ import { Button } from "@/components/ui/button"
 import { useCmk } from "@/stores/cmdk"
 import { useTeam } from "@/stores/team"
 import { useTheme } from "next-themes"
-import Link from "next/link"
+import { Link } from "next-view-transitions"
 
 export function UserNav() {
   const { data: session } = useSession()

@@ -4,7 +4,7 @@ import authConfig from "./auth.config"
 
 export const { auth } = NextAuth(authConfig)
 
-const protectedRoutes = ["/events", "/teams", "/profile"]
+const protectedRoutes = ["/events", "/teams", "/settings"]
 
 export default async function middleware(request) {
   const session = await auth()

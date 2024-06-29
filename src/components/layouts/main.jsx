@@ -4,7 +4,7 @@ import { auth } from "@/auth"
 import { Banner } from "@/components/landing/banner"
 import { StarField } from "@/components/landing/star-field"
 import { ThemeToggle } from "@/components/landing/theme-toggle"
-import Link from "next/link"
+import { Link } from "next-view-transitions"
 import { useId } from "react"
 
 function Timeline() {

@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import Link from "next/link"
+import { Link } from "next-view-transitions"
 
 function ButtonInner({ arrow = false, children }) {
   return (
