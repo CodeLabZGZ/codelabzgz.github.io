@@ -1,5 +1,6 @@
 import { Intro, IntroFooter } from "@/components/landing/intro"
 
+import { auth } from "@/auth"
 import { Banner } from "@/components/landing/banner"
 import { StarField } from "@/components/landing/star-field"
 import { ThemeToggle } from "@/components/landing/theme-toggle"
@@ -90,17 +91,30 @@ function FixedSidebar({ main, footer }) {
   )
 }
 
-export function Layout({ children }) {
+export async function Layout({ children }) {
+  const session = await auth()
+
   return (
     <div className="bg-white dark:bg-gray-950">
       <div className="fixed top-4 z-50 flex w-full items-center justify-between px-6 lg:px-8">
         <ThemeToggle />
-        <Link
-          href="/auth/login"
-          className="text-sm font-semibold leading-6 text-gray-900 dark:text-white"
-        >
-          Log in <span aria-hidden="true">&rarr;</span>
-        </Link>
+        <div className="ml-auto">
+          {!session?.user ? (
+            <Link
+              href="/auth/login"
+              className="text-sm font-semibold leading-6 text-gray-900 dark:text-white"
+            >
+              Iniciar sesión <span aria-hidden="true">&rarr;</span>
+            </Link>
+          ) : (
+            <Link
+              href="/events"
+              className="text-sm font-semibold leading-6 text-gray-900 dark:text-white"
+            >
+              Entrar <span aria-hidden="true">&rarr;</span>
+            </Link>
+          )}
+        </div>
       </div>
       <FixedSidebar main={<Intro />} footer={<IntroFooter />} />
       <Banner

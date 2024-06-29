@@ -1,3 +1,9 @@
+"use client"
+
+import { IconLink } from "@/components/landing/icon-link"
+import { Codelab } from "@/components/logos"
+import Link from "next/link"
+import { useState } from "react"
 import {
   FaDiscord,
   FaGithub,
@@ -6,10 +12,6 @@ import {
   FaRegBuilding,
   FaXTwitter
 } from "react-icons/fa6"
-
-import { IconLink } from "@/components/landing/icon-link"
-import { Codelab } from "@/components/logos"
-import Link from "next/link"
 
 const buttons = [
   {
@@ -29,11 +31,21 @@ const buttons = [
   }
 ]
 
-export function IntroCard({ href, title, description, Icon }) {
+export function IntroCard({
+  href,
+  title,
+  description,
+  Icon,
+  isActive,
+  onMouseEnter
+}) {
   return (
     <a
       href={href}
-      className="relative flex w-full cursor-pointer rounded-lg border border-white p-4 opacity-20 shadow-sm ring-2 ring-white duration-500 ease-in-out hover:scale-105 hover:opacity-100 focus:outline-none"
+      className={`relative flex w-full cursor-pointer rounded-lg border border-white p-4 shadow-sm ring-2 ring-white duration-500 ease-in-out ${
+        isActive ? "scale-105 opacity-100" : "opacity-20"
+      } focus:outline-none`}
+      onMouseEnter={onMouseEnter}
     >
       <div className="flex flex-1">
         <div className="flex flex-col">
@@ -51,6 +63,7 @@ export function IntroCard({ href, title, description, Icon }) {
 }
 
 export function Intro() {
+  const [activeCard, setActiveCard] = useState("Estudiantes")
   return (
     <>
       <div>
@@ -74,13 +87,17 @@ export function Intro() {
           description="Reunete en Discord"
           href="https://discord.gg/QHe9YYDtGf"
           Icon={FaDiscord}
+          isActive={activeCard === "Estudiantes"}
+          onMouseEnter={() => setActiveCard("Estudiantes")}
         />
         <IntroCard
-          key={"Empresas"}
+          key="Empresas"
           title="Empresas"
           description="Colabora con nosotros"
           href="mailto:codelabzgz@unizar.es"
           Icon={FaRegBuilding}
+          isActive={activeCard === "Empresas"}
+          onMouseEnter={() => setActiveCard("Empresas")}
         />
       </div>
     </>
