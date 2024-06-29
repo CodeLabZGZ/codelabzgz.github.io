@@ -42,14 +42,6 @@ export function Ticket({ number, date, options, brands }) {
                       className="text-shadow-lg text-1rem/6 z-50 flex items-center justify-center text-white"
                     >
                       {dateTime.toLocaleDateString("en-US", options)}
-                      {false && (
-                        <svg
-                          viewBox="0 0 2 2"
-                          className="z-50 mx-3 h-[0.1875rem] w-[0.1875rem] flex-none fill-white"
-                        >
-                          <circle cx={1} cy={1} r={1} />
-                        </svg>
-                      )}
                     </time>
                     <div className="text-shadow-xl z-10 mt-1 uppercase leading-6 text-violet-300">
                       eina/codelab
