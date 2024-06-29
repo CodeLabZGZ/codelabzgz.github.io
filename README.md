@@ -32,14 +32,8 @@ npm run dev
 
 ### Run for a production environment
 
-```bash
-git clone -b main --depth 1 https://github.com/CodeLabZGZ/codelabzgz.github.io.git
-npm i --production
-npm run build
-npm run start
-```
-
-### Compile for docker
+> [!IMPORTANT]
+> For production deployment do not forget to launch judge0. [Instructions](https://github.com/judge0/judge0/blob/master/CHANGELOG.md#deployment-procedure)
 
 ```bash
 docker build -t codelab:latest .
