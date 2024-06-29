@@ -90,11 +90,17 @@ export function UserNav() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => setOpen(!open)}>
+          <DropdownMenuItem
+            onClick={() => setOpen(!open)}
+            className="cursor-pointer"
+          >
             Menú de comandos
             <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setTheme(otherTheme)}>
+          <DropdownMenuItem
+            onClick={() => setTheme(otherTheme)}
+            className="cursor-pointer"
+          >
             Tema
             <DropdownMenuShortcut>
               {resolvedTheme === "dark" ? (
