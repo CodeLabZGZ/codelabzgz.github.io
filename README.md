@@ -1,6 +1,6 @@
-# Upgraded Pancake
+# codelabzgz.github.io
 
-[![node](https://img.shields.io/badge/node-20.x-blue)](https://nodejs.org/en/download)
+[![node](https://img.shields.io/badge/node-18.x-blue)](https://nodejs.org/en/download)
 [![npm](https://img.shields.io/badge/npm-10.x-blue)](https://www.npmjs.com/)
 
 [![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
@@ -10,19 +10,13 @@
 
 ## Getting started
 
-To get started, first install dependencies via npm:
+To get started, first install the dependencies with npm:
 
 ```bash
-npm install
+npm i
 ```
 
-Next, create a `.env` file in the root of your project and set the `NEXT_PUBLIC_SITE_URL` environment variable to your site's public URL:
-
-```
-NEXT_PUBLIC_SITE_URL=https://example.com
-```
-
-Then start the development server:
+Next, rename the `.env.example` file to `.env` and set the environment variables. Then start the development server.
 
 ```bash
 npm run dev
@@ -31,7 +25,7 @@ npm run dev
 ### Run for a development environment
 
 ```bash
-git clone https://github.com/CodeLabZGZ/codelabzgz.github.io.git
+git clone -b develop --depth 1 https://github.com/CodeLabZGZ/codelabzgz.github.io.git
 npm i
 npm run dev
 ```
@@ -39,8 +33,8 @@ npm run dev
 ### Run for a production environment
 
 ```bash
-git clone --depth 1 https://github.com/CodeLabZGZ/codelabzgz.github.io.git
-npm ci
+git clone -b main --depth 1 https://github.com/CodeLabZGZ/codelabzgz.github.io.git
+npm i --production
 npm run build
 npm run start
 ```
@@ -53,6 +47,18 @@ docker build -t codelab:latest .
 
 ```bash
 docker run -p 3000:3000 --env-file .env codelab:latest
+```
+
+---
+
+```bash
+docker compose up -d
+```
+
+---
+
+```bash
+make start
 ```
 
 ## Customizing
@@ -71,11 +77,11 @@ The template is built as a pretty standard Next.js website, but using the `src` 
 
 - `app`: Place where the main structure and code that follows every page of the application is stored.
 - `components`: Reusable code snippets that are used throughout all of the pages
-- `context`: Encapsulates a global state that can be accessed from anywhere in the application.
+- `stores`: Encapsulates a global state that can be accessed from anywhere in the application (we use [zustand](https://zustand-demo.pmnd.rs/) to manage global states).
 - `hooks`: Encapsulates small pieces of code that represent a certain type of logic.
 - `lib`: Chaos property, stores here functionalities that do not have to do with the rest of the mentioned sections.
 - `public`: Static content that is publicly accessible
-- `styles`: Contains the styles of the application. Override or new styles in [`tailwind.config.ts`](tailwind.config.ts).
+- `styles`: Contains the styles of the application. Override or new styles in [`tailwind.config.js`](tailwind.config.js).
 
 #### Naming convention
 
