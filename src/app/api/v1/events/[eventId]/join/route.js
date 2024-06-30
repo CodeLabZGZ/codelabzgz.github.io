@@ -13,7 +13,7 @@ async function postHandler(request, context) {
   const data = await db
     .insert(participations)
     .values({
-      event: Number(context.params.id),
+      event: Number(context.params.eventId),
       user: request.auth.user.id,
       ...team
     })

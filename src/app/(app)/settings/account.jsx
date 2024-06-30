@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect, useState } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { z } from "zod"
 
 const profileFormSchema = z.object({
@@ -46,9 +47,9 @@ export default function Account({ data }) {
   const form = useForm({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      name: data.name,
-      description: data.description,
-      username: data.username ?? data.name,
+      name: data.name ?? "",
+      description: data.description ?? "",
+      username: data.username ?? data.name ?? "",
       email: data.email,
       urls: data?.urls?.map(u => ({ value: u })) ?? [
         { value: "https://johndoe.github.io" },
@@ -78,12 +79,31 @@ export default function Account({ data }) {
   }
 
   useEffect(() => {
-    console.log("useEffect")
     checkAndRemoveEmptyFields()
   }, [])
 
-  function onSubmit(values) {
-    console.log(values)
+  async function onSubmit(values) {
+    const { createdAt, updatedAt, ...body } = {
+      ...data,
+      ...values,
+      urls: values.urls.map(u => u.value)
+    }
+
+    const promise = fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/users/${data.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      }
+    )
+    toast.promise(promise, {
+      loading: "loading...",
+      success: "success",
+      error: "error"
+    })
   }
 
   return (

@@ -14,7 +14,7 @@ async function deleteHandler(request, context) {
     .delete(participations)
     .where(
       and(
-        eq(participations.event, Number(context.params.id)),
+        eq(participations.event, Number(context.params.eventId)),
         eq(participations.user, request.auth.user.id)
       )
     )

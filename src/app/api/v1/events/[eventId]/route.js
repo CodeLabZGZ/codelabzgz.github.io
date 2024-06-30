@@ -6,7 +6,7 @@ import { events } from "@/schema"
 import { eq } from "drizzle-orm"
 
 async function putHandler(request, context) {
-  const id = context.params.id
+  const id = context.params.eventId
   const values = request.json()
   const data = await db
     .update(events)
@@ -19,7 +19,7 @@ async function putHandler(request, context) {
 }
 
 async function patchHandler(request, context) {
-  const id = context.params.id
+  const id = context.params.eventId
   const { title, description } = request.json()
 
   const values = {
@@ -38,7 +38,7 @@ async function patchHandler(request, context) {
 }
 
 async function getHandler(request, context) {
-  const id = context.params.id
+  const id = context.params.eventId
   const data = await db.query.events.findFirst({
     where: eq(events.id, id)
   })
@@ -48,7 +48,7 @@ async function getHandler(request, context) {
 }
 
 async function deleteHandler(request, context) {
-  const id = context.params.id
+  const id = context.params.eventId
   const rows = await db.delete(events).where(eq(events.id, id)).returning()
 
   if (rows.length === 0) throw new NotFoundException()

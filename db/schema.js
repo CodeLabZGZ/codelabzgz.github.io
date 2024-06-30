@@ -11,10 +11,17 @@ export const users = sqliteTable("user", {
   id: text("id").primaryKey(),
   image: text("image"),
   name: text("name"),
+  description: text("description"),
   status: text("status"),
   username: text("username"),
   email: text("email").notNull(),
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
+  urls: text("urls", { mode: "json" }),
+  socialEmails: integer("socialEmails", { mode: "boolean" }).default(0),
+  marketingEmails: integer("marketingEmails", { mode: "boolean" }).default(0),
+  securityEmails: integer("securityEmails", { mode: "boolean" }).default(0),
+  privacyPolicy: integer("privacyPolicy", { mode: "boolean" }).default(1),
+  imageRight: integer("imageRight", { mode: "boolean" }).default(0),
   createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(
     sql`CURRENT_TIMESTAMP`
   ),
@@ -136,6 +143,7 @@ export const challengesRelations = relations(challenges, ({ one, many }) => ({
     fields: [challenges.event],
     references: [events.id]
   }),
+  challenges: many(tests),
   scoreboards: many(scoreboards)
 }))
 
@@ -230,5 +238,32 @@ export const scoreboardsRelations = relations(scoreboards, ({ one }) => ({
   user: one(users, {
     fields: [scoreboards.user],
     references: [users.id]
+  })
+}))
+
+export const tests = sqliteTable(
+  "tests",
+  {
+    id: integer("id", { mode: "number" }),
+    event: integer("event", { mode: "number" }),
+    challenge: text("challenge"),
+    input: text("input", { mode: "json" }),
+    output: text("output")
+  },
+  sb => ({
+    compoundKey: primaryKey({
+      columns: [sb.id, sb.event, sb.challenge]
+    }),
+    challengeReference: foreignKey({
+      columns: [sb.event, sb.challenge],
+      foreignColumns: [challenges.event, challenges.title]
+    })
+  })
+)
+
+export const testsRelations = relations(tests, ({ one }) => ({
+  challenge: one(challenges, {
+    fields: [tests.event, tests.challenge],
+    references: [challenges.event, challenges.title]
   })
 }))

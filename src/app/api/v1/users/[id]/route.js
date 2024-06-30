@@ -7,24 +7,48 @@ import { eq } from "drizzle-orm"
 
 async function putHandler(request, context) {
   const id = context.params.id
-  const values = request.json()
+  const values = await request.json()
+
   const data = await db
     .update(users)
     .set(values)
     .where(eq(users.id, id))
     .returning()
 
-  if (rows.length === 0) throw new NotFoundException()
+  if (data.length === 0) throw new NotFoundException()
   return response({ data })
 }
 
 async function patchHandler(request, context) {
   const id = context.params.id
-  const { title, description } = request.json()
+  const {
+    image,
+    name,
+    description,
+    username,
+    email,
+    emailVerified,
+    urls,
+    socialEmails,
+    marketingEmails,
+    securityEmails,
+    privacyPolicy,
+    imageRight
+  } = await request.json()
 
   const values = {
-    ...(title && { title }),
-    ...(description && { description })
+    ...(image && { image }),
+    ...(name && { name }),
+    ...(description && { description }),
+    ...(username && { username }),
+    ...(email && { email }),
+    ...(emailVerified && { emailVerified }),
+    ...(urls && { urls }),
+    ...(socialEmails && { socialEmails }),
+    ...(marketingEmails && { marketingEmails }),
+    ...(securityEmails && { securityEmails }),
+    ...(privacyPolicy && { privacyPolicy }),
+    ...(imageRight && { imageRight })
   }
 
   const data = await db
@@ -33,7 +57,7 @@ async function patchHandler(request, context) {
     .where(eq(users.id, id))
     .returning()
 
-  if (rows.length === 0) throw new NotFoundException()
+  if (data.length === 0) throw new NotFoundException()
   return response({ data })
 }
 
@@ -47,15 +71,6 @@ async function getHandler(request, context) {
   return response({ data })
 }
 
-async function deleteHandler(request, context) {
-  const id = context.params.id
-  const rows = await db.delete(users).where(eq(users.id, id)).returning()
-
-  if (rows.length === 0) throw new NotFoundException()
-  return response({ code: 200, statusCode: 204 })
-}
-
 export const PUT = errorHandler(putHandler)
 export const PATCH = errorHandler(patchHandler)
 export const GET = errorHandler(getHandler)
-export const DELETE = errorHandler(deleteHandler)
