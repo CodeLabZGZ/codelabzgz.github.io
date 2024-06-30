@@ -1,9 +1,19 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
+import { auth } from "@/auth"
+import { db } from "@/db"
+import { users } from "@/schema"
+import { eq } from "drizzle-orm"
 import Account from "./account"
 import Notifications from "./notifications"
 
 export default async function Page() {
+  const session = await auth()
+  const [account] = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, session.user.id))
+
   return (
     <>
       <div className="flex items-center justify-between space-y-2">
@@ -16,10 +26,10 @@ export default async function Page() {
         </TabsList>
         <main>
           <TabsContent value="account" className="space-y-4">
-            <Account />
+            <Account data={account} />
           </TabsContent>
           <TabsContent value="notifications" className="space-y-4">
-            <Notifications />
+            <Notifications data={account} />
           </TabsContent>
         </main>
       </Tabs>

@@ -16,114 +16,110 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 const notificationsFormSchema = z.object({
-  type: z.enum(["all", "mentions", "none"], {
-    required_error: "You need to select a notification type."
-  }),
-  mobile: z.boolean().default(false).optional(),
-  communication_emails: z.boolean().default(false).optional(),
-  social_emails: z.boolean().default(false).optional(),
-  marketing_emails: z.boolean().default(false).optional(),
-  security_emails: z.boolean()
+  socialEmails: z.boolean().default(false).optional(),
+  marketingEmails: z.boolean().default(false).optional(),
+  securityEmails: z.boolean().default(false)
 })
 
-// This can come from your database or API.
-const defaultValues = {
-  communication_emails: false,
-  marketing_emails: false,
-  social_emails: true,
-  security_emails: true
-}
+const privacyFormSchema = z.object({
+  privacyPolicy: z.boolean().default(true).optional(),
+  imageRight: z.boolean().default(true).optional()
+})
 
-export default function Notifications() {
-  const form = useForm({
+export default function Notifications({ data }) {
+  const notificationsForm = useForm({
     resolver: zodResolver(notificationsFormSchema),
-    defaultValues
+    defaultValues: {
+      marketingEmails: false,
+      socialEmails: false,
+      securityEmails: false
+    }
   })
 
-  function onSubmit(data) {}
+  const onSubmitNotifications = data => {
+    console.log(data)
+  }
+
+  const privacyForm = useForm({
+    resolver: zodResolver(privacyFormSchema),
+    defaultValues: {
+      privacyPolicy: true,
+      imageRight: true
+    }
+  })
+
+  const onSubmitPrivacy = data => {
+    console.log(data)
+    // Aquí podrías enviar los datos a tu backend o procesarlos según sea necesario
+  }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <h3 className="mb-4 text-lg font-medium">Email Notifications</h3>
+    <Form {...notificationsForm}>
+      <form
+        onSubmit={notificationsForm.handleSubmit(onSubmitNotifications)}
+        className="space-y-8"
+      >
+        <h3 className="mb-4 text-lg font-medium">
+          Notificaciones por correo electrónico
+        </h3>
         <div className="space-y-4">
           <FormField
-            control={form.control}
-            name="communication_emails"
+            control={notificationsForm.control}
+            name="marketingEmails"
             render={({ field }) => (
               <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                 <div className="space-y-0.5">
-                  <FormLabel className="text-base">
-                    Communication emails
-                  </FormLabel>
+                  <FormLabel className="text-base">Marketing</FormLabel>
                   <FormDescription>
-                    Receive emails about your account activity.
+                    Reciba correos electrónicos sobre nuevos eventos.
                   </FormDescription>
                 </div>
                 <FormControl>
                   <Switch
                     checked={field.value}
-                    onCheckedChange={field.onChange}
+                    onChange={e => field.onChange(e.target.checked)}
                   />
                 </FormControl>
               </FormItem>
             )}
           />
           <FormField
-            control={form.control}
-            name="marketing_emails"
+            control={notificationsForm.control}
+            name="socialEmails"
             render={({ field }) => (
               <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                 <div className="space-y-0.5">
-                  <FormLabel className="text-base">Marketing emails</FormLabel>
+                  <FormLabel className="text-base">Social</FormLabel>
                   <FormDescription>
-                    Receive emails about new products, features, and more.
+                    Recibe correos electrónicos con solicitudes de amistad,
+                    seguidores y mucho más.
                   </FormDescription>
                 </div>
                 <FormControl>
                   <Switch
                     checked={field.value}
-                    onCheckedChange={field.onChange}
+                    onChange={e => field.onChange(e.target.checked)}
                   />
                 </FormControl>
               </FormItem>
             )}
           />
           <FormField
-            control={form.control}
-            name="social_emails"
+            control={notificationsForm.control}
+            name="securityEmails"
             render={({ field }) => (
               <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                 <div className="space-y-0.5">
-                  <FormLabel className="text-base">Social emails</FormLabel>
+                  <FormLabel className="text-base">Seguridad</FormLabel>
                   <FormDescription>
-                    Receive emails for friend requests, follows, and more.
+                    Reciba correos electrónicos sobre la actividad y seguridad
+                    de su cuenta.
                   </FormDescription>
                 </div>
                 <FormControl>
                   <Switch
                     checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="security_emails"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                <div className="space-y-0.5">
-                  <FormLabel className="text-base">Security emails</FormLabel>
-                  <FormDescription>
-                    Receive emails about your account activity and security.
-                  </FormDescription>
-                </div>
-                <FormControl>
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
+                    onChange={e => field.onChange(e.target.checked)}
                     disabled
                     aria-readonly
                   />
@@ -132,7 +128,65 @@ export default function Notifications() {
             )}
           />
         </div>
-        <Button type="submit">Update notifications</Button>
+        <Button type="submit">Guardar cambios</Button>
+      </form>
+
+      <form
+        onSubmit={privacyForm.handleSubmit(onSubmitPrivacy)}
+        className="space-y-8"
+      >
+        <h3 className="mb-4 text-lg font-medium">
+          Consentimiento y Privacidad
+        </h3>
+        <div className="space-y-4">
+          <FormField
+            control={privacyForm.control}
+            name="privacyPolicy"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <FormLabel className="text-base">
+                    Política de privacidad
+                  </FormLabel>
+                  <FormDescription>
+                    Estoy de acuerdo con la política de privacidad que describe
+                    cómo se recopilan, utilizan y protegen mis datos personales
+                    durante los eventos.
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onChange={e => field.onChange(e.target.checked)}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={privacyForm.control}
+            name="imageRight"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <FormLabel className="text-base">Derecho de imagen</FormLabel>
+                  <FormDescription>
+                    Entiendo que tengo derecho a decidir sobre el uso de mi
+                    imagen en materiales de marketing y puedo optar por no
+                    participar en la captura y uso de imágenes.
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onChange={e => field.onChange(e.target.checked)}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </div>
+        <Button type="submit">Guardar cambios</Button>
       </form>
     </Form>
   )
