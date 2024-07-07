@@ -13,29 +13,21 @@ import Database from "better-sqlite3"
 import { drizzle } from "drizzle-orm/better-sqlite3"
 import shuffle from "just-shuffle"
 
-function genUsers({ lim = 10 }) {
-  const values = []
-  for (let index = 0; index < lim; index++) {
-    values.push({
-      id: faker.string.uuid(),
-      name: faker.person.fullName(),
-      username: faker.internet.userName(),
-      email: faker.internet.email()
-    })
+function genUsers() {
+  return {
+    id: faker.string.uuid(),
+    name: faker.person.fullName(),
+    username: faker.internet.userName(),
+    email: faker.internet.email()
   }
-  return values
 }
 
-function genTeams({ lim = 10 }) {
-  const values = []
-  for (let index = 0; index < lim; index++) {
-    values.push({
-      name: faker.company.name(),
-      motto: faker.lorem.sentence(),
-      slug: faker.lorem.slug()
-    })
+function genTeams() {
+  return {
+    name: faker.company.name(),
+    motto: faker.lorem.sentence(),
+    slug: faker.lorem.slug()
   }
-  return values
 }
 
 function genMembers({ min = 0, max = 5, users, teams }) {
@@ -57,22 +49,18 @@ function genMembers({ min = 0, max = 5, users, teams }) {
   return values
 }
 
-function genEvents({ lim = 10 }) {
-  const values = []
-  for (let index = 0; index < lim; index++) {
-    const dateA = faker.date.anytime()
-    const dateB = faker.date.anytime()
+function genEvents() {
+  const dateA = faker.date.anytime()
+  const dateB = faker.date.anytime()
 
-    values.push({
-      title: faker.lorem.words({ min: 3, max: 8 }),
-      visibility: Math.random() > 0.5 ? "public" : "private",
-      format: Math.random() > 0.5 ? "hackathon" : "ideathon",
-      location: faker.location.direction(),
-      startDate: dateA < dateB ? dateA : dateB,
-      endDate: dateA < dateB ? dateB : dateA
-    })
+  return {
+    title: faker.lorem.words({ min: 3, max: 8 }),
+    visibility: faker.helpers.arrayElement(["public", "private"]),
+    format: faker.helpers.arrayElement(["hackathon", "ideathon"]),
+    location: faker.location.direction(),
+    startDate: dateA < dateB ? dateA : dateB,
+    endDate: dateA < dateB ? dateB : dateA
   }
-  return values
 }
 
 function genChallenges({ min = 0, max = 10, events }) {
@@ -175,11 +163,11 @@ async function main() {
 
   const usersData = await db
     .insert(users)
-    .values(genUsers({ lim: 15 }))
+    .values(faker.helpers.multiple(genUsers, { count: 15 }))
     .returning()
   const teamsData = await db
     .insert(teams)
-    .values(genTeams({ lim: 15 }))
+    .values(faker.helpers.multiple(genTeams, { count: 10 }))
     .returning()
   const users4teams = await db
     .insert(members)
@@ -194,7 +182,7 @@ async function main() {
 
   const eventsData = await db
     .insert(events)
-    .values(genEvents({ lim: 15 }))
+    .values(faker.helpers.multiple(genEvents, { count: 15 }))
     .returning()
   const challengesData = await db
     .insert(challenges)
