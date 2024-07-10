@@ -17,6 +17,8 @@ export default async function Page({ params: { slug } }) {
     ORDER BY m.role;
   `)
 
+  console.log(slug)
+
   return (
     <>
       <div className="flex items-center justify-between space-y-2">
@@ -31,7 +33,7 @@ export default async function Page({ params: { slug } }) {
         </TabsList>
         <main>
           <TabsContent value="team-details" className="space-y-4">
-            <Details />
+            <Details values={{ teamId: slug }} />
           </TabsContent>
           <TabsContent value="team-players" className="space-y-4">
             <Players

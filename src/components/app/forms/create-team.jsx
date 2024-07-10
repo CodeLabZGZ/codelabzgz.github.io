@@ -40,14 +40,16 @@ const formSchema = z.object({
   })
 })
 
-export function CreateTeamForm() {
+export function CreateTeamForm({ userId, onSubmitCb }) {
   const form = useForm({
     resolver: zodResolver(formSchema)
   })
 
   async function onSubmit(values) {
     const { name, motto, slug } = values
-    toast.promise(createTeam({ id, name, motto, slug }), {
+
+    const teamReq = createTeam({ userId, name, motto, slug })
+    toast.promise(teamReq, {
       loading: "Estamos creando tu equipo...",
       success: ({ name, slug }) => (
         <>
@@ -64,7 +66,9 @@ export function CreateTeamForm() {
       ),
       error: err => err.message
     })
-    setOpen(false)
+
+    // once the request is processed, execute submit callback
+    teamReq.then(r => onSubmitCb())
   }
 
   return (
@@ -148,7 +152,7 @@ export function CreateTeam({ id }) {
       <DialogTrigger asChild>
         <Button variant="outline">Crear equipo</Button>
       </DialogTrigger>
-      <CreateTeamForm />
+      <CreateTeamForm userId={id} onSubmitCb={() => setOpen(false)} />
     </Dialog>
   )
 }

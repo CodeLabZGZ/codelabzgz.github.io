@@ -3,5 +3,7 @@
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll": "always"
-  }
+  },
+  "files.eol": "\n",
+  "prettier.endOfLine": "lf"
 }

@@ -5,6 +5,12 @@ import { errorHandler } from "@/middlewares/error-handler"
 import { teams } from "@/schema"
 import { eq } from "drizzle-orm"
 
+/**
+ * Update team data
+ * @param {*} request
+ * @param {*} context
+ * @returns
+ */
 async function putHandler(request, context) {
   const id = context.params.id
   const values = request.json()
@@ -18,6 +24,12 @@ async function putHandler(request, context) {
   return response({ data })
 }
 
+/**
+ * Update title and description of the team
+ * @param {*} request
+ * @param {*} context
+ * @returns
+ */
 async function patchHandler(request, context) {
   const id = context.params.id
   const { title, description } = request.json()
@@ -37,6 +49,12 @@ async function patchHandler(request, context) {
   return response({ data })
 }
 
+/**
+ * Find a team by name and return its information
+ * @param {*} request
+ * @param {*} context
+ * @returns
+ */
 async function getHandler(request, context) {
   const id = context.params.id
   const data = await db.query.teams.findFirst({
@@ -47,6 +65,12 @@ async function getHandler(request, context) {
   return response({ data })
 }
 
+/**
+ * Delete a team and all its information
+ * @param {*} request
+ * @param {*} context
+ * @returns
+ */
 async function deleteHandler(request, context) {
   const id = context.params.id
   const rows = await db.delete(teams).where(eq(teams.name, id)).returning()

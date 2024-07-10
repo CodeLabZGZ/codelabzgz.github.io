@@ -47,10 +47,10 @@ export default function Account({ data }) {
   const form = useForm({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      name: data.name ?? "",
-      description: data.description ?? "",
-      username: data.username ?? data.name ?? "",
-      email: data.email,
+      name: data?.name ?? "",
+      description: data?.description ?? "",
+      username: data?.username ?? data?.name ?? "",
+      email: data?.email,
       urls: data?.urls?.map(u => ({ value: u })) ?? [
         { value: "https://johndoe.github.io" },
         { value: "https://www.linkedin.com/in/johndoe" },
@@ -163,7 +163,7 @@ export default function Account({ data }) {
             <FormItem>
               <FormLabel>Correo electrónico</FormLabel>
               <FormControl>
-                <Input placeholder="johndoe@example.com" {...field} disabled />
+                <Input placeholder="johndoe@example.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
