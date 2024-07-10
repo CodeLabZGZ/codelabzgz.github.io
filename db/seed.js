@@ -5,6 +5,7 @@ import {
   participations,
   scoreboards,
   teams,
+  tests,
   users
 } from "./schema.js"
 
@@ -157,6 +158,31 @@ function genScoreboard({
   return values
 }
 
+function genTest(challengesData) {
+  return challengesData
+    .map(({ title, event }) => {
+      // Generar una cantidad aleatoria de números en el rango de 1 a 7
+      const numTests = faker.helpers.arrayElement([1, 2, 3, 4, 5, 6, 7])
+      const nums = [...Array(numTests).keys()]
+
+      // Crear la lista de objetos de prueba
+      const listOfNums = nums.map((_, id) => {
+        const a = faker.number.int()
+        const b = faker.number.int()
+        return {
+          id,
+          challenge: title,
+          event,
+          input: [String(a), String(b)],
+          output: String(a + b)
+        }
+      })
+
+      return listOfNums
+    })
+    .flat()
+}
+
 async function main() {
   const sqlite = new Database("db/sqlite.db")
   const db = drizzle(sqlite)
@@ -210,6 +236,11 @@ async function main() {
     )
     .returning()
 
+  const testsData = await db
+    .insert(tests)
+    .values(genTest(challengesData))
+    .returning()
+
   console.log("users: %d", usersData.length)
   console.log("teams: %d", teamsData.length)
   console.log("members: %d", users4teams.length)
@@ -217,6 +248,7 @@ async function main() {
   console.log("challenges: %d", challengesData.length)
   console.log("participations: %d", participationsData.length)
   console.log("scoreboard: %d", scoreboardsData.length)
+  console.log("tests: %d", testsData.length)
 }
 
 await main()

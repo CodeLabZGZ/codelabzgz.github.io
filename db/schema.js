@@ -131,7 +131,8 @@ export const challenges = sqliteTable(
     difficulty: text("difficulty", {
       enum: ["very easy", "easy", "medium", "hard", "insane"]
     }).notNull(),
-    points: integer("points", { mode: "number" })
+    points: integer("points", { mode: "number" }),
+    validator: text("validator")
   },
   c => ({
     compoundKey: primaryKey({ columns: [c.event, c.title] })

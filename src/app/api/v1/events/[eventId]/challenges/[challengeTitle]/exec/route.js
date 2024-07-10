@@ -5,10 +5,14 @@ import { tests } from "@/schema"
 import { and, eq } from "drizzle-orm"
 
 async function handleSource(eventId, challengeTitle, sourceCode, languageId) {
+  console.log(eventId, challengeTitle, sourceCode, languageId)
+
   const cases = await db
     .select()
     .from(tests)
     .where(and(eq(tests.event, eventId), eq(tests.challenge, challengeTitle)))
+
+  console.log(cases)
 
   const tokens = await fetch(
     `${process.env.JUDGE0_API_URL}/submissions/batch`,
@@ -36,49 +40,15 @@ async function handleSource(eventId, challengeTitle, sourceCode, languageId) {
   })
 }
 
-async function handleSolution(file) {
-  response({ statusCode: 200 })
-}
-
 async function postHandler(request, context) {
   const { eventId, challengeTitle } = context.params
   const formData = await request.formData()
 
   const source = formData.get("source")
-  const solution = formData.get("solution")
-  if (source) {
-    const buffer = Buffer.from(await source.arrayBuffer())
-    const file = buffer.toString("utf-8")
-    const languageId = Number(formData.get("language"))
-    return handleSource(eventId, challengeTitle, file, languageId)
-  } else if (solution) {
-    const buffer = Buffer.from(await solution.arrayBuffer())
-    const file = buffer.toString("utf-8")
-    return handleSolution(file)
-  } else {
-    return response({ statusCode: 400 })
-  }
+  const buffer = Buffer.from(await source.arrayBuffer())
+  const file = buffer.toString("utf-8")
+  const languageId = Number(formData.get("language"))
+  return handleSource(eventId, challengeTitle, file, languageId)
 }
 
-async function getHandler(request, context) {
-  const { eventId, challengeTitle } = context.params
-  const url = new URL(request.url)
-  const searchParams = new URLSearchParams(url.searchParams)
-
-  const cases = await db
-    .select()
-    .from(tests)
-    .where(and(eq(tests.event, eventId), eq(tests.challenge, challengeTitle)))
-
-  const results = await fetch(
-    `${process.env.JUDGE0_API_URL}/submissions/batch?${searchParams}`
-  ).then(res => res.json())
-
-  return response({
-    data: results,
-    statusCode: 200
-  })
-}
-
-export const GET = errorHandler(getHandler)
 export const POST = errorHandler(postHandler)
