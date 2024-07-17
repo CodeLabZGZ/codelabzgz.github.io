@@ -17,8 +17,6 @@ export default async function Page({ params: { slug } }) {
     ORDER BY m.role;
   `)
 
-  console.log(slug)
-
   return (
     <>
       <div className="flex items-center justify-between space-y-2">
