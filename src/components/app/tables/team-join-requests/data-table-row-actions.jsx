@@ -11,9 +11,21 @@ import { TbUserMinus, TbUserPlus } from "react-icons/tb"
 import { Button } from "@/components/ui/button"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 
-export function DataTableRowActions({ row }) {
+export async function DataTableRowActions({ row }) {
   const handleAccept = e => {
     e.preventDefault()
+
+    // accept the request
+    const promise = fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/teams/${id}/join`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          participation?.type === "team" ? { team: participation.label } : {}
+        )
+      }
+    )
   }
 
   const handleReject = e => {

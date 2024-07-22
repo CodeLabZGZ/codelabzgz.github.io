@@ -14,6 +14,8 @@ import { TbUserMinus } from "react-icons/tb"
 export function DataTableRowActions({ row }) {
   const { role } = row.original
 
+  console.log(row)
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
