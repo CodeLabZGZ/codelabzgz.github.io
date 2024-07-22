@@ -46,18 +46,19 @@ async function getHandler(request, context) {
  * @param {*} context
  * @returns
  */
-async function putHandler(request, context) {
+async function patchHandler(request, context) {
   // Only authenticated users can accept members into the team
   //if (!request.auth) throw new UnauthorizedException()
+  const values = await request.json()
 
   // placeholder!!
-  const userId = request.nextUrl.searchParams.get("userId") //request.auth.user.id
+  const userId = values.userId //request.auth.user.id
 
   // team name
   const teamId = context.params.id
 
   // the member to kick from the team
-  const reqId = request.nextUrl.searchParams.get("reqId")
+  const reqId = values.reqId
 
   // find if the user is an admin of the team
   const adminResult = await db
@@ -76,7 +77,9 @@ async function putHandler(request, context) {
     .update(members)
     .set({ role: "member" })
     .where(and(eq(members.user, reqId), eq(members.team, teamId), eq(members.role, "pending")))
-    .returning({ updatedId: members.role })
+    .returning({ updatedId: members.user })
+
+  console.log(userId, memberResult, reqId, adminResult, teamId)
 
   // if the user is not an admin of the team
   if (adminResult.length === 0) throw new ConflictException()
@@ -87,7 +90,7 @@ async function putHandler(request, context) {
   return response({
     code: 200,
     statusCode: 204,
-    data: { deletedId: memberResult[0].deletedId }
+    data: { updatedId: memberResult[0].updatedId }
   })
 }
 
@@ -142,5 +145,5 @@ async function deleteHandler(request, context) {
 }
 
 export const GET = errorHandler(getHandler)
-export const PUT = errorHandler(putHandler)
+export const PATCH = errorHandler(patchHandler)
 export const DELETE = errorHandler(deleteHandler)

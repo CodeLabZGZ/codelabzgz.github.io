@@ -25,7 +25,7 @@ async function deleteHandler(request, context) {
   const memberId = request.nextUrl.searchParams.get("memberId")
 
   // find if the user is an admin of the team
-  const adminResult = await db
+  const adminResult = db
     .select()
     .from(members)
     .where(
