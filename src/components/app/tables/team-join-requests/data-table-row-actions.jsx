@@ -9,38 +9,27 @@ import {
 import { TbUserMinus, TbUserPlus } from "react-icons/tb"
 
 import { Button } from "@/components/ui/button"
-import { useTeam } from "@/stores/team"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { useSession } from "next-auth/react"
 import { toast } from "sonner"
 
-export function DataTableRowActions({ row }) {
+export function DataTableRowActions({ row, teamId }) {
   const { id, name } = row.original
 
   // get current session
   const { data: session, status } = useSession()
-  const { selectedTeam } = useTeam()
 
   const handleAccept = e => {
     e.preventDefault()
 
-    // Temporary solution, team must be selected in the team dropdown menu.
-    // this is definitely not ideal and not user friendly :_)
-    // TODO: find way to extract team (some sort of zustand state
-    // or propagate the team id to this row element)
-    if (!selectedTeam) toast.error("¡No hay ningún equipo seleccionado!")
-
     const body = { userId: session?.user.id, reqId: id }
 
     // accept the request
-    fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/teams/${selectedTeam?.label}/request`,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      }
-    )
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/teams/${teamId}/request`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    })
       .then(res => {
         if (!res.ok) throw Error("status")
         return res.json()
@@ -63,7 +52,7 @@ export function DataTableRowActions({ row }) {
     // this is definitely not ideal and not user friendly :_)
     // TODO: find way to extract team (some sort of zustand state
     // or propagate the team id to this row element)
-    if (!selectedTeam) toast.error("¡No hay ningún equipo seleccionado!")
+    if (!teamId) toast.error("¡No hay ningún equipo seleccionado!")
 
     const searchParams = new URLSearchParams({
       userId: session?.user.id,
@@ -72,7 +61,7 @@ export function DataTableRowActions({ row }) {
 
     // accept the request
     fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/teams/${selectedTeam?.label}/request?${searchParams}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/teams/${teamId}/request?${searchParams}`,
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" }

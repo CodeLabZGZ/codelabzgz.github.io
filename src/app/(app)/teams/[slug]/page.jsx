@@ -1,21 +1,93 @@
+"use client"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { members, users } from "@/schema"
 
-import { db } from "@/db"
-import { sql } from "drizzle-orm"
 import Details from "./details"
 import JoinRequest from "./join-request"
 import Players from "./players"
 import Settings from "./settings"
 
-export default async function Page({ params: { slug } }) {
-  const teamMembers = db.all(sql`
-    SELECT u.id, u.image, u.name, u.status, u.username, m.createdAt, m.updatedAt, m.role
-    FROM ${users} u
-    JOIN ${members} m ON u.id = m.user
-    WHERE m.team = ${slug.replaceAll("-", " ")} 
-    ORDER BY m.role;
-  `)
+import { Skeleton } from "@/components/ui/skeleton"
+import useSWR, { useSWRConfig } from "swr"
+
+function MembersTab({ teamId, members, loading, error }) {
+  if (loading || !members) {
+    return (
+      <TabsContent value="team-players" className="space-y-4">
+        <Skeleton>
+          <Skeleton />
+          <Skeleton />
+        </Skeleton>
+      </TabsContent>
+    )
+  }
+
+  if (error) {
+    return (
+      <TabsContent value="team-players" className="space-y-4">
+        <div>
+          <h2>Error cargando los miembros del equipo</h2>
+        </div>
+      </TabsContent>
+    )
+  }
+
+  console.log(members)
+
+  return (
+    <TabsContent value="team-players" className="space-y-4">
+      <Players values={members.data.members} />
+    </TabsContent>
+  )
+}
+
+function RequestsTab({ teamId, requests, loading, error }) {
+  if (loading || !requests) {
+    return (
+      <TabsContent value="join-request" className="space-y-4">
+        <Skeleton>
+          <Skeleton />
+          <Skeleton />
+        </Skeleton>
+      </TabsContent>
+    )
+  }
+
+  if (error) {
+    return (
+      <TabsContent value="join-request" className="space-y-4">
+        <div>
+          <h2>Error cargando las peticiones de entrada al equipo</h2>
+        </div>
+      </TabsContent>
+    )
+  }
+
+  return (
+    <TabsContent value="join-request" className="space-y-4">
+      <JoinRequest
+        values={requests.data.requests}
+        teamId={teamId.replaceAll("-", " ")}
+      />
+    </TabsContent>
+  )
+}
+
+export default function Page({ params: { slug } }) {
+  const { fetcher } = useSWRConfig()
+
+  // load members of the team
+  const {
+    data: membersData,
+    isLoading: membersLoading,
+    error: membersError
+  } = useSWR(`/api/v1/teams/${slug.replaceAll("-", " ")}/members`, fetcher)
+
+  // load pending requests
+  const {
+    data: requestsData,
+    isLoading: requestsLoading,
+    error: requestsError
+  } = useSWR(`/api/v1/teams/${slug.replaceAll("-", " ")}/request`, fetcher)
 
   return (
     <>
@@ -33,19 +105,21 @@ export default async function Page({ params: { slug } }) {
           <TabsContent value="team-details" className="space-y-4">
             <Details values={{ teamId: slug }} />
           </TabsContent>
-          <TabsContent value="team-players" className="space-y-4">
-            <Players
-              values={teamMembers.filter(({ role }) => role !== "pending")}
-            />
-          </TabsContent>
+          <MembersTab
+            teamId={slug}
+            members={membersData}
+            loading={membersLoading}
+            error={membersError}
+          />
           <TabsContent value="settings" className="space-y-4">
             <Settings />
           </TabsContent>
-          <TabsContent value="join-request" className="space-y-4">
-            <JoinRequest
-              values={teamMembers.filter(({ role }) => role === "pending")}
-            />
-          </TabsContent>
+          <RequestsTab
+            teamId={slug}
+            requests={requestsData}
+            loading={requestsLoading}
+            error={requestsError}
+          />
         </main>
       </Tabs>
     </>

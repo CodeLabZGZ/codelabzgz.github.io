@@ -12,8 +12,6 @@ export default function Details({ values }) {
     fetcher
   )
 
-  console.log(data)
-
   if (isLoading) {
     return (
       <>

@@ -2,8 +2,47 @@ import { db } from "@/db"
 import { ConflictException, NotFoundException } from "@/lib/api-errors"
 import { response } from "@/lib/utils"
 import { errorHandler } from "@/middlewares/error-handler"
-import { members } from "@/schema"
-import { and, eq } from "drizzle-orm"
+import { members, users } from "@/schema"
+import { and, eq, ne } from "drizzle-orm"
+
+/**
+ * Get all members of the team. Includes the information of each user
+ * from the user table for display purposes.
+ * 
+ * @param {*} request
+ * @param {*} context
+ * @returns
+ */
+async function getHandler(request, context) {
+  // Only authenticated users can accept members into the team
+  // if (!request.auth) throw new UnauthorizedException()
+
+  // team name
+  const teamId = context.params.id
+
+  // find if the user is an admin of the team
+  const memberResult = await db
+    .select()
+    .from(members)
+    .innerJoin(users, eq(users.id, members.user))
+    .where(
+      and(
+        eq(members.team, teamId),
+        ne(members.role, "pending")
+      )
+    ).all()
+
+  return response({
+    code: 200,
+    statusCode: 204,
+    data: {
+      members: memberResult.map(d => {
+        // aggregate all fields without naming
+        return { ...d.members, ...d.user }
+      })
+    }
+  })
+}
 
 /**
  * Kick a member from a team
@@ -57,4 +96,5 @@ async function deleteHandler(request, context) {
   })
 }
 
+export const GET = errorHandler(getHandler)
 export const DELETE = errorHandler(deleteHandler)

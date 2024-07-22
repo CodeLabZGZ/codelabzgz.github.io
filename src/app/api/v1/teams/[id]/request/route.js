@@ -2,8 +2,10 @@ import { db } from "@/db"
 import { ConflictException, NotFoundException } from "@/lib/api-errors"
 import { response } from "@/lib/utils"
 import { errorHandler } from "@/middlewares/error-handler"
-import { members } from "@/schema"
+import { members, users } from "@/schema"
 import { and, eq } from "drizzle-orm"
+
+import { UnauthorizedException } from "@/lib/api-errors"
 
 /**
  * Get all join requests of the team.
@@ -12,22 +14,19 @@ import { and, eq } from "drizzle-orm"
  * @returns
  */
 async function getHandler(request, context) {
-  // Only authenticated users can see team requests
-  //if (!request.auth) throw new UnauthorizedException()
-
-  // placeholder!!
-  const userId = request.nextUrl.searchParams.get("userId") //request.auth.user.id
+  // Only authenticated users can accept members into the team
+  // if (!request.auth) throw new UnauthorizedException()
 
   // team name
   const teamId = context.params.id
 
-  // query all requests
-  const requestResult = db
+  // find if the user is an admin of the team
+  const requestResult = await db
     .select()
     .from(members)
+    .innerJoin(users, eq(users.id, members.user))
     .where(
       and(
-        eq(members.user, userId),
         eq(members.team, teamId),
         eq(members.role, "pending")
       )
@@ -36,7 +35,12 @@ async function getHandler(request, context) {
   return response({
     code: 200,
     statusCode: 204,
-    data: { requests: requestResult }
+    data: {
+      requests: requestResult.map(d => {
+        // aggregate all fields without naming
+        return { ...d.members, ...d.user }
+      })
+    }
   })
 }
 
@@ -48,7 +52,7 @@ async function getHandler(request, context) {
  */
 async function patchHandler(request, context) {
   // Only authenticated users can accept members into the team
-  //if (!request.auth) throw new UnauthorizedException()
+  // if (!request.auth) throw new UnauthorizedException()
   const values = await request.json()
 
   // placeholder!!
