@@ -1,5 +1,6 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -18,9 +19,6 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form"
-
-import { joinTeam } from "@/actions/join-team"
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
@@ -41,9 +39,22 @@ export function JoinTeam({ id }) {
     resolver: zodResolver(formSchema)
   })
 
+  const bodyJoin = { teamId: id }
+
+  const joinPromise = fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/teams/${id}/members`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(bodyJoin)
+    }
+  )
+
   async function onSubmit(values) {
     const { name } = values
-    toast.promise(joinTeam({ id, name }), {
+    toast.promise(joinPromise, {
       loading: "Enviando solicitud...",
       success:
         "Petición enviada con éxito. Puede que el equipo tarde en aceptar tu petición",

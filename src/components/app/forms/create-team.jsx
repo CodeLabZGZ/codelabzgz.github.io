@@ -19,7 +19,6 @@ import {
   FormMessage
 } from "@/components/ui/form"
 
-import { createTeam } from "@/actions/create-team"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -48,7 +47,21 @@ export function CreateTeamForm({ userId, onSubmitCb }) {
   async function onSubmit(values) {
     const { name, motto, slug } = values
 
-    const teamReq = createTeam({ userId, name, motto, slug })
+    const reqBody = {
+      userId,
+      name,
+      motto,
+      slug
+    }
+
+    const teamReq = fetch(`${process.env.NEXT_PUBLIC_API_URL}/teams`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(reqBody)
+    })
+
     toast.promise(teamReq, {
       loading: "Estamos creando tu equipo...",
       success: ({ name, slug }) => (

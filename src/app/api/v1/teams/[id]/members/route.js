@@ -8,7 +8,7 @@ import { and, eq, ne } from "drizzle-orm"
 /**
  * Get all members of the team. Includes the information of each user
  * from the user table for display purposes.
- * 
+ *
  * @param {*} request
  * @param {*} context
  * @returns
@@ -25,12 +25,8 @@ async function getHandler(request, context) {
     .select()
     .from(members)
     .innerJoin(users, eq(users.id, members.user))
-    .where(
-      and(
-        eq(members.team, teamId),
-        ne(members.role, "pending")
-      )
-    ).all()
+    .where(and(eq(members.team, teamId), ne(members.role, "pending")))
+    .all()
 
   return response({
     code: 200,
@@ -41,6 +37,41 @@ async function getHandler(request, context) {
         return { ...d.members, ...d.user }
       })
     }
+  })
+}
+
+/**
+ * Send a member request from a team
+ * @param {*} request
+ * @param {*} context
+ * @returns
+ */
+async function postHandler(request, context) {
+  // Only authenticated users can kick members
+  //if (!request.auth) throw new UnauthorizedException()
+
+  // placeholder!!
+  const userId = request.nextUrl.searchParams.get("userId") //request.auth.user.id
+
+  // team name
+  const teamId = context.params.id
+
+  // check if already on the team
+
+  // find if the member to kick belongs to the team
+  const row = await db
+    .insert(members)
+    .values({
+      user: userId,
+      team: teamId,
+      role: "pending"
+    })
+    .returning()
+
+  return response({
+    code: 200,
+    statusCode: 204,
+    data: { deletedId: memberResult[0].deletedId }
   })
 }
 
@@ -97,4 +128,5 @@ async function deleteHandler(request, context) {
 }
 
 export const GET = errorHandler(getHandler)
+export const POST = errorHandler(postHandler)
 export const DELETE = errorHandler(deleteHandler)
