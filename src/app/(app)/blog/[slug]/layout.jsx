@@ -5,5 +5,5 @@ export async function generateMetadata({ params: { slug } }) {
 }
 
 export default function Layout({ children }) {
-  return children
+  return <>{children}</>
 }

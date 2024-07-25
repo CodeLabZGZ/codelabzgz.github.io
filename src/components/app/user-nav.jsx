@@ -63,7 +63,7 @@ export function UserNav() {
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <Link
-              href="/settings"
+              href={`/${session?.user.id}`}
               className="flex w-full items-center gap-x-2.5"
             >
               <User className="h-4 w-4" />
