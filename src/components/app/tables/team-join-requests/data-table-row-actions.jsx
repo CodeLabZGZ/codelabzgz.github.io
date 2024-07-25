@@ -35,11 +35,9 @@ export function DataTableRowActions({ row, teamId }) {
         return res.json()
       })
       .then(result => {
-        console.log(result)
         toast.message(`Se ha añadido a ${name} al equipo.`)
       })
       .catch(err => {
-        console.log(err)
         // TODO: improve error messages
         toast.error(`Error: ${name}`)
       })
@@ -48,10 +46,6 @@ export function DataTableRowActions({ row, teamId }) {
   const handleReject = e => {
     e.preventDefault()
 
-    // Temporary solution, team must be selected in the team dropdown menu.
-    // this is definitely not ideal and not user friendly :_)
-    // TODO: find way to extract team (some sort of zustand state
-    // or propagate the team id to this row element)
     if (!teamId) toast.error("¡No hay ningún equipo seleccionado!")
 
     const searchParams = new URLSearchParams({

@@ -51,28 +51,37 @@ async function postHandler(request, context) {
   //if (!request.auth) throw new UnauthorizedException()
 
   // placeholder!!
-  const userId = request.nextUrl.searchParams.get("userId") //request.auth.user.id
+  const values = await request.json()
+  console.log(values)
+
+  const userReqId = values.userId
 
   // team name
   const teamId = context.params.id
 
-  // check if already on the team
+  // insert user (catch error if user is already on the team)
+  try {
+    console.log(userReqId)
+    console.log(teamId)
+    const row = await db.insert(members)
+      .values({
+        user: userReqId,
+        team: teamId,
+        role: "pending"
+      })
+      .returning()
 
-  // find if the member to kick belongs to the team
-  const row = await db
-    .insert(members)
-    .values({
-      user: userId,
-      team: teamId,
-      role: "pending"
+    return response({
+      code: 200,
+      statusCode: 204,
+      data: { userId: row[0].user }
     })
-    .returning()
+  }
+  catch (e) {
+    console.log(e)
+    throw new ConflictException(e.message)
+  }
 
-  return response({
-    code: 200,
-    statusCode: 204,
-    data: { deletedId: memberResult[0].deletedId }
-  })
 }
 
 /**

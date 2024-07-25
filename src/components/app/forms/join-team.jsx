@@ -32,28 +32,32 @@ const formSchema = z.object({
   })
 })
 
-export function JoinTeam({ id }) {
+export function JoinTeam({ userId }) {
+  console.log(userId)
   const [open, setOpen] = useState(false)
 
   const form = useForm({
     resolver: zodResolver(formSchema)
   })
 
-  const bodyJoin = { teamId: id }
-
-  const joinPromise = fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/teams/${id}/members`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(bodyJoin)
-    }
-  )
-
   async function onSubmit(values) {
-    const { name } = values
+    const { name: teamId } = values
+
+    const bodyJoin = { userId }
+
+    console.log(userId)
+
+    const joinPromise = fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/teams/${teamId}/members`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(bodyJoin)
+      }
+    )
+
     toast.promise(joinPromise, {
       loading: "Enviando solicitud...",
       success:

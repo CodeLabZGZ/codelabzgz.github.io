@@ -47,8 +47,8 @@ export default async function Page() {
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Equipos</h2>
         <div className="flex items-center gap-x-2">
-          <JoinTeam id={user.id} />
-          <CreateTeam id={user.id} />
+          <JoinTeam userId={user.id} />
+          <CreateTeam userId={user.id} />
         </div>
       </div>
       <Tabs defaultValue="all" className="space-y-4">

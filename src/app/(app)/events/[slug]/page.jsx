@@ -35,10 +35,10 @@ export default async function Page({ params: { slug } }) {
       COALESCE(SUM(best_scores.points), 0) AS total_points,
       COALESCE(COUNT(DISTINCT best_scores.challenge), 0) AS challenges_solved,
       CASE WHEN p.team IS NOT NULL THEN 'team' ELSE 'user' END AS participant_type,
-      ROW_NUMBER() OVER (ORDER BY SUM(best_scores.points) DESC) AS position
+      ROW_NUMBER() OVER (ORDER BY SUM(best_scores.points) DESC, best_scores.timestamp) AS position
     FROM participations p
     LEFT JOIN (
-      SELECT user, event, challenge, MAX(points) AS points
+      SELECT user, event, challenge, MAX(points) AS points, timestamp
       FROM scoreboards
       GROUP BY user, event, challenge
     ) AS best_scores ON p.user = best_scores.user AND p.event = best_scores.event

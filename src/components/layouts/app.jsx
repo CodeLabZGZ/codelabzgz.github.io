@@ -139,7 +139,6 @@ export function AppLayout({ children }) {
               <button
                 className="flex w-full items-center gap-2"
                 onClick={() => {
-                  console.log("hola")
                   setTheme(otherTheme)
                 }}
               >

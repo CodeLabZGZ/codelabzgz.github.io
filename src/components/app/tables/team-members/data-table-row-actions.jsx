@@ -14,7 +14,11 @@ import { TbUserMinus } from "react-icons/tb"
 export function DataTableRowActions({ row }) {
   const { role } = row.original
 
-  console.log(row)
+  const handleKick = e => {
+    e.preventDefault()
+
+    // TODO propagate team id and fetch DELETE .../members
+  }
 
   return (
     <DropdownMenu>
@@ -30,7 +34,7 @@ export function DataTableRowActions({ row }) {
       <DropdownMenuContent align="end">
         <DropdownMenuItem
           className="flex cursor-pointer items-center gap-x-2 whitespace-nowrap"
-          onClick={() => {}}
+          onClick={handleKick}
         >
           <TbUserMinus className="h-4 w-4" />
           Echar del equipo
