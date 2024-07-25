@@ -1,8 +1,8 @@
 import { auth } from "@/auth"
 import { db } from "@/db"
+import { getContent } from "@/lib/fetchers"
 import { sql } from "drizzle-orm"
 import { notFound } from "next/navigation"
-import { getContent } from "./fetchers"
 import PageComponent from "./page-component"
 
 export default async function Page({ params: { slug } }) {
@@ -26,7 +26,7 @@ export default async function Page({ params: { slug } }) {
     WHERE e.title = ${slug.replaceAll("-", " ")} AND p.user = ${user.id};
   `)
 
-  const { error, data: values } = await getContent(slug)
+  const { error, data: values } = await getContent(`events/${slug}`)
   if (!participant || error) return notFound()
 
   const [info] = db.all(sql`

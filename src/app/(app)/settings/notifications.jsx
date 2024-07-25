@@ -1,6 +1,7 @@
 "use client"
 
 import { Switch } from "@/components/ui/switch"
+import Link from "next/link"
 import { toast } from "sonner"
 
 export default function Notifications({ data }) {
@@ -36,7 +37,7 @@ export default function Notifications({ data }) {
             </div>
             <Switch
               defaultChecked={data.marketingEmails}
-              onCheckedChange={e => handleSubmit("marketingEmails", e)}
+              onCheckedChange={e => handleSubmit("marketingEmails", Number(e))}
             />
           </div>
           <div className="flex flex-row items-center justify-between rounded-lg border p-4">
@@ -77,9 +78,15 @@ export default function Notifications({ data }) {
             <div className="space-y-0.5">
               <label className="text-base">Política de privacidad</label>
               <p>
-                Estoy de acuerdo con la política de privacidad que describe cómo
-                se recopilan, utilizan y protegen mis datos personales durante
-                los eventos.
+                Estoy de acuerdo con la{" "}
+                <Link
+                  href="/privacy-policy"
+                  className="font-medium underline underline-offset-4"
+                >
+                  política de privacidad
+                </Link>{" "}
+                que describe cómo se recopilan, utilizan y protegen mis datos
+                personales durante los eventos.
               </p>
             </div>
             <Switch

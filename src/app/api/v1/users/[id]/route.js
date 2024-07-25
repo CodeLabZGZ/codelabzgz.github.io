@@ -37,19 +37,21 @@ async function patchHandler(request, context) {
   } = await request.json()
 
   const values = {
-    ...(image && { image }),
-    ...(name && { name }),
-    ...(description && { description }),
-    ...(username && { username }),
-    ...(email && { email }),
-    ...(emailVerified && { emailVerified }),
-    ...(urls && { urls }),
-    ...(socialEmails && { socialEmails }),
-    ...(marketingEmails && { marketingEmails }),
-    ...(securityEmails && { securityEmails }),
-    ...(privacyPolicy && { privacyPolicy }),
-    ...(imageRight && { imageRight })
+    ...(image !== undefined && { image }),
+    ...(name !== undefined && { name }),
+    ...(description !== undefined && { description }),
+    ...(username !== undefined && { username }),
+    ...(email !== undefined && { email }),
+    ...(emailVerified !== undefined && { emailVerified }),
+    ...(urls !== undefined && { urls }),
+    ...(socialEmails !== undefined && { socialEmails }),
+    ...(marketingEmails !== undefined && { marketingEmails }),
+    ...(securityEmails !== undefined && { securityEmails }),
+    ...(privacyPolicy !== undefined && { privacyPolicy }),
+    ...(imageRight !== undefined && { imageRight })
   }
+
+  console.log(values)
 
   const data = await db
     .update(users)

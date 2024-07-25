@@ -14,11 +14,11 @@ import {
 import { auth } from "@/auth"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { db } from "@/db"
+import { getContentBySlug } from "@/lib/fetchers"
 import { formatDateInfoEvent } from "@/lib/utils"
 import { sql } from "drizzle-orm"
 import Image from "next/image"
 import { notFound } from "next/navigation"
-import { getContentBySlug } from "../fetchers"
 
 export default async function Page({ params: { slug } }) {
   const { user } = await auth()
@@ -54,7 +54,11 @@ export default async function Page({ params: { slug } }) {
   `)
 
   if (!event) return notFound()
-  const eventContent = await getContentBySlug(slug, "overview", ".mdx")
+  const eventContent = await getContentBySlug(
+    `events/${slug}`,
+    "overview",
+    ".mdx"
+  )
 
   return (
     <div className="mx-auto w-full">
