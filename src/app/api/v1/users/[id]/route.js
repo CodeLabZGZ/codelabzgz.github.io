@@ -51,8 +51,6 @@ async function patchHandler(request, context) {
     ...(imageRight !== undefined && { imageRight })
   }
 
-  console.log(values)
-
   const data = await db
     .update(users)
     .set(values)
