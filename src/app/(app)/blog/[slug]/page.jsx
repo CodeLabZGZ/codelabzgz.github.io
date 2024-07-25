@@ -11,7 +11,7 @@ export default async function Page({ params: { slug } }) {
 
   return (
     <div className="mx-auto max-w-prose space-y-6">
-      <header className="space-y-4">
+      <header className="space-y-2">
         <div className="flex gap-x-2">
           <Avatar image="" value={post.frontmatter.author} />
           <div className="flex flex-col">

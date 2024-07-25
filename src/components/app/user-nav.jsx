@@ -13,11 +13,12 @@ import {
 import { signOut, useSession } from "next-auth/react"
 import {
   TbMoonStars as Dark,
+  TbDoorExit as Exit,
+  TbHelpSquare as Help,
   TbSun as Light,
-  TbDoorExit,
-  TbHelpSquare,
-  TbUser,
-  TbUsers
+  TbSettings as Settings,
+  TbUsers as Team,
+  TbUser as User
 } from "react-icons/tb"
 
 import { Avatar } from "@/components/avatar"
@@ -65,7 +66,7 @@ export function UserNav() {
               href="/settings"
               className="flex w-full items-center gap-x-2.5"
             >
-              <TbUser className="h-4 w-4" />
+              <User className="h-4 w-4" />
               Mi perfil
             </Link>
           </DropdownMenuItem>
@@ -74,8 +75,17 @@ export function UserNav() {
               href={selectedTeam ? `/teams/${selectedTeam?.value}` : "/teams"}
               className="flex w-full items-center gap-x-2.5"
             >
-              <TbUsers className="h-4 w-4" />
+              <Team className="h-4 w-4" />
               Mi equipo
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link
+              href="/settings"
+              className="flex w-full items-center gap-x-2.5"
+            >
+              <Settings className="h-4 w-4" />
+              Ajustes
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
@@ -83,7 +93,7 @@ export function UserNav() {
               href="https://discord.gg/QHe9YYDtGf"
               className="flex w-full items-center gap-x-2.5"
             >
-              <TbHelpSquare className="h-4 w-4" />
+              <Help className="h-4 w-4" />
               Ayuda
             </a>
           </DropdownMenuItem>
@@ -116,7 +126,7 @@ export function UserNav() {
           onClick={async () => await signOut({ callbackUrl: "/" })}
           className="flex cursor-pointer items-center gap-x-2.5"
         >
-          <TbDoorExit className="h-4 w-4" />
+          <Exit className="h-4 w-4" />
           Cerrar sesión
         </DropdownMenuItem>
       </DropdownMenuContent>
