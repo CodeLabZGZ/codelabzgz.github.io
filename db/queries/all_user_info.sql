@@ -1,6 +1,5 @@
 -- behold, the mega query
 -- this is scary
-
 -- get all number of events of the members of the team
 WITH team_members AS (
   SELECT
@@ -132,7 +131,7 @@ user_podiums AS (
 
 SELECT u.*, event_participations, challenge_points, podiums 
 FROM 
-  user_events ue INNER JOIN 
-  user_points upt INNER JOIN 
-  user_podiums up INNER JOIN 
-  user u ON u.id = up.user_id;
+  user_events ue 
+  INNER JOIN user_points upt ON ue.user_id = upt.user_id 
+  INNER JOIN user_podiums up ON upt.user_id = up.user_id
+  INNER JOIN user u ON u.id = up.user_id;
