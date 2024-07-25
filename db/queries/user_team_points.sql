@@ -1,9 +1,7 @@
-
 -- get total challenge points of each user in the team and its information 
 -- (and 0 if the user didn't participate in any challenge)
 SELECT
-  u.*,
-  u.team,
+  u.id,
   COALESCE(challenge_points, 0) AS challenge_points
 FROM
   (
@@ -14,7 +12,7 @@ FROM
       user u
       INNER JOIN members m ON u.id = m.user
     WHERE
-      m.team = 'Pacocha and Sons' -- replace team name with param
+      m.team = 'Pacocha and Sons'
   ) u
   LEFT JOIN (
     SELECT

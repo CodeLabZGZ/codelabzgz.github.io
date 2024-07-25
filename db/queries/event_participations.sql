@@ -1,8 +1,8 @@
--- get all stats from members of any team
+-- get all number of events of the members of the team
 SELECT
-  -- distinct users (no matter the team)
+  -- distinct users
   DISTINCT um.id,
-  um.*,
+  -- um.*,
   -- count null user participations as 0
   COUNT(pt.user) AS ev_participations
 FROM
@@ -16,7 +16,7 @@ FROM
     WHERE
       m.team = 'Pacocha and Sons'
   ) um
-  -- we ensure all users appear
+  -- we ensure all users of the team appear
   LEFT JOIN participations pt ON um.id = pt.user
 GROUP BY
   um.id;
