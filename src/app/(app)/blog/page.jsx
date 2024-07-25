@@ -25,7 +25,7 @@ export default async function Page() {
                 <p className="line-clamp-2 text-muted-foreground">
                   {description}
                 </p>
-                <div className="flex items-center gap-x-2 text-sm text-muted">
+                <div className="flex items-center gap-x-2 text-sm">
                   <p>{author}</p>|
                   <time dateTime={date} className="capitalize">
                     {formatter.format(new Date(date))}
