@@ -19,6 +19,7 @@ import {
 import { db } from "@/db"
 import { users } from "@/schema"
 import { eq } from "drizzle-orm"
+import { notFound } from "next/navigation"
 
 const scoreboards = [
   {
@@ -76,6 +77,8 @@ export default async function Page({ params: { userId } }) {
     },
     where: eq(users.id, userId)
   })
+
+  if (!user) return notFound()
 
   const opciones = { day: "numeric", month: "short", year: "numeric" }
   const formatter = new Intl.DateTimeFormat("es-ES", opciones)
