@@ -6,19 +6,8 @@ import Players from "./players"
 import Settings from "./settings"
 
 export default async function Page({ params: { slug } }) {
-  /*
-  const teamMembers = db.all(sql`
-    SELECT u.id, u.image, u.name, u.status, u.username, m.createdAt, m.updatedAt, m.role
-    FROM ${users} u
-    JOIN ${members} m ON u.id = m.user
-    WHERE m.team = ${slug.replaceAll("-", " ")} 
-    ORDER BY m.role;
-  `)
-  */
-  const teamId = slug.replaceAll("-", " ")
-
   const teamMembers = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/teams/${teamId}/members`,
+    `${process.env.NEXT_PUBLIC_API_URL}/teams/${slug.replaceAll("-", " ")}/members`,
     {
       method: "GET",
       headers: {
@@ -36,6 +25,15 @@ export default async function Page({ params: { slug } }) {
     <>
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Equipos</h2>
+        {/* <div className="flex gap-x-4">
+          <Avatar image={user.image} value={user.name} className="h-14 w-14" />
+          <div className="flex flex-col justify-center">
+            <h1 className="text-2xl font-medium">{user.name}</h1>
+            {user.username && (
+              <h2 className="text-muted-foreground">@{user.username}</h2>
+            )}
+          </div>
+        </div> */}
       </div>
       <Tabs defaultValue="team-players" className="space-y-4">
         <TabsList>

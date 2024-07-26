@@ -2,8 +2,8 @@ import { db } from "@/db"
 import { ConflictException, NotFoundException } from "@/lib/api-errors"
 import { response } from "@/lib/utils"
 import { errorHandler } from "@/middlewares/error-handler"
-import { members, users } from "@/schema"
-import { and, eq, ne, sql } from "drizzle-orm"
+import { members } from "@/schema"
+import { and, eq, sql } from "drizzle-orm"
 
 /**
  * Get all members of the team. Includes the information of each user
@@ -21,8 +21,7 @@ async function getHandler(request, context) {
   const teamId = context.params.id
 
   // find if the user is an admin of the team
-  const memberResult = await db
-    .all(sql`
+  const memberResult = await db.all(sql`
       WITH
         team_members AS (
           SELECT
@@ -128,7 +127,6 @@ async function getHandler(request, context) {
         INNER JOIN user u ON u.id = up.user_id
         INNER JOIN team_members tm ON tm.id = u.id;
     `)
-  console.log(memberResult)
 
   return response({
     code: 200,
@@ -159,9 +157,8 @@ async function postHandler(request, context) {
 
   // insert user (catch error if user is already on the team)
   try {
-    console.log(userReqId)
-    console.log(teamId)
-    const row = await db.insert(members)
+    const row = await db
+      .insert(members)
       .values({
         user: userReqId,
         team: teamId,
@@ -174,12 +171,9 @@ async function postHandler(request, context) {
       statusCode: 204,
       data: { userId: row[0].user }
     })
-  }
-  catch (e) {
-    console.log(e)
+  } catch (e) {
     throw new ConflictException(e.message)
   }
-
 }
 
 /**
@@ -218,8 +212,6 @@ async function deleteHandler(request, context) {
     .delete(members)
     .where(and(eq(members.user, memberId), eq(members.team, teamId)))
     .returning({ deletedId: members.user })
-
-  console.log(memberResult)
 
   // if the user is not an admin of the team
   if (adminResult.length === 0) throw new ConflictException()

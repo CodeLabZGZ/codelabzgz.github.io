@@ -19,13 +19,10 @@ export function DataTableRowActions({ row, teamId }) {
   // get current session
   const { data: session, status } = useSession()
 
-  console.log(session)
-
   const handleAccept = e => {
     e.preventDefault()
 
     const body = { userId: session?.user.id, reqId: id }
-    console.log(body)
 
     // accept the request
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/teams/${teamId}/request`, {
@@ -69,11 +66,9 @@ export function DataTableRowActions({ row, teamId }) {
         return res.json()
       })
       .then(result => {
-        console.log(result)
         toast.message(`Se ha eliminado a ${name} del equipo.`)
       })
       .catch(err => {
-        console.log(err)
         // TODO: improve error messages
         toast.error(`Error: ${name}`)
       })

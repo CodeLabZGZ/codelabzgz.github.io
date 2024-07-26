@@ -12,7 +12,6 @@ export const errorHandler = fn => async (req, res) => {
         statusCode: error.statusCode
       })
     }
-    console.log(error)
 
     return response({ statusCode: 500 })
   }

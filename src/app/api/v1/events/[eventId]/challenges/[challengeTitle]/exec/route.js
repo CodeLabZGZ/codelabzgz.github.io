@@ -5,14 +5,10 @@ import { tests } from "@/schema"
 import { and, eq } from "drizzle-orm"
 
 async function handleSource(eventId, challengeTitle, sourceCode, languageId) {
-  console.log(eventId, challengeTitle, sourceCode, languageId)
-
   const cases = await db
     .select()
     .from(tests)
     .where(and(eq(tests.event, eventId), eq(tests.challenge, challengeTitle)))
-
-  console.log(cases)
 
   const tokens = await fetch(
     `${process.env.JUDGE0_API_URL}/submissions/batch`,

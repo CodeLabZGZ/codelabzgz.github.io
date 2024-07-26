@@ -33,7 +33,6 @@ const formSchema = z.object({
 })
 
 export function JoinTeam({ userId }) {
-  console.log(userId)
   const [open, setOpen] = useState(false)
 
   const form = useForm({
@@ -44,8 +43,6 @@ export function JoinTeam({ userId }) {
     const { name: teamId } = values
 
     const bodyJoin = { userId }
-
-    console.log(userId)
 
     const joinPromise = fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/teams/${teamId}/members`,

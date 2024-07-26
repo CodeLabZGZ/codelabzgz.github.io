@@ -5,8 +5,6 @@ import { errorHandler } from "@/middlewares/error-handler"
 import { members, users } from "@/schema"
 import { and, eq } from "drizzle-orm"
 
-import { UnauthorizedException } from "@/lib/api-errors"
-
 /**
  * Get all join requests of the team.
  * @param {*} request
@@ -25,12 +23,7 @@ async function getHandler(request, context) {
     .select()
     .from(members)
     .innerJoin(users, eq(users.id, members.user))
-    .where(
-      and(
-        eq(members.team, teamId),
-        eq(members.role, "pending")
-      )
-    )
+    .where(and(eq(members.team, teamId), eq(members.role, "pending")))
 
   return response({
     code: 200,
@@ -80,10 +73,14 @@ async function patchHandler(request, context) {
   const memberResult = await db
     .update(members)
     .set({ role: "member" })
-    .where(and(eq(members.user, reqId), eq(members.team, teamId), eq(members.role, "pending")))
+    .where(
+      and(
+        eq(members.user, reqId),
+        eq(members.team, teamId),
+        eq(members.role, "pending")
+      )
+    )
     .returning({ updatedId: members.user })
-
-  console.log(userId, memberResult, reqId, adminResult, teamId)
 
   // if the user is not an admin of the team
   if (adminResult.length === 0) throw new ConflictException()
@@ -132,7 +129,13 @@ async function deleteHandler(request, context) {
   // remove the user who sent a request
   const memberResult = await db
     .delete(members)
-    .where(and(eq(members.user, reqId), eq(members.team, teamId), eq(members.role, "pending")))
+    .where(
+      and(
+        eq(members.user, reqId),
+        eq(members.team, teamId),
+        eq(members.role, "pending")
+      )
+    )
     .returning({ deletedId: members.user })
 
   // if the user is not an admin of the team
