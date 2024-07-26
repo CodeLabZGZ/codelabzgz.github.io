@@ -2,7 +2,7 @@ import { getContent } from "@/lib/fetchers"
 import Link from "next/link"
 
 export default async function Page() {
-  const { error, data } = await getContent(`posts`)
+  const { data } = await getContent(`posts`)
 
   const opciones = { day: "numeric", month: "short", year: "numeric" }
   const formatter = new Intl.DateTimeFormat("es-ES", opciones)

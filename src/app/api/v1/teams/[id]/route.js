@@ -55,8 +55,8 @@ async function patchHandler(request, context) {
  * - the team information
  * - The members list, where some additional info is included:
  *    - The number of events where each member participates in
- *    - The amount of points in total 
- * 
+ *    - The amount of points in total
+ *
  * @param {*} request
  * @param {*} context
  * @returns

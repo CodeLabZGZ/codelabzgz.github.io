@@ -1,5 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
+import { Avatar } from "@/components/avatar"
 import Details from "./details"
 import JoinRequest from "./join-request"
 import Players from "./players"
@@ -15,27 +16,27 @@ export default async function Page({ params: { slug } }) {
       },
       cache: "no-store"
     }
-  )
-    .then(res => res.json())
-    .then(res => res.data.members)
-
-  console.log(teamMembers)
+  ).then(async res => {
+    const data = await res.json()
+    return data.data.members
+  })
 
   return (
-    <>
+    <div className="space-y-6">
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Equipos</h2>
-        {/* <div className="flex gap-x-4">
-          <Avatar image={user.image} value={user.name} className="h-14 w-14" />
-          <div className="flex flex-col justify-center">
-            <h1 className="text-2xl font-medium">{user.name}</h1>
-            {user.username && (
-              <h2 className="text-muted-foreground">@{user.username}</h2>
-            )}
-          </div>
-        </div> */}
       </div>
-      <Tabs defaultValue="team-players" className="space-y-4">
+      <div className="flex gap-x-4">
+        <Avatar
+          image={""}
+          value={slug.replaceAll("-", " ")}
+          className="h-14 w-14"
+        />
+        <div className="flex flex-col justify-center">
+          <h1 className="text-2xl font-medium">{slug.replaceAll("-", " ")}</h1>
+        </div>
+      </div>
+      <Tabs defaultValue="team-details" className="space-y-4">
         <TabsList>
           <TabsTrigger value="team-details">Detalles</TabsTrigger>
           <TabsTrigger value="team-players">Miembros</TabsTrigger>
@@ -62,6 +63,6 @@ export default async function Page({ params: { slug } }) {
           </TabsContent>
         </main>
       </Tabs>
-    </>
+    </div>
   )
 }

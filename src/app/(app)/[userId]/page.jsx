@@ -1,6 +1,6 @@
-import { LineChart } from "@/components/app/profile/line-chart"
-import { RadarChart } from "@/components/app/profile/radar-chart"
-import { RadialChart } from "@/components/app/profile/radial-chart"
+import { LineChart } from "@/components/app/teams/line-chart"
+import { RadarChart } from "@/components/app/teams/radar-chart"
+import { RadialChart } from "@/components/app/teams/radial-chart"
 import { Avatar } from "@/components/avatar"
 import {
   Card,

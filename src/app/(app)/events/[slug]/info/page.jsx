@@ -1,7 +1,7 @@
 import {
   JoinLeaveButton,
   ShareButton
-} from "@/components/app/tables/events/info-buttons"
+} from "@/components/app/events/info-buttons"
 import {
   TbPuzzle as Challenge,
   TbFlag2 as Format,

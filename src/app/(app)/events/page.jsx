@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { events, participations } from "@/schema"
 
-import { columns } from "@/components/app/tables/events/columns"
+import { columns } from "@/components/app/events/columns"
 import { db } from "@/db"
 import { auth } from "auth"
 import { sql } from "drizzle-orm"

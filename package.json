@@ -19,7 +19,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "lint-staged": {
-    "*.{js,ts,jsx,tsx,mdx}": "npm run lint"
+    "*.{js,ts,jsx,tsx,mdx}": "prettier . --write"
   },
   "browserslist": "defaults, not ie <= 11",
   "dependencies": {

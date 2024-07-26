@@ -14,10 +14,9 @@ import { useSession } from "next-auth/react"
 import { toast } from "sonner"
 
 export function DataTableRowActions({ row, teamId }) {
-  const { id, name } = row.original
+  const { id } = row.original
 
-  // get current session
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
 
   const handleAccept = e => {
     e.preventDefault()
@@ -34,12 +33,11 @@ export function DataTableRowActions({ row, teamId }) {
         if (!res.ok) throw Error("status")
         return res.json()
       })
-      .then(result => {
-        toast.message(`Se ha añadido a ${name} al equipo.`)
+      .then(() => {
+        toast.message(`Se ha añadido a name al equipo.`)
       })
-      .catch(err => {
-        // TODO: improve error messages
-        toast.error(`Error: ${name}`)
+      .catch(() => {
+        toast.error(`Error: name`)
       })
   }
 
@@ -65,12 +63,11 @@ export function DataTableRowActions({ row, teamId }) {
         if (!res.ok) throw Error("status")
         return res.json()
       })
-      .then(result => {
-        toast.message(`Se ha eliminado a ${name} del equipo.`)
+      .then(() => {
+        toast.message(`Se ha eliminado a name del equipo.`)
       })
-      .catch(err => {
-        // TODO: improve error messages
-        toast.error(`Error: ${name}`)
+      .catch(() => {
+        toast.error(`Error: name`)
       })
   }
 

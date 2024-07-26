@@ -11,13 +11,9 @@ import { Button } from "@/components/ui/button"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { TbUserMinus } from "react-icons/tb"
 
-export function DataTableRowActions({ row }) {
-  const { role } = row.original
-
+export function DataTableRowActions() {
   const handleKick = e => {
     e.preventDefault()
-
-    // TODO propagate team id and fetch DELETE .../members
   }
 
   return (

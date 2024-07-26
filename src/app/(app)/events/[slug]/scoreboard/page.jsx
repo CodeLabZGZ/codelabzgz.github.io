@@ -1,5 +1,5 @@
-import { columns } from "@/components/app/tables/scoreboard/columns"
-import { DataTable } from "@/components/app/tables/scoreboard/data-table"
+import { columns } from "@/components/app/events/scoreboard/columns"
+import { DataTable } from "@/components/app/events/scoreboard/data-table"
 import { db } from "@/db"
 import { events } from "@/schema"
 import { eq, sql } from "drizzle-orm"
