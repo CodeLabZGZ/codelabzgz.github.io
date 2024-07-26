@@ -3,7 +3,7 @@ import { ConflictException, NotFoundException } from "@/lib/api-errors"
 import { response } from "@/lib/utils"
 import { errorHandler } from "@/middlewares/error-handler"
 import { members, users } from "@/schema"
-import { and, eq, ne } from "drizzle-orm"
+import { and, eq, ne, sql } from "drizzle-orm"
 
 /**
  * Get all members of the team. Includes the information of each user
@@ -22,20 +22,119 @@ async function getHandler(request, context) {
 
   // find if the user is an admin of the team
   const memberResult = await db
-    .select()
-    .from(members)
-    .innerJoin(users, eq(users.id, members.user))
-    .where(and(eq(members.team, teamId), ne(members.role, "pending")))
-    .all()
+    .all(sql`
+      WITH
+        team_members AS (
+          SELECT
+            u.id, m.team, m.role
+          FROM
+            user u
+            INNER JOIN members m ON u.id = m.user
+          WHERE
+            m.team = ${teamId}
+        ),
+        user_events AS (
+          SELECT
+            DISTINCT um.id AS user_id,
+            COUNT(pt.user) AS events
+          FROM
+            team_members um
+            LEFT JOIN participations pt ON um.id = pt.user
+          GROUP BY
+            user_id
+          ORDER BY
+            user_id ASC
+        ),
+        user_points AS (
+          SELECT
+            u.id AS user_id,
+            COALESCE(points, 0) AS points
+          FROM
+            team_members u
+            LEFT JOIN (
+              SELECT
+                scores.user,
+                SUM(ch.points) AS points
+              FROM
+                (
+                  SELECT sc.user, sc.challenge, sc.event, MAX(points) AS score
+                  FROM scoreboards sc
+                  GROUP BY sc.user, sc.challenge, sc.event
+                ) scores
+                INNER JOIN challenges ch ON scores.challenge = ch.title
+                AND scores.event = ch.event
+              GROUP BY
+                scores.user
+            ) up ON u.id = up.user
+          ORDER BY
+            user_id ASC
+        ),
+        user_podiums AS (
+          SELECT
+            tm.id AS user_id, COUNT(position) AS awards
+          FROM
+            team_members tm
+            LEFT JOIN (
+              SELECT
+                ps.event, ps.challenge, ps.user, ps.best_points, ps.timestamp, ps.position
+              FROM
+                (
+                  SELECT
+                    sc.*,
+                    DENSE_RANK() OVER (
+                      PARTITION BY
+                        sc.challenge
+                      ORDER BY
+                        sc.best_points DESC
+                    ) AS position
+                  FROM
+                    (
+                      SELECT
+                        sc.event, sc.challenge, sc.user, sc.timestamp,
+                        MAX(sc.points) AS best_points
+                      FROM
+                        scoreboards sc
+                      WHERE
+                        sc.user IN (
+                          SELECT
+                            tm.id
+                          FROM
+                            team_members tm
+                        )
+                      GROUP BY
+                        sc.challenge,
+                        sc.user
+                      ORDER BY
+                        best_points DESC
+                    ) sc
+                  ORDER BY
+                    sc.challenge,
+                    sc.best_points DESC
+                ) ps
+              WHERE
+                position <= 3
+            ) pd ON tm.id = pd.user
+          GROUP BY
+            pd.user
+          ORDER BY
+            user_id ASC
+        )
+      SELECT
+        u.*, tm.role, events, points, awards
+      FROM
+        user_events ue
+        INNER JOIN user_points upt ON ue.user_id = upt.user_id
+        INNER JOIN user_podiums up ON upt.user_id = up.user_id
+        INNER JOIN user u ON u.id = up.user_id
+        INNER JOIN team_members tm ON tm.id = u.id;
+    `)
+  console.log(memberResult)
 
   return response({
     code: 200,
     statusCode: 204,
     data: {
-      members: memberResult.map(d => {
-        // aggregate all fields without naming
-        return { ...d.members, ...d.user }
-      })
+      members: memberResult
     }
   })
 }
@@ -52,7 +151,6 @@ async function postHandler(request, context) {
 
   // placeholder!!
   const values = await request.json()
-  console.log(values)
 
   const userReqId = values.userId
 

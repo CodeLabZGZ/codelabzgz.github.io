@@ -1,8 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { members, users } from "@/schema"
 
-import { db } from "@/db"
-import { sql } from "drizzle-orm"
 import Details from "./details"
 import JoinRequest from "./join-request"
 import Players from "./players"
@@ -18,16 +15,22 @@ export default async function Page({ params: { slug } }) {
     ORDER BY m.role;
   `)
   */
-  // team data
-  // const teamData = fetch
+  const teamId = slug.replaceAll("-", " ")
 
-  const teamMembers = db.all(sql`
-    SELECT u.id, u.image, u.name, u.status, u.username, m.createdAt, m.updatedAt, m.role
-    FROM ${users} u
-    JOIN ${members} m ON u.id = m.user
-    WHERE m.team = ${slug.replaceAll("-", " ")} 
-    ORDER BY m.role;
-  `)
+  const teamMembers = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/teams/${teamId}/members`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      cache: "no-store"
+    }
+  )
+    .then(res => res.json())
+    .then(res => res.data.members)
+
+  console.log(teamMembers)
 
   return (
     <>
