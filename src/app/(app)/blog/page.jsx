@@ -8,7 +8,7 @@ export default async function Page() {
   const formatter = new Intl.DateTimeFormat("es-ES", opciones)
 
   return (
-    <>
+    <div className="mx-auto max-w-prose">
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Blog</h2>
       </div>
@@ -36,6 +36,6 @@ export default async function Page() {
           )}
         </section>
       </main>
-    </>
+    </div>
   )
 }
