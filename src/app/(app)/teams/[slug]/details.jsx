@@ -52,26 +52,26 @@ export default function Details() {
 
   return (
     <div className="space-y-4">
-      <section className="flex gap-x-4">
-        <Card className="w-fit min-w-44 rounded">
+      <section className="grid grid-cols-4 gap-x-4">
+        <Card className="col-span-1 rounded">
           <CardHeader>
             <CardTitle># 813</CardTitle>
             <CardDescription>Puesto global</CardDescription>
           </CardHeader>
         </Card>
-        <Card className="w-fit min-w-44 rounded">
+        <Card className="col-span-1 rounded">
           <CardHeader>
-            <CardTitle>813</CardTitle>
+            <CardTitle>60</CardTitle>
             <CardDescription>Puntuación total</CardDescription>
           </CardHeader>
         </Card>
-        <Card className="w-fit min-w-44 rounded">
+        <Card className="col-span-1 rounded">
           <CardHeader>
             <CardTitle>6</CardTitle>
-            <CardDescription>Participaciones totales</CardDescription>
+            <CardDescription>Eventos totales</CardDescription>
           </CardHeader>
         </Card>
-        <Card className="w-fit min-w-44 rounded">
+        <Card className="col-span-1 rounded">
           <CardHeader>
             <CardTitle>6</CardTitle>
             <CardDescription>Podeos totales</CardDescription>

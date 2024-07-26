@@ -113,19 +113,31 @@ export default async function Page({ params: { userId } }) {
         </div>
         <p>{user.description}</p>
       </section>
-      <section className="flex gap-x-4">
-        <Card className="w-fit min-w-44 rounded">
+      <section className="grid grid-cols-4 gap-x-4">
+        <Card className="col-span-1 rounded">
           <CardHeader>
             <CardTitle># 813</CardTitle>
             <CardDescription>Puesto global</CardDescription>
           </CardHeader>
         </Card>
-        <Card className="w-fit min-w-44 rounded">
+        <Card className="col-span-1 rounded">
           <CardHeader>
             <CardTitle>
               {__scoreboards.reduce((prev, curr) => prev + curr.points, 0)}
             </CardTitle>
             <CardDescription>Puntuación total</CardDescription>
+          </CardHeader>
+        </Card>
+        <Card className="col-span-1 rounded">
+          <CardHeader>
+            <CardTitle>6</CardTitle>
+            <CardDescription>Eventos totales</CardDescription>
+          </CardHeader>
+        </Card>
+        <Card className="col-span-1 rounded">
+          <CardHeader>
+            <CardTitle>6</CardTitle>
+            <CardDescription>Podeos totales</CardDescription>
           </CardHeader>
         </Card>
       </section>
