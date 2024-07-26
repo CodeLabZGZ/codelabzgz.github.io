@@ -120,6 +120,11 @@ export function UserNav() {
               )}
             </DropdownMenuShortcut>
           </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link href="/" className="flex w-full items-center gap-x-2.5">
+              Página de inicio
+            </Link>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem
