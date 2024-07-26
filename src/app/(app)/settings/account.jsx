@@ -163,7 +163,7 @@ export default function Account({ data }) {
             <FormItem>
               <FormLabel>Correo electrónico</FormLabel>
               <FormControl>
-                <Input placeholder="johndoe@example.com" {...field} />
+                <Input placeholder="johndoe@example.com" {...field} disabled />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -1,7 +1,7 @@
 import { AppLayout } from "@/components/layouts/app"
 
 export const metadata = {
-  title: "Equipos | codelabzgz",
+  title: "Perfil | codelab",
   description: ""
 }
 
