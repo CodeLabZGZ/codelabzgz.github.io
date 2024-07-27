@@ -49,7 +49,7 @@ body:
       options:
         - public
         - private
-      default: public
+      default: 0
     validations:
       required: true
 
@@ -62,7 +62,7 @@ body:
         - hackathon
         - ideathon
         - ctf
-      default: hackathon
+      default: 0
     validations:
       required: true
 
