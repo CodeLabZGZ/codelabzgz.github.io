@@ -78,8 +78,9 @@ export default async function Page({ params: { slug } }) {
           </TabsContent>
           <TabsContent value="join-request" className="space-y-4">
             <JoinRequest
-              values={teamMembers.filter(({ role }) => role === "pending")}
-              teamId={slug.replaceAll("-", " ")}
+              values={teamMembers
+                .filter(({ role }) => role === "pending")
+                .map(row => ({ ...row, slug }))}
             />
           </TabsContent>
         </main>

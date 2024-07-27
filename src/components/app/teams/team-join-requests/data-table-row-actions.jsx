@@ -13,8 +13,8 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { useSession } from "next-auth/react"
 import { toast } from "sonner"
 
-export function DataTableRowActions({ row, teamId }) {
-  const { id } = row.original
+export function DataTableRowActions({ row }) {
+  const { id, slug } = row.original
 
   const { data: session } = useSession()
 
@@ -24,7 +24,7 @@ export function DataTableRowActions({ row, teamId }) {
     const body = { userId: session?.user.id, reqId: id }
 
     // accept the request
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/teams/${teamId}/request`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}/request`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
@@ -44,7 +44,7 @@ export function DataTableRowActions({ row, teamId }) {
   const handleReject = e => {
     e.preventDefault()
 
-    if (!teamId) toast.error("¡No hay ningún equipo seleccionado!")
+    if (!slug) toast.error("¡No hay ningún equipo seleccionado!")
 
     const searchParams = new URLSearchParams({
       userId: session?.user.id,
@@ -53,7 +53,7 @@ export function DataTableRowActions({ row, teamId }) {
 
     // accept the request
     fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/teams/${teamId}/request?${searchParams}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}/request?${searchParams}`,
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" }
