@@ -1,5 +1,7 @@
 "use client"
 
+import { Avatar } from "@/components/avatar"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +12,12 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
+import { isEmptyObject } from "@/lib/utils"
+import { useCmk } from "@/stores/cmdk"
+import { useTeam } from "@/stores/team"
 import { signOut, useSession } from "next-auth/react"
+import { useTheme } from "next-themes"
+import { Link } from "next-view-transitions"
 import {
   TbMoonStars as Dark,
   TbDoorExit as Exit,
@@ -20,13 +27,6 @@ import {
   TbUsers as Team,
   TbUser as User
 } from "react-icons/tb"
-
-import { Avatar } from "@/components/avatar"
-import { Button } from "@/components/ui/button"
-import { useCmk } from "@/stores/cmdk"
-import { useTeam } from "@/stores/team"
-import { useTheme } from "next-themes"
-import { Link } from "next-view-transitions"
 
 export function UserNav() {
   const { data: session } = useSession()
@@ -70,9 +70,13 @@ export function UserNav() {
               Mi perfil
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem disabled={!selectedTeam}>
+          <DropdownMenuItem disabled={isEmptyObject(selectedTeam)}>
             <Link
-              href={selectedTeam ? `/teams/${selectedTeam?.value}` : "/teams"}
+              href={
+                !isEmptyObject(selectedTeam)
+                  ? `/teams/${selectedTeam?.value}`
+                  : "/teams"
+              }
               className="flex w-full items-center gap-x-2.5"
             >
               <Team className="h-4 w-4" />

@@ -11,7 +11,7 @@ async function postHandler(request) {
   return response({ data, statusCode: 201 })
 }
 
-async function getHandler(request) {
+async function getHandler() {
   const data = await db.query.users.findMany()
   return response({ data })
 }

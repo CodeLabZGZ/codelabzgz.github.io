@@ -80,7 +80,7 @@ export default function Account({ data }) {
 
   useEffect(() => {
     checkAndRemoveEmptyFields()
-  }, [])
+  })
 
   async function onSubmit(values) {
     const { createdAt, updatedAt, ...body } = {
@@ -99,6 +99,7 @@ export default function Account({ data }) {
         body: JSON.stringify(body)
       }
     )
+
     toast.promise(promise, {
       loading: "loading...",
       success: "success",

@@ -60,7 +60,7 @@ export default function Settings() {
   })
 
   // 2. Define a submit handler.
-  function onSubmit(values) {
+  function onSubmit() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
   }

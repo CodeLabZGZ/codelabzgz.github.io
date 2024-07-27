@@ -81,7 +81,7 @@ export function CreateTeamForm({ userId, onSubmitCb }) {
     })
 
     // once the request is processed, execute submit callback
-    teamReq.then(r => onSubmitCb())
+    teamReq.then(() => onSubmitCb())
   }
 
   return (

@@ -31,16 +31,15 @@ async function handleCustom(validator, eventId, challengeTitle, content) {
       content
     })
   })
-    .then(async res => {
-      const data = await res.json()
+    .then(async () => {
       return response({ statusCode: 200 })
     })
-    .catch(err => {
+    .catch(() => {
       return response({ statusCode: 400 })
     })
 }
 
-async function postHandler(request, context) {
+async function postHandler(_request, context) {
   const { eventId, challengeTitle } = context.params
 
   const [challenge] = await db

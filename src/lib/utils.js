@@ -72,3 +72,11 @@ export function formatNumber(num) {
     ? (num / result.value).toFixed(1).replace(/\.0$/, "") + " " + result.suffix
     : num.toString()
 }
+
+export function isEmptyObject(obj) {
+  if (obj == null) return true // Verifica si es null o undefined
+  if (Array.isArray(obj) || typeof obj === "string") return obj.length === 0 // Verifica si es un array o una cadena
+  if (obj instanceof Set || obj instanceof Map) return obj.size === 0 // Verifica si es un Set o un Map
+  if (typeof obj === "object") return Object.keys(obj).length === 0 // Verifica si es un objeto
+  return false // En otros casos, no se considera vacío
+}
