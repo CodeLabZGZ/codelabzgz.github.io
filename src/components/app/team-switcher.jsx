@@ -64,7 +64,7 @@ export function TeamSwitcher({ className }) {
 
     const updatedGroups = GROUPS_INITIAL.map(group => {
       if (group.label === "Accounts") {
-        group.values = [
+        group["values"] = [
           {
             id: session?.user?.id,
             image: session?.user?.image,
@@ -72,10 +72,8 @@ export function TeamSwitcher({ className }) {
             value: session?.user?.email
           }
         ]
-      }
-
-      if (group.label === "Teams") {
-        group.values = data.data
+      } else if (group.label === "Teams") {
+        group["values"] = data.data
           .filter(item => item.role !== "pending")
           .map(item => ({
             id: item.team.id,
