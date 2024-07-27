@@ -124,9 +124,14 @@ export function DataTableRowActions({ row }) {
           </DropdownMenuItem>
         )}
         {new Date(endDate) <= currentDate && (
-          <DropdownMenuItem className="flex items-center gap-x-2" disabled>
-            <TbCertificate className="h-4 w-4" />
-            Certificado
+          <DropdownMenuItem className="flex items-center gap-x-2">
+            <Link
+              href={`/events/${title.replaceAll(" ", "-")}/cert`}
+              className="flex w-full items-center gap-x-2"
+            >
+              <TbCertificate className="h-4 w-4" />
+              Certificado
+            </Link>
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

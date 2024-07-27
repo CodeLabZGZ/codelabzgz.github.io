@@ -16,6 +16,7 @@ import {
 import { useShortcut } from "@/hooks/shortcut"
 import { useCmk } from "@/stores/cmdk"
 import { useTeam } from "@/stores/team"
+import { useSession } from "next-auth/react"
 import { useTheme } from "next-themes"
 import { Link } from "next-view-transitions"
 import { useRouter } from "next/navigation"
@@ -33,6 +34,7 @@ import {
 
 export function AppLayout({ children }) {
   const router = useRouter()
+  const { data: session } = useSession()
   const { open, setOpen } = useCmk()
   const { resolvedTheme, setTheme } = useTheme()
   const { selectedTeam } = useTeam()
@@ -43,7 +45,7 @@ export function AppLayout({ children }) {
   })
   useShortcut({
     key: "p",
-    callback: () => router.push("/settings")
+    callback: () => router.push(`/${session?.user?.id}`)
   })
   useShortcut({
     key: "t",
@@ -100,7 +102,10 @@ export function AppLayout({ children }) {
           <CommandSeparator />
           <CommandGroup heading="Ajustes">
             <CommandItem>
-              <Link href="/settings" className="flex w-full items-center gap-2">
+              <Link
+                href={`/${session?.user?.id}`}
+                className="flex w-full items-center gap-2"
+              >
                 <User className="h-4 w-4" />
                 <span>Mi perfil</span>
                 <CommandShortcut>⌘P</CommandShortcut>

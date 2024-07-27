@@ -1,8 +1,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-import { CreateTeam } from "@/components/app/forms/create-team"
-import { JoinTeam } from "@/components/app/forms/join-team"
 import { columns } from "@/components/app/teams/columns"
+import { CreateTeam } from "@/components/app/teams/create-team"
+import { JoinTeam } from "@/components/app/teams/join-team"
 import { db } from "@/db"
 import { auth } from "auth"
 import { sql } from "drizzle-orm"
