@@ -65,7 +65,7 @@ export default function Settings(values) {
   function onSubmit(values) {
     console.log(values)
     const promise = fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/teams/${teamName}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/teams/${values.name}`,
       {
         method: "PUT",
         headers: {
@@ -85,7 +85,7 @@ export default function Settings(values) {
     const visibilityValue = checked ? "private" : "public"
     form.setValue("website.visibility", visibilityValue)
     const promise = fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/teams/${teamName}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/teams/${values.name}`,
       {
         method: "PATCH",
         headers: {

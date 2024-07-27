@@ -1,0 +1,118 @@
+name: 🗓️ New Event
+description: Form to request the creation of an event
+title: "[EVENT REQ] <title>"
+labels: [event request]
+assignees: hec7orci7o, ZenithGD
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Contact Information
+        Please provide the following details to help us get in touch with you regarding this event request.
+
+  - type: input
+    id: publisherName
+    attributes:
+      label: Publisher Name
+      description: Enter the name of the individual or organization publishing the event.
+      placeholder: e.g., John Doe or XYZ Corp
+    validations:
+      required: true
+
+  - type: input
+    id: publisherEmail
+    attributes:
+      label: Publisher Email
+      description: Enter the email address of the publisher for contact purposes.
+      placeholder: e.g., john.doe@example.com
+    validations:
+      required: true
+      format: email
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Event Details
+        Please provide detailed information about the event.
+
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: What is the name of the event?
+      placeholder: e.g., Unicode 2024
+    validations:
+      required: true
+
+  - type: input
+    id: banner
+    attributes:
+      label: Banner
+      description: Do you want to add a banner to your event?
+      placeholder: e.g., https://unsplash.com/...
+    validations:
+      required: false
+
+  - type: dropdown
+    id: visibility
+    attributes:
+      label: Visibility
+      description: Is the event public or private?
+      options:
+        - public
+        - private
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Event Type
+      description: What type of event is this?
+      options:
+        - hackathon
+        - ideathon
+        - ctf
+      default: 0
+    validations:
+      required: true
+
+  - type: input
+    id: location
+    attributes:
+      label: Location
+      description: Will the event be in-person or online?
+      placeholder: e.g., EINA, ES
+    validations:
+      required: true
+
+  - type: input
+    id: startDate
+    attributes:
+      label: Start Date
+      description: What is the event's start date and time?
+      placeholder: e.g., yyyy-mm-dd hh:mm:ss
+    validations:
+      required: true
+
+  - type: input
+    id: endDate
+    attributes:
+      label: End Date
+      description: What is the event's end date and time?
+      placeholder: e.g., yyyy-mm-dd hh:mm:ss
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Codelab
+        Thank you for providing the details of your event request. If you have any questions or need further assistance, please contact us at [codelabzgz@unizar.es](mailto:codelabzgz@unizar.es).
+
+        **Relevant Links:**
+        - [LinkedIn](https://www.linkedin.com/company/codelabzgz)
+        - [Help Center](https://discord.gg/QHe9YYDtGf)
+        - [Terms of Service](https://codelabzgz.github.io/terms)
+        - [Privacy Policy](https://codelabzgz.github.io/privacy)

@@ -1,5 +1,7 @@
 "use client"
 
+import { Avatar } from "@/components/avatar"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,22 +12,21 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
-import { signOut, useSession } from "next-auth/react"
-import {
-  TbMoonStars as Dark,
-  TbSun as Light,
-  TbDoorExit,
-  TbHelpSquare,
-  TbUser,
-  TbUsers
-} from "react-icons/tb"
-
-import { Avatar } from "@/components/avatar"
-import { Button } from "@/components/ui/button"
+import { isEmptyObject } from "@/lib/utils"
 import { useCmk } from "@/stores/cmdk"
 import { useTeam } from "@/stores/team"
+import { signOut, useSession } from "next-auth/react"
 import { useTheme } from "next-themes"
 import { Link } from "next-view-transitions"
+import {
+  TbMoonStars as Dark,
+  TbDoorExit as Exit,
+  TbHelpSquare as Help,
+  TbSun as Light,
+  TbSettings as Settings,
+  TbUsers as Team,
+  TbUser as User
+} from "react-icons/tb"
 
 export function UserNav() {
   const { data: session } = useSession()
@@ -62,20 +63,33 @@ export function UserNav() {
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <Link
-              href="/settings"
+              href={`/${session?.user.id}`}
               className="flex w-full items-center gap-x-2.5"
             >
-              <TbUser className="h-4 w-4" />
+              <User className="h-4 w-4" />
               Mi perfil
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem disabled={!selectedTeam}>
+          <DropdownMenuItem disabled={isEmptyObject(selectedTeam)}>
             <Link
-              href={selectedTeam ? `/teams/${selectedTeam?.value}` : "/teams"}
+              href={
+                !isEmptyObject(selectedTeam)
+                  ? `/teams/${selectedTeam?.value}`
+                  : "/teams"
+              }
               className="flex w-full items-center gap-x-2.5"
             >
-              <TbUsers className="h-4 w-4" />
+              <Team className="h-4 w-4" />
               Mi equipo
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link
+              href="/settings"
+              className="flex w-full items-center gap-x-2.5"
+            >
+              <Settings className="h-4 w-4" />
+              Ajustes
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
@@ -83,7 +97,7 @@ export function UserNav() {
               href="https://discord.gg/QHe9YYDtGf"
               className="flex w-full items-center gap-x-2.5"
             >
-              <TbHelpSquare className="h-4 w-4" />
+              <Help className="h-4 w-4" />
               Ayuda
             </a>
           </DropdownMenuItem>
@@ -110,13 +124,18 @@ export function UserNav() {
               )}
             </DropdownMenuShortcut>
           </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link href="/" className="flex w-full items-center gap-x-2.5">
+              Página de inicio
+            </Link>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={async () => await signOut({ callbackUrl: "/" })}
           className="flex cursor-pointer items-center gap-x-2.5"
         >
-          <TbDoorExit className="h-4 w-4" />
+          <Exit className="h-4 w-4" />
           Cerrar sesión
         </DropdownMenuItem>
       </DropdownMenuContent>

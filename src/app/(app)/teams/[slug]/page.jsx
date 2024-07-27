@@ -1,8 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { members, teams, users } from "@/schema"
 
-import { db } from "@/db"
-import { sql } from "drizzle-orm"
+import { Avatar } from "@/components/avatar"
 import Details from "./details"
 import JoinRequest from "./join-request"
 import Players from "./players"
@@ -10,25 +8,49 @@ import Settings from "./settings"
 
 export default async function Page({ params: { slug } }) {
   const spacedSlug = slug.replaceAll("-", " ")
-  const teamMembers = db.all(sql`
-    SELECT u.id, u.image, u.name, u.status, u.username, m.createdAt, m.updatedAt, m.role
-    FROM ${users} u
-    JOIN ${members} m ON u.id = m.user
-    WHERE m.team = ${spacedSlug} 
-    ORDER BY m.role;
-  `)
-  const teamInfo = db.get(sql`
-    SELECT * 
-    FROM ${teams} 
-    WHERE name = ${spacedSlug};
-  `)
+  const teamMembers = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/teams/${spacedSlug}/members`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      cache: "no-store"
+    }
+  ).then(async res => {
+    const data = await res.json()
+    return data.data.members
+  })
+  const teamInfo = await await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/teams/${spacedSlug}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      cache: "no-store"
+    }
+  ).then(async res => {
+    const data = await res.json()
+    return data.data
+  })
 
   return (
-    <>
+    <div className="space-y-6">
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Equipos</h2>
       </div>
-      <Tabs defaultValue="team-players" className="space-y-4">
+      <div className="flex gap-x-4">
+        <Avatar
+          image={""}
+          value={slug.replaceAll("-", " ")}
+          className="h-14 w-14"
+        />
+        <div className="flex flex-col justify-center">
+          <h1 className="text-2xl font-medium">{slug.replaceAll("-", " ")}</h1>
+        </div>
+      </div>
+      <Tabs defaultValue="team-details" className="space-y-4">
         <TabsList>
           <TabsTrigger value="team-details">Detalles</TabsTrigger>
           <TabsTrigger value="team-players">Miembros</TabsTrigger>
@@ -50,10 +72,11 @@ export default async function Page({ params: { slug } }) {
           <TabsContent value="join-request" className="space-y-4">
             <JoinRequest
               values={teamMembers.filter(({ role }) => role === "pending")}
+              teamId={slug.replaceAll("-", " ")}
             />
           </TabsContent>
         </main>
       </Tabs>
-    </>
+    </div>
   )
 }

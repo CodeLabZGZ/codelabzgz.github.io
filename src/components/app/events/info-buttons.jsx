@@ -22,13 +22,11 @@ export function JoinLeaveButton({ event, state }) {
 
           toast.promise(promise2Leave, {
             loading: "Loading...",
-            success: async res => {
-              const { data, status } = await res.json()
+            success: async () => {
               router.refresh()
               return "ok"
             },
-            error: async res => {
-              const { status } = await res.json()
+            error: async () => {
               return "error"
             }
           })
@@ -48,13 +46,11 @@ export function JoinLeaveButton({ event, state }) {
 
           toast.promise(promise2Join, {
             loading: "Loading...",
-            success: async res => {
-              const { data, status } = await res.json()
+            success: async () => {
               router.refresh()
               return "ok"
             },
-            error: async res => {
-              const { status } = await res.json()
+            error: async () => {
               return "error"
             }
           })

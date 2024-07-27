@@ -83,6 +83,7 @@ export const verificationTokens = sqliteTable(
 export const teams = sqliteTable("teams", {
   name: text("name").primaryKey(),
   motto: text("motto").notNull(),
+  description: text("description"),
   slug: text("slug").unique(),
   logo: text("logo"),
   website: text("website"),

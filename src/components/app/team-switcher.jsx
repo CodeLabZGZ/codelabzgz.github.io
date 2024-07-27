@@ -24,7 +24,7 @@ import useSWR, { useSWRConfig } from "swr"
 import { CreateTeamForm } from "@/components/app/forms/create-team"
 import { Avatar } from "@/components/avatar"
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { cn, isEmptyObject } from "@/lib/utils"
 import { useParticipation } from "@/stores/participation"
 import { useTeam } from "@/stores/team"
 import { useSession } from "next-auth/react"
@@ -75,24 +75,26 @@ export function TeamSwitcher({ className }) {
       }
 
       if (group.label === "Teams") {
-        group.values = data.data.map(item => ({
-          id: item.team.id,
-          image: item.team.logo,
-          label: item.team.name,
-          value: item.team.name.replaceAll(" ", "-"),
-          role: item.role
-        }))
+        group.values = data.data
+          .filter(item => item.role !== "pending")
+          .map(item => ({
+            id: item.team.id,
+            image: item.team.logo,
+            label: item.team.name,
+            value: item.team.name.replaceAll(" ", "-"),
+            role: item.role
+          }))
       }
 
       return group
     })
-
     setGroups(updatedGroups)
 
     if (isEmptyObject(participation)) {
       const accountsValues = updatedGroups.find(
         i => i.label === "Accounts"
       )?.values
+
       if (accountsValues && accountsValues.length > 0) {
         setParticipation(accountsValues[0])
       }
@@ -104,7 +106,14 @@ export function TeamSwitcher({ className }) {
         setSelectedTeam(teamsValues[0])
       }
     }
-  }, [data, session, setParticipation, setSelectedTeam])
+  }, [
+    data,
+    session,
+    setParticipation,
+    setSelectedTeam,
+    participation,
+    selectedTeam
+  ])
 
   const handleSelectTeam = ({ value, label }) => {
     setSelectedTeam(value)
@@ -193,8 +202,4 @@ export function TeamSwitcher({ className }) {
       <CreateTeamForm />
     </Dialog>
   )
-}
-
-function isEmptyObject(obj) {
-  return obj && Object.keys(obj).length === 0
 }

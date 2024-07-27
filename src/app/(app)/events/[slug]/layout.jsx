@@ -1,10 +1,7 @@
-import "@/styles/github-dark.css"
-import "@/styles/github-markdown.css"
-import "@/styles/katex.css"
-
-export const metadata = {
-  title: "",
-  description: ""
+export async function generateMetadata({ params: { slug } }) {
+  return {
+    title: `${slug.replaceAll("-", " ")} | codelabzgz`
+  }
 }
 
 export default function Layout({ children }) {

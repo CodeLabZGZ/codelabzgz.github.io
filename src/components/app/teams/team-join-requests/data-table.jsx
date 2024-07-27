@@ -19,12 +19,10 @@ import {
   useReactTable
 } from "@tanstack/react-table"
 
-import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { DataTablePagination } from "./data-table-pagination"
 
 export function DataTable({ columns, data }) {
-  const router = useRouter()
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState({})
   const [columnFilters, setColumnFilters] = useState([])
@@ -79,7 +77,7 @@ export function DataTable({ columns, data }) {
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
-                onClick={() => router.push(`/teams/${row.original.slug}`)}
+                //onClick={() => router.push(`/teams/${row.original.slug}`)}
                 className="cursor-pointer"
               >
                 {row.getVisibleCells().map(cell => (

@@ -33,6 +33,7 @@ export async function getContentBySlug(eventFolder, slug, ext = ".md") {
       slug: path.parse(fileName).name
     }
   } catch (error) {
+    console.error(error)
     return null
   }
 }

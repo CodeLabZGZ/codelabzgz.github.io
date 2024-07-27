@@ -34,6 +34,15 @@ export function MainNav({ className, ...props }) {
       >
         Equipos
       </Link>
+      <Link
+        href="/blog"
+        className={cn(
+          "text-sm font-medium transition-colors",
+          pathname === "/blog" ? "" : "text-muted-foreground hover:text-primary"
+        )}
+      >
+        Blog
+      </Link>
     </nav>
   )
 }

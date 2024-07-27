@@ -1,5 +1,9 @@
 "use client"
 
+import "@/styles/github-dark.css"
+import "@/styles/github-markdown.css"
+import "@/styles/katex.css"
+
 import { Avatar } from "@/components/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button, buttonVariants } from "@/components/ui/button"

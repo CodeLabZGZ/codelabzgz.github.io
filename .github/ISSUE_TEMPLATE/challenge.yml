@@ -1,0 +1,72 @@
+name: 🎯 New Challenge
+description: Form to request the creation of a new challenge for an event
+title: "[CHALLENGE REQ] <title>"
+labels: [challenge request]
+assignees: hec7orci7o, ZenithGD
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Event Link
+        Please link this challenge request to the related event issue. This will help us track the challenges associated with the specific event.
+
+  - type: input
+    id: eventIssue
+    attributes:
+      label: Event Issue
+      description: Enter the issue number of the event to which this challenge is related.
+      placeholder: "e.g., #42"
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Challenge Details
+        Please provide the details of the challenge you wish to create.
+
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: What is the title of the challenge?
+      placeholder: e.g., "Escape the Maze"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: Difficulty
+      description: Select the difficulty level of the challenge.
+      options:
+        - very easy
+        - easy
+        - medium
+        - hard
+        - insane
+      default: 2
+    validations:
+      required: true
+
+  - type: input
+    id: validatorUrl
+    attributes:
+      label: Validator URL (Optional)
+      description: Enter the URL of the validator for the challenge, if applicable.
+      placeholder: e.g., https://example.com/validator
+    validations:
+      required: false
+      format: url
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Codelab
+        Thank you for providing the details of your event request. If you have any questions or need further assistance, please contact us at [codelabzgz@unizar.es](mailto:codelabzgz@unizar.es).
+
+        **Relevant Links:**
+        - [LinkedIn](https://www.linkedin.com/company/codelabzgz)
+        - [Help Center](https://discord.gg/QHe9YYDtGf)
+        - [Terms of Service](https://codelabzgz.github.io/terms)
+        - [Privacy Policy](https://codelabzgz.github.io/privacy)
