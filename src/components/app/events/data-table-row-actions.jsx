@@ -123,7 +123,7 @@ export function DataTableRowActions({ row }) {
             </Link>
           </DropdownMenuItem>
         )}
-        {new Date(endDate) <= currentDate && (
+        {new Date(endDate) <= currentDate && participating ? (
           <DropdownMenuItem className="flex items-center gap-x-2">
             <Link
               href={`/events/${title.replaceAll(" ", "-")}/cert`}
@@ -133,7 +133,7 @@ export function DataTableRowActions({ row }) {
               Certificado
             </Link>
           </DropdownMenuItem>
-        )}
+        ) : null}
       </DropdownMenuContent>
     </DropdownMenu>
   )

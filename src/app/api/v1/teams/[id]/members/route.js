@@ -13,7 +13,7 @@ import { and, eq, sql } from "drizzle-orm"
  * @param {*} context
  * @returns
  */
-async function getHandler(request, context) {
+async function getHandler(_request, context) {
   // Only authenticated users can accept members into the team
   // if (!request.auth) throw new UnauthorizedException()
 
@@ -21,7 +21,7 @@ async function getHandler(request, context) {
   const teamId = context.params.id
 
   // find if the user is an admin of the team
-  const memberResult = await db.all(sql`
+  const memberResult = db.all(sql`
       WITH
         team_members AS (
           SELECT

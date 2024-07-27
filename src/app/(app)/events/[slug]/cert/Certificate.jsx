@@ -5,7 +5,6 @@ import { toJpeg } from "html-to-image"
 import { useCallback, useRef } from "react"
 
 export default function Page({ event, name, date, cert }) {
-  console.log(cert)
   const ref = useRef(null)
 
   const options = { day: "2-digit", month: "2-digit", year: "numeric" }
