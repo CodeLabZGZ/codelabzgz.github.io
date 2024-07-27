@@ -2,6 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { events, participations } from "@/schema"
 
 import { columns } from "@/components/app/events/columns"
+import { buttonVariants } from "@/components/ui/button"
 import { db } from "@/db"
 import { auth } from "auth"
 import { sql } from "drizzle-orm"
@@ -29,6 +30,16 @@ export default async function Page() {
     <>
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Eventos</h2>
+        <div className="flex items-center gap-x-2">
+          <a
+            href="https://github.com/CodeLabZGZ/codelabzgz.github.io/issues/new/choose"
+            className={buttonVariants({ variant: "outline" })}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Crear evento
+          </a>
+        </div>
       </div>
       <Tabs defaultValue="ongoing" className="space-y-4">
         <TabsList>
