@@ -85,6 +85,22 @@ export const teams = sqliteTable("teams", {
   motto: text("motto").notNull(),
   slug: text("slug").unique(),
   logo: text("logo"),
+  website: text("website"),
+  websiteVisibility: text("websiteVisibility", { enum: ["public", "private"] })
+    .notNull()
+    .default("public"),
+  twitter: text("twitter"),
+  twitterVisibility: text("twitterVisibility", { enum: ["public", "private"] })
+    .notNull()
+    .default("public"),
+  discord: text("discord"),
+  discordVisibility: text("discordVisibility", { enum: ["public", "private"] })
+    .notNull()
+    .default("public"),
+  email: text("email"),
+  emailVisibility: text("emailVisibility", { enum: ["public", "private"] })
+    .notNull()
+    .default("public"),
   createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(
     sql`CURRENT_TIMESTAMP`
   ),

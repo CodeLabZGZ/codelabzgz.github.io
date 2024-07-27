@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { members, users } from "@/schema"
+import { members, teams, users } from "@/schema"
 
 import { db } from "@/db"
 import { sql } from "drizzle-orm"
@@ -9,12 +9,18 @@ import Players from "./players"
 import Settings from "./settings"
 
 export default async function Page({ params: { slug } }) {
+  const spacedSlug = slug.replaceAll("-", " ")
   const teamMembers = db.all(sql`
     SELECT u.id, u.image, u.name, u.status, u.username, m.createdAt, m.updatedAt, m.role
     FROM ${users} u
     JOIN ${members} m ON u.id = m.user
-    WHERE m.team = ${slug.replaceAll("-", " ")} 
+    WHERE m.team = ${spacedSlug} 
     ORDER BY m.role;
+  `)
+  const teamInfo = db.get(sql`
+    SELECT * 
+    FROM ${teams} 
+    WHERE name = ${spacedSlug};
   `)
 
   return (
@@ -39,7 +45,7 @@ export default async function Page({ params: { slug } }) {
             />
           </TabsContent>
           <TabsContent value="settings" className="space-y-4">
-            <Settings />
+            <Settings {...teamInfo} />
           </TabsContent>
           <TabsContent value="join-request" className="space-y-4">
             <JoinRequest

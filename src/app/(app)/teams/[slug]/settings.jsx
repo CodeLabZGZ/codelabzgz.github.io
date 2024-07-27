@@ -17,6 +17,7 @@ import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { z } from "zod"
 
 const formSchema = z.object({
@@ -47,22 +48,57 @@ const formSchema = z.object({
   })
 })
 
-export default function Settings() {
+export default function Settings(values) {
   // 1. Define your form.
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      website: { visibility: "public" },
-      twitter: { visibility: "public" },
-      discord: { visibility: "public" },
-      email: { visibility: "public" }
+      ...values,
+      website: { visibility: values.websiteVisibility, value: values.website },
+      twitter: { visibility: values.twitterVisibility, value: values.twitter },
+      discord: { visibility: values.discordVisibility, value: values.discord },
+      email: { visibility: values.emailVisibility, value: values.email }
     }
   })
 
   // 2. Define a submit handler.
   function onSubmit(values) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+    console.log(values)
+    const promise = fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/teams/${teamName}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(values)
+      }
+    )
+    toast.promise(promise, {
+      loading: "loading...",
+      success: "success",
+      error: "error"
+    })
+  }
+
+  function onSwitch(key, checked) {
+    const visibilityValue = checked ? "private" : "public"
+    form.setValue("website.visibility", visibilityValue)
+    const promise = fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/teams/${teamName}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ [key]: { visibility: visibilityValue } })
+      }
+    )
+    toast.promise(promise, {
+      loading: "loading...",
+      success: "success",
+      error: "error"
+    })
   }
 
   return (
@@ -131,12 +167,8 @@ export default function Settings() {
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="website-switch"
-                    onChange={e =>
-                      form.setValue(
-                        "website.visibility",
-                        e.target.checked ? "private" : "public"
-                      )
-                    }
+                    defaultChecked={values.websiteVisibility === "private"}
+                    onCheckedChange={e => onSwitch("website", e)}
                   />
                   <Label htmlFor="website-switch">Oculto al público</Label>
                 </div>
@@ -159,12 +191,8 @@ export default function Settings() {
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="twitter-switch"
-                    onChange={e =>
-                      form.setValue(
-                        "twitter.visibility",
-                        e.target.checked ? "private" : "public"
-                      )
-                    }
+                    defaultChecked={values.twitterVisibility === "private"}
+                    onCheckedChange={e => onSwitch("twitter", e)}
                   />
                   <Label htmlFor="twitter-switch">Oculto al público</Label>
                 </div>
@@ -189,12 +217,8 @@ export default function Settings() {
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="discord-switch"
-                    onChange={e =>
-                      form.setValue(
-                        "discord.visibility",
-                        e.target.checked ? "private" : "public"
-                      )
-                    }
+                    defaultChecked={values.discordVisibility === "private"}
+                    onCheckedChange={e => onSwitch("discord", e)}
                   />
                   <Label htmlFor="discord-switch">Oculto al público</Label>
                 </div>
@@ -219,12 +243,8 @@ export default function Settings() {
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="email-switch"
-                    onChange={e =>
-                      form.setValue(
-                        "email.visibility",
-                        e.target.checked ? "private" : "public"
-                      )
-                    }
+                    defaultChecked={values.emailVisibility === "private"}
+                    onCheckedChange={e => onSwitch("email", e)}
                   />
                   <Label htmlFor="email-switch">Oculto al público</Label>
                 </div>

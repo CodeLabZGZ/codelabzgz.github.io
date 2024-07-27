@@ -13,14 +13,24 @@ import { eq } from "drizzle-orm"
  */
 async function putHandler(request, context) {
   const id = context.params.id
-  const values = request.json()
+  const values = await request.json()
+  const realValues = {
+    ...values,
+    website: values.website.value,
+    websiteVisibility: values.website.visibility,
+    discord: values.discord.value,
+    discordVisibility: values.discord.visibility,
+    twitter: values.twitter.value,
+    twitterVisibility: values.twitter.visibility,
+    email: values.email.value,
+    emailVisibility: values.email.visibility
+  }
   const data = await db
     .update(teams)
-    .set(values)
-    .where(eq(teams.id, id))
+    .set(realValues)
+    .where(eq(teams.name, id))
     .returning()
-
-  if (rows.length === 0) throw new NotFoundException()
+  if (data.length === 0) throw new NotFoundException()
   return response({ data })
 }
 
@@ -32,20 +42,22 @@ async function putHandler(request, context) {
  */
 async function patchHandler(request, context) {
   const id = context.params.id
-  const { title, description } = request.json()
+  const { website, twitter, discord, email } = await request.json()
 
   const values = {
-    ...(title && { title }),
-    ...(description && { description })
+    ...(website && { websiteVisibility: website.visibility }),
+    ...(twitter && { twitterVisibility: twitter.visibility }),
+    ...(discord && { discordVisibility: discord.visibility }),
+    ...(email && { emailVisibility: email.visibility })
   }
 
   const data = await db
     .update(teams)
     .set(values)
-    .where(eq(teams.id, id))
+    .where(eq(teams.name, id))
     .returning()
 
-  if (rows.length === 0) throw new NotFoundException()
+  if (data.length === 0) throw new NotFoundException()
   return response({ data })
 }
 
