@@ -1,0 +1,76 @@
+name: 📝 New Blog Post
+description: Form to request the publication of a new blog post
+title: "[BLOG POST REQ] <title>"
+labels: [post request]
+assignees: hec7orci7o, ZenithGD
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Contact Information
+        Please provide your details to assist us in processing your blog post request.
+
+  - type: input
+    id: author
+    attributes:
+      label: Author
+      description: Enter the name of the author of the blog post.
+      placeholder: e.g., Jane Doe
+    validations:
+      required: true
+
+  - type: input
+    id: email
+    attributes:
+      label: Email
+      description: Enter your email address for contact purposes.
+      placeholder: e.g., jane.doe@example.com
+    validations:
+      required: true
+      format: email
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Blog Post Details
+        Please provide the details of the blog post you wish to publish.
+
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: What is the title of the blog post?
+      placeholder: e.g., The Future of Technology
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Provide a brief description or summary of the blog post.
+      placeholder: e.g., An in-depth look at emerging technologies and their potential impact.
+    validations:
+      required: true
+
+  - type: input
+    id: date
+    attributes:
+      label: Date
+      description: Enter the date you would like the blog post to be published.
+      placeholder: e.g., yyyy-mm-dd
+    validations:
+      required: true
+      format: date
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Codelab
+        Thank you for providing the details of your event request. If you have any questions or need further assistance, please contact us at [codelabzgz@unizar.es](mailto:codelabzgz@unizar.es).
+
+        **Relevant Links:**
+        - [LinkedIn](https://www.linkedin.com/company/codelabzgz)
+        - [Help Center](https://discord.gg/QHe9YYDtGf)
+        - [Terms of Service](https://codelabzgz.github.io/terms)
+        - [Privacy Policy](https://codelabzgz.github.io/privacy)
