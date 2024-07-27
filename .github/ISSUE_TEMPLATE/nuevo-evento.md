@@ -1,65 +1,94 @@
----
-name: Nuevo evento
-about: Formulario para solicitar la creación de un evento
-title: "[EVENT REQUEST]"
-labels: event request
+name: 🐞 New Event
+description: Form to request the creation of an event
+title: "[EVENT REQ] <title>"
+labels: [event request]
 assignees: hec7orci7o, ZenithGD
+body:
+  - type: input
+    id: publisherName
+    attributes:
+      label: Publisher Name
+      description: Enter the name of the individual or organization publishing the event.
+      placeholder: e.g., John Doe or XYZ Corp
+    validations:
+      required: true
 
----
+  - type: input
+    id: publisherEmail
+    attributes:
+      label: Publisher Email
+      description: Enter the email address of the publisher for contact purposes.
+      placeholder: e.g., john.doe@example.com
+    validations:
+      required: true
+      format: email
 
-## Creación de un Evento
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: What is the name of the event?
+      placeholder: e.g., Unicode 2024
+    validations:
+      required: true
 
-Por favor, completa la siguiente información para la creación del evento.
+  - type: input
+    id: banner
+    attributes:
+      label: Banner
+      description: Do you want to add a banner to your event?
+      placeholder: e.g., https://unsplash.com/...
+    validations:
+      required: false
 
-### Información General
+  - type: dropdown
+    id: visibility
+    attributes:
+      label: Visibility
+      description: Is the event public or private?
+      options:
+        - public
+        - private
+      default: public
+    validations:
+      required: true
 
-- **Título del Evento:**
-  - _Ejemplo: Reunión de Planificación del Proyecto_
+  - type: dropdown
+    id: type
+    attributes:
+      label: Event Type
+      description: What type of event is this?
+      options:
+        - hackathon
+        - ideathon
+        - ctf
+      default: hackathon
+    validations:
+      required: true
 
-- **Descripción del Evento:**
-  - _Ejemplo: Reunión para discutir los próximos pasos del proyecto y asignar tareas._
+  - type: input
+    id: location
+    attributes:
+      label: Location
+      description: Will the event be in-person or online?
+      placeholder: e.g., EINA, ES
+    validations:
+      required: true
 
-- **Fecha y Hora:**
-  - _Formato: YYYY-MM-DD HH:MM_
-  - _Ejemplo: 2024-08-15 14:00_
+  - type: input
+    id: startDate
+    attributes:
+      label: Start Date
+      description: What is the event's start date and time?
+      placeholder: e.g., yyyy-mm-dd hh:mm:ss
+    validations:
+      required: true
 
-- **Ubicación:**
-  - _Ejemplo: Sala de conferencias 2B o enlace de videollamada_
-
-- **Duración Estimada:**
-  - _Ejemplo: 1 hora_
-
-### Participantes
-
-- **Organizador:**
-  - _Nombre del organizador_
-  - _Ejemplo: Juan Pérez_
-
-- **Lista de Participantes:**
-  - _Nombre de la persona 1_
-  - _Nombre de la persona 2_
-  - _Nombre de la persona 3_
-
-### Recursos y Materiales
-
-- **Materiales Necesarios:**
-  - _Ejemplo: Proyector, pizarra, material de lectura_
-
-- **Enlace a Recursos Adicionales:**
-  - _Ejemplo: [Documento de referencia](http://enlace-a-documento.com)_
-
-### Otros Detalles
-
-- **Notas Adicionales:**
-  - _Ejemplo: Confirmar disponibilidad del espacio una semana antes del evento._
-
-- **Acciones a Realizar:**
-  - _Ejemplo: Enviar invitaciones, preparar agenda_
-
----
-
-**¿Hay algún otro detalle importante que debamos conocer?**
-
----
-
-Gracias por proporcionar esta información. Nos pondremos en contacto contigo para confirmar los detalles.
+  - type: input
+    id: endDate
+    attributes:
+      label: End Date
+      description: What is the event's end date and time?
+      placeholder: e.g., yyyy-mm-dd hh:mm:ss
+    validations:
+      required: true
