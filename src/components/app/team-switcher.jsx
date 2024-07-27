@@ -21,7 +21,7 @@ import {
 import { useEffect, useState } from "react"
 import useSWR, { useSWRConfig } from "swr"
 
-import { CreateTeamForm } from "@/components/app/forms/create-team"
+import { CreateTeamForm } from "@/components/app/teams/create-team"
 import { Avatar } from "@/components/avatar"
 import { Button } from "@/components/ui/button"
 import { cn, isEmptyObject } from "@/lib/utils"
