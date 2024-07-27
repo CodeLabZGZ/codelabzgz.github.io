@@ -8,7 +8,7 @@ export default {
   schema: "./db/schema.js",
   out: "./db/drizzle",
   dbCredentials: {
-    url: "file:" + path.resolve(__dirname, process.env.DB_URL)
+    url: "file:" + path.resolve(__dirname, process.env.DATABASE_URL)
   },
   strict: true,
   verbose: true

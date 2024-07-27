@@ -1,3 +1,4 @@
+import "dotenv/config"
 import {
   challenges,
   events,
@@ -184,8 +185,8 @@ function genTest(challengesData) {
 }
 
 async function main() {
-  const sqlite = new Database("db/sqlite.db")
-  const db = drizzle(sqlite)
+  const client = new Database("db/sqlite.db")
+  const db = drizzle(client)
 
   const usersData = await db
     .insert(users)
