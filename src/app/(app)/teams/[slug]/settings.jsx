@@ -21,25 +21,33 @@ import { toast } from "sonner"
 import { z } from "zod"
 
 const formSchema = z.object({
-  name: z.string().min(2, {
+  name: z.string().trim().min(2, {
     message: "El nombre debe tener al menos 2 caracteres."
   }),
-  motto: z.string().min(2, {
+  motto: z.string().trim().min(2, {
     message: "El apodo debe tener al menos 2 caracteres.."
   }),
-  description: z.string().min(2, {
+  slug: z
+    .string()
+    .trim()
+    .min(2, {
+      message: "El slug debe tener al menos 2 caracteres.."
+    })
+    .toLowerCase()
+    .regex(new RegExp(/^[A-Za-z\d_-\s]*$/)),
+  description: z.string().trim().min(2, {
     message: "La descripcion debe tener al menos 2 caracteres.."
   }),
   website: z.object({
-    value: z.string().url(),
+    value: z.union([z.string().url(), z.literal("")]),
     visibility: z.enum(["public", "private"])
   }),
   twitter: z.object({
-    value: z.string().url(),
+    value: z.union([z.string().url(), z.literal("")]),
     visibility: z.enum(["public", "private"])
   }),
   discord: z.object({
-    value: z.string().url(),
+    value: z.union([z.string().url(), z.literal("")]),
     visibility: z.enum(["public", "private"])
   }),
   email: z.object({
@@ -54,15 +62,28 @@ export default function Settings(values) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       ...values,
-      website: { visibility: values.websiteVisibility, value: values.website },
-      twitter: { visibility: values.twitterVisibility, value: values.twitter },
-      discord: { visibility: values.discordVisibility, value: values.discord },
-      email: { visibility: values.emailVisibility, value: values.email }
+      teamDescription: values.teamDescription ?? "",
+
+      website: {
+        visibility: values.websiteVisibility,
+        value: values.website ?? ""
+      },
+      twitter: {
+        visibility: values.twitterVisibility,
+        value: values.twitter ?? ""
+      },
+      discord: {
+        visibility: values.discordVisibility,
+        value: values.discord ?? ""
+      },
+      email: { visibility: values.emailVisibility, value: values.email ?? "" }
     }
   })
 
   // 2. Define a submit handler.
   function onSubmit(values) {
+    const replacedSlug = values.slug.replaceAll(" ", "-")
+    console.log(replacedSlug)
     const promise = fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/teams/${values.name}`,
       {
@@ -70,7 +91,10 @@ export default function Settings(values) {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(values)
+        body: JSON.stringify({
+          ...values,
+          slug: replacedSlug
+        })
       }
     )
     toast.promise(promise, {
@@ -137,7 +161,23 @@ export default function Settings(values) {
         />
         <FormField
           control={form.control}
-          name="description"
+          name="slug"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Slug</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormDescription>
+                Enlace personalizado para acceder a tu equipo.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="teamDescription"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Descripción</FormLabel>

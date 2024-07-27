@@ -2,6 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import { Avatar } from "@/components/avatar"
 import { db } from "@/db"
+import { auth } from "@/middleware"
 import { teams } from "@/schema"
 import { eq } from "drizzle-orm"
 import { notFound } from "next/navigation"
@@ -11,6 +12,8 @@ import Players from "./players"
 import Settings from "./settings"
 
 export default async function Page({ params: { slug } }) {
+  const spacedSlug = slug.replaceAll("-", " ")
+  const session = await auth()
   const [team] = await db
     .select({ name: teams.name })
     .from(teams)
@@ -31,8 +34,7 @@ export default async function Page({ params: { slug } }) {
     const data = await res.json()
     return data.data.members
   })
-
-  const teamInfo = await await fetch(
+  const teamInfo = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/teams/${team.name}`,
     {
       method: "GET",
@@ -61,8 +63,12 @@ export default async function Page({ params: { slug } }) {
         <TabsList>
           <TabsTrigger value="team-details">Detalles</TabsTrigger>
           <TabsTrigger value="team-players">Miembros</TabsTrigger>
-          <TabsTrigger value="settings">Ajustes</TabsTrigger>
-          <TabsTrigger value="join-request">Solicitudes</TabsTrigger>
+          {teamMembers.filter(({ email }) => email === session?.user.email)
+            .length > 0 && <TabsTrigger value="settings">Ajustes</TabsTrigger>}
+          {teamMembers.filter(({ email }) => email === session?.user.email)
+            .length > 0 && (
+            <TabsTrigger value="join-request">Solicitudes</TabsTrigger>
+          )}
         </TabsList>
         <main>
           <TabsContent value="team-details" className="space-y-4">
@@ -73,16 +79,22 @@ export default async function Page({ params: { slug } }) {
               values={teamMembers.filter(({ role }) => role !== "pending")}
             />
           </TabsContent>
-          <TabsContent value="settings" className="space-y-4">
-            <Settings {...teamInfo} />
-          </TabsContent>
-          <TabsContent value="join-request" className="space-y-4">
-            <JoinRequest
-              values={teamMembers
-                .filter(({ role }) => role === "pending")
-                .map(row => ({ ...row, slug }))}
-            />
-          </TabsContent>
+          {teamMembers.filter(({ email }) => email === session?.user.email)
+            .length > 0 && (
+            <div>
+              {" "}
+              <TabsContent value="settings" className="space-y-4">
+                <Settings {...teamInfo} />
+              </TabsContent>
+              <TabsContent value="join-request" className="space-y-4">
+                <JoinRequest
+                  values={teamMembers
+                    .filter(({ role }) => role === "pending")
+                    .map(row => ({ ...row, slug }))}
+                />
+              </TabsContent>
+            </div>
+          )}
         </main>
       </Tabs>
     </div>
