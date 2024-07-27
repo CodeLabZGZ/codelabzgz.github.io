@@ -1,9 +1,15 @@
-name: 🐞 New Event
+name: 🗓️ New Event
 description: Form to request the creation of an event
 title: "[EVENT REQ] <title>"
 labels: [event request]
 assignees: hec7orci7o, ZenithGD
 body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Contact Information
+        Please provide the following details to help us get in touch with you regarding this event request.
+
   - type: input
     id: publisherName
     attributes:
@@ -22,6 +28,12 @@ body:
     validations:
       required: true
       format: email
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Event Details
+        Please provide detailed information about the event.
 
   - type: input
     id: title
@@ -92,3 +104,15 @@ body:
       placeholder: e.g., yyyy-mm-dd hh:mm:ss
     validations:
       required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Codelab
+        Thank you for providing the details of your event request. If you have any questions or need further assistance, please contact us at [codelabzgz@unizar.es](mailto:codelabzgz@unizar.es).
+
+        **Relevant Links:**
+        - [LinkedIn](https://www.linkedin.com/company/codelabzgz)
+        - [Help Center](https://discord.gg/QHe9YYDtGf)
+        - [Terms of Service](https://codelabzgz.github.io/terms)
+        - [Privacy Policy](https://codelabzgz.github.io/privacy)
