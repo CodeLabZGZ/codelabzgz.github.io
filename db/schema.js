@@ -135,6 +135,7 @@ export const events = sqliteTable("events", {
 
 export const eventsRelations = relations(events, ({ many }) => ({
   challenges: many(challenges),
+  scoreboards: many(scoreboards),
   participations: many(participations)
 }))
 
@@ -252,6 +253,10 @@ export const scoreboardsRelations = relations(scoreboards, ({ one }) => ({
   team: one(teams, {
     fields: [scoreboards.team],
     references: [teams.name]
+  }),
+  event: one(events, {
+    fields: [scoreboards.event],
+    references: [events.id]
   }),
   user: one(users, {
     fields: [scoreboards.user],
