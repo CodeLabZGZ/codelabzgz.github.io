@@ -1,4 +1,4 @@
-import { response } from "@/lib/utils"
+import { BadRequestException } from "@/lib/api-errors"
 
 export const validator = (fn, schemas) => async (req, res) => {
   // Validar encabezados
@@ -6,7 +6,7 @@ export const validator = (fn, schemas) => async (req, res) => {
     const headers = Object.fromEntries(req.headers.entries())
     const headersResult = schemas.headers.safeParse(headers)
     if (!headersResult.success) {
-      return response({ code: 400, statusCode: 400, message: "Bad Request" })
+      throw new BadRequestException()
     }
     req.validatedHeaders = headersResult.data
   }
@@ -17,7 +17,7 @@ export const validator = (fn, schemas) => async (req, res) => {
     const routeParams = { userId: url.pathname.split("/").pop() }
     const routeParamsResult = schemas.routeParams.safeParse(routeParams)
     if (!routeParamsResult.success) {
-      return response({ code: 400, statusCode: 400, message: "Bad Request" })
+      throw new BadRequestException()
     }
     req.validatedParams = routeParamsResult.data
   }
@@ -28,7 +28,7 @@ export const validator = (fn, schemas) => async (req, res) => {
     const queryParams = Object.fromEntries(url.searchParams.entries())
     const queryParamsResult = schemas.query.safeParse(queryParams)
     if (!queryParamsResult.success) {
-      return response({ code: 400, statusCode: 400, message: "Bad Request" })
+      throw new BadRequestException()
     }
     req.validatedQuery = queryParamsResult.data
   }
@@ -41,7 +41,7 @@ export const validator = (fn, schemas) => async (req, res) => {
     const body = await req.json()
     const bodyResult = schemas.body.safeParse(body)
     if (!bodyResult.success) {
-      return response({ code: 400, statusCode: 400, message: "Bad Request" })
+      throw new BadRequestException()
     }
     req.validatedBody = bodyResult.data
   }

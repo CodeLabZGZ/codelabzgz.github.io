@@ -1,6 +1,7 @@
 import { db } from "@/db"
 import { getAllUsers } from "@/functions/get-all-users"
 import { response } from "@/lib/utils"
+import { authenticator } from "@/middlewares/authenticator"
 import { errorHandler } from "@/middlewares/error-handler"
 import { validator } from "@/middlewares/validator"
 import { users } from "@/schema"
@@ -44,4 +45,6 @@ async function getHandler(request) {
 }
 
 export const POST = errorHandler(postHandler)
-export const GET = errorHandler(validator(getHandler, { query: getSchema }))
+export const GET = errorHandler(
+  authenticator(validator(getHandler, { query: getSchema }))
+)
