@@ -113,7 +113,7 @@ export default async function Page({ params: { userId } }) {
         </div>
         <p>{user.description}</p>
       </section>
-      <section className="grid grid-cols-4 gap-x-4">
+      <section className="grid grid-cols-3 gap-x-4">
         <Card className="col-span-1 rounded">
           <CardHeader>
             <CardTitle># 813</CardTitle>
@@ -132,12 +132,6 @@ export default async function Page({ params: { userId } }) {
           <CardHeader>
             <CardTitle>6</CardTitle>
             <CardDescription>Eventos totales</CardDescription>
-          </CardHeader>
-        </Card>
-        <Card className="col-span-1 rounded">
-          <CardHeader>
-            <CardTitle>6</CardTitle>
-            <CardDescription>Podeos totales</CardDescription>
           </CardHeader>
         </Card>
       </section>

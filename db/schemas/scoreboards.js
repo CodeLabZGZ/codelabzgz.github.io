@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm"
+import { relations, sql } from "drizzle-orm"
 import {
   foreignKey,
   integer,
@@ -17,13 +17,15 @@ export const scoreboards = sqliteTable(
     event: integer("event", { mode: "number" }),
     challenge: text("challenge"),
     user: text("user").references(() => users.id),
-    team: text("team").references(() => teams.name),
-    timestamp: integer("timestamp", { mode: "timestamp_ms" }),
+    team: text("team").references(() => teams.slug),
+    timestamp: integer("timestamp", { mode: "timestamp_ms" }).default(
+      sql`CURRENT_TIMESTAMP`
+    ),
     points: text("points")
   },
   sb => ({
     compoundKey: primaryKey({
-      columns: [sb.event, sb.challenge, sb.user, sb.timestamp]
+      columns: [sb.event, sb.challenge, sb.user]
     }),
     challengeReference: foreignKey({
       columns: [sb.event, sb.challenge],
@@ -39,7 +41,7 @@ export const scoreboardsRelations = relations(scoreboards, ({ one }) => ({
   }),
   team: one(teams, {
     fields: [scoreboards.team],
-    references: [teams.name]
+    references: [teams.slug]
   }),
   event: one(events, {
     fields: [scoreboards.event],

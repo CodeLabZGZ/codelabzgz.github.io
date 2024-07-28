@@ -7,7 +7,7 @@ export const members = sqliteTable(
   "members",
   {
     user: text("user").references(() => users.id, { onDelete: "cascade" }),
-    team: text("team").references(() => teams.name, { onDelete: "cascade" }),
+    team: text("team").references(() => teams.slug, { onDelete: "cascade" }),
     role: text("role", { enum: ["admin", "member", "pending"] }).notNull(),
     createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(
       sql`CURRENT_TIMESTAMP`
@@ -24,7 +24,7 @@ export const members = sqliteTable(
 export const membersRelations = relations(members, ({ one }) => ({
   team: one(teams, {
     fields: [members.team],
-    references: [teams.name]
+    references: [teams.slug]
   }),
   user: one(users, {
     fields: [members.user],

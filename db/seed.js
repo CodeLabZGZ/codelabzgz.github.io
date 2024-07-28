@@ -123,13 +123,7 @@ function genParticipations({ min = 0, max = 10, members, events }) {
   return values
 }
 
-function genScoreboard({
-  min = 0,
-  max = 4,
-  events,
-  challenges,
-  participations
-}) {
+function genScoreboard({ events, challenges, participations }) {
   const values = []
 
   participations.forEach(p => {
@@ -137,20 +131,17 @@ function genScoreboard({
     const problems = challenges.filter(c => c.event === p.event)
 
     problems.forEach(challenge => {
-      const tries = Math.random() * (max - min) + min
-      for (let index = 0; index < tries; index++) {
-        values.push({
-          event: p.event,
-          challenge: challenge.title,
-          user: p.user,
-          team: p.team,
-          timestamp: faker.date.between({
-            from: event.startDate,
-            to: event.endDate
-          }),
-          points: String(Math.floor(Math.random() * 1e12) + 1)
-        })
-      }
+      values.push({
+        event: p.event,
+        challenge: challenge.title,
+        user: p.user,
+        team: p.team,
+        timestamp: faker.date.between({
+          from: event.startDate,
+          to: event.endDate
+        }),
+        points: String(Math.floor(Math.random() * 1e12) + 1)
+      })
     })
   })
 
@@ -200,7 +191,7 @@ async function main() {
       genMembers({
         lim: 30,
         users: usersData.map(u => u.id),
-        teams: teamsData.map(t => t.name)
+        teams: teamsData.map(t => t.slug)
       })
     )
     .returning()

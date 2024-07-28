@@ -6,11 +6,11 @@ import { participations } from "./participations.js"
 import { scoreboards } from "./scoreboards.js"
 
 export const teams = sqliteTable("teams", {
-  name: text("name").primaryKey(),
+  name: text("name").unique(),
   motto: text("motto").notNull(),
   teamDescription: text("teamDescription"),
-  slug: text("slug").unique(),
-  logo: text("logo"),
+  slug: text("slug").primaryKey(),
+  image: text("image"),
   website: text("website"),
   websiteVisibility: text("websiteVisibility", { enum: ["public", "private"] })
     .notNull()

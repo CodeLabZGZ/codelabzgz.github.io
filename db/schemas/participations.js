@@ -11,7 +11,7 @@ export const participations = sqliteTable(
     event: integer("event", { mode: "number" }).references(() => events.id, {
       onDelete: "cascade"
     }),
-    team: text("team").references(() => teams.name)
+    team: text("team").references(() => teams.slug)
   },
   p => ({
     compoundKey: primaryKey({ columns: [p.user, p.event] })
@@ -29,6 +29,6 @@ export const participationsRelations = relations(participations, ({ one }) => ({
   }),
   team: one(teams, {
     fields: [participations.team],
-    references: [teams.name]
+    references: [teams.slug]
   })
 }))
