@@ -1,17 +1,24 @@
-import { getAll } from "@/functions/teams/get-all"
+import { getOne } from "@/functions/teams/get-one"
+import { update } from "@/functions/teams/update"
 import { response } from "@/lib/utils"
 import { authenticator } from "@/middlewares/authenticator"
 import { errorHandler } from "@/middlewares/error-handler"
 import { validator } from "@/middlewares/validator"
+import { insertTeamSchema } from "@/schema"
 import { z } from "zod"
 
-// async function postHandler(request) {
-//   const values = request.json()
+const pathSchema = z.object({
+  slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, {
+    message: "Slug can only contain letters, numbers, and hyphens as separators"
+  })
+})
 
-//   const data = await db.insert(teams).values(values).returning()
-
-//   return response({ data, statusCode: 201 })
-// }
+async function updateHandler(request) {
+  const { slug } = request.validatedParams
+  const values = request.validatedBody
+  const data = await update({ slug, values })
+  return response({ data })
+}
 
 const getSchema = z
   .object({
@@ -37,12 +44,25 @@ const getSchema = z
   )
 
 async function getHandler(request) {
+  const { slug } = request.validatedParams
   const params = request.validatedQuery
-  const data = await getAll({ ...params })
+  const data = await getOne({ slug, ...params })
   return response({ data })
 }
 
-// export const POST = errorHandler(postHandler)
+export const PUT = errorHandler(
+  authenticator(
+    validator(updateHandler, { path: pathSchema, body: insertTeamSchema })
+  )
+)
+export const PATCH = errorHandler(
+  authenticator(
+    validator(updateHandler, {
+      path: pathSchema,
+      body: insertTeamSchema.partial()
+    })
+  )
+)
 export const GET = errorHandler(
-  authenticator(validator(getHandler, { query: getSchema }))
+  authenticator(validator(getHandler, { path: pathSchema, query: getSchema }))
 )

@@ -90,7 +90,6 @@ export default function Settings(values) {
   // 2. Define a submit handler.
   function onSubmit(values) {
     const replacedSlug = values.slug.replaceAll(" ", "-")
-    console.log(replacedSlug)
     const promise = fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/teams/${values.name}`,
       {

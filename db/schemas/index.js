@@ -9,7 +9,12 @@ import {
 } from "@/schemas/participations"
 import { scoreboards, scoreboardsRelations } from "@/schemas/scoreboards"
 import { sessions, verificationTokens } from "@/schemas/sessions"
-import { teams, teamsRelations } from "@/schemas/teams"
+import {
+  insertTeamSchema,
+  selectTeamSchema,
+  teams,
+  teamsRelations
+} from "@/schemas/teams"
 import { tests, testsRelations } from "@/schemas/tests"
 import {
   insertUserSchema,
@@ -25,6 +30,7 @@ export {
   challengesRelations,
   events,
   eventsRelations,
+  insertTeamSchema,
   insertUserSchema,
   members,
   membersRelations,
@@ -32,6 +38,7 @@ export {
   participationsRelations,
   scoreboards,
   scoreboardsRelations,
+  selectTeamSchema,
   selectUserSchema,
   sessions,
   teams,
