@@ -1,20 +1,31 @@
-import { getAll } from "@/functions/events/get-all"
+import { getOne } from "@/functions/events/get-one"
 import { response } from "@/lib/utils"
 import { authenticator } from "@/middlewares/authenticator"
 import { errorHandler } from "@/middlewares/error-handler"
 import { validator } from "@/middlewares/validator"
 import { z } from "zod"
 
+const pathSchema = z.object({
+  id: z
+    .string()
+    .refine(
+      value => {
+        const number = parseInt(value, 10)
+        return Number.isInteger(number) && number > 0 && number <= 1000000
+      },
+      {
+        message: "ID must be a positive integer within a safe range"
+      }
+    )
+    .transform(value => parseInt(value, 10))
+})
+
 const getSchema = z
   .object({
     challenges: z.preprocess(val => val === "true", z.boolean()).optional(),
     participations: z.preprocess(val => val === "true", z.boolean()).optional(),
     scoreboards: z.preprocess(val => val === "true", z.boolean()).optional(),
-    populate: z.preprocess(val => val === "true", z.boolean()).default(false),
-    limit: z
-      .preprocess(val => parseInt(val, 10), z.number().min(1).max(20))
-      .default(10),
-    offset: z.preprocess(val => parseInt(val, 10), z.number().min(0)).default(0)
+    populate: z.preprocess(val => val === "true", z.boolean()).default(false)
   })
   .refine(
     ({ challenges, participations, scoreboards }) => {
@@ -30,11 +41,12 @@ const getSchema = z
   )
 
 async function getHandler(request) {
+  const { id } = request.validatedParams
   const params = request.validatedQuery
-  const data = await getAll({ ...params })
+  const data = await getOne({ id, ...params })
   return response({ data })
 }
 
 export const GET = errorHandler(
-  authenticator(validator(getHandler, { query: getSchema }))
+  authenticator(validator(getHandler, { path: pathSchema, query: getSchema }))
 )

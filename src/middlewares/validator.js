@@ -35,7 +35,7 @@ export const validator = (fn, schemas) => async (req, ctx) => {
 
   // Validar query params
   if (schemas.query) {
-    const url = new URL(req.nextUrl, `http://${req.headers.host}`)
+    const url = new URL(req.nextUrl)
     const queryParams = Object.fromEntries(url.searchParams.entries())
     const queryParamsResult = schemas.query.safeParse(queryParams)
     if (!queryParamsResult.success) {
