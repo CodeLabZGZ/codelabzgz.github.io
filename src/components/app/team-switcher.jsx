@@ -73,15 +73,17 @@ export function TeamSwitcher({ className }) {
           }
         ]
       } else if (group.label === "Teams") {
-        group["values"] = data.data
-          .filter(item => item.role !== "pending")
-          .map(item => ({
-            id: item.team.id,
-            image: item.team.logo,
-            label: item.team.name,
-            value: item.team.name.replaceAll(" ", "-"),
-            role: item.role
-          }))
+        group["values"] =
+          data?.data ??
+          []
+            .filter(item => item.role !== "pending")
+            .map(item => ({
+              id: item.team.id,
+              image: item.team.logo,
+              label: item.team.name,
+              value: item.team.name.replaceAll(" ", "-"),
+              role: item.role
+            }))
       }
 
       return group
