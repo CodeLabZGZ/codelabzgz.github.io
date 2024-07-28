@@ -35,21 +35,28 @@ const formSchema = z.object({
     })
     .toLowerCase()
     .regex(new RegExp(/^[A-Za-z\d_-\s]*$/)),
-  description: z.string().trim().min(2, {
+
+  teamDescription: z.string().trim().min(2, {
     message: "La descripcion debe tener al menos 2 caracteres.."
   }),
-  website: z.object({
-    value: z.union([z.string().url(), z.literal("")]),
-    visibility: z.enum(["public", "private"])
-  }),
-  twitter: z.object({
-    value: z.union([z.string().url(), z.literal("")]),
-    visibility: z.enum(["public", "private"])
-  }),
-  discord: z.object({
-    value: z.union([z.string().url(), z.literal("")]),
-    visibility: z.enum(["public", "private"])
-  }),
+  website: z
+    .object({
+      value: z.union([z.string().url(), z.literal("")]),
+      visibility: z.enum(["public", "private"])
+    })
+    .optional(),
+  twitter: z
+    .object({
+      value: z.union([z.string().url(), z.literal("")]),
+      visibility: z.enum(["public", "private"])
+    })
+    .optional(),
+  discord: z
+    .object({
+      value: z.union([z.string().url(), z.literal("")]),
+      visibility: z.enum(["public", "private"])
+    })
+    .optional(),
   email: z.object({
     value: z.string().email(),
     visibility: z.enum(["public", "private"])
