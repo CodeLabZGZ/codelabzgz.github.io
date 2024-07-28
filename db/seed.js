@@ -1,19 +1,17 @@
 import "dotenv/config"
-import {
-  challenges,
-  events,
-  members,
-  participations,
-  scoreboards,
-  teams,
-  tests,
-  users
-} from "./schema.js"
 
 import { faker } from "@faker-js/faker"
 import Database from "better-sqlite3"
 import { drizzle } from "drizzle-orm/better-sqlite3"
 import shuffle from "just-shuffle"
+import { challenges } from "./schemas/challenges.js"
+import { events } from "./schemas/events.js"
+import { members } from "./schemas/members.js"
+import { participations } from "./schemas/participations.js"
+import { scoreboards } from "./schemas/scoreboards.js"
+import { teams } from "./schemas/teams.js"
+import { tests } from "./schemas/tests.js"
+import { users } from "./schemas/users.js"
 
 function genUsers() {
   return {

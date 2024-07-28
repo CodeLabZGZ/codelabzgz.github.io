@@ -2,6 +2,7 @@
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*", "./db/*", "./mdx/*"],
+      "@/schema": ["./db/schemas/index.js"],
       "auth": ["./src/auth.js"]
     }
   }

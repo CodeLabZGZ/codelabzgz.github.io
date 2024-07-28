@@ -1,19 +1,9 @@
-import { db } from "@/db"
-import { getAllUsers } from "@/functions/get-all-users"
+import { getAllUsers } from "@/functions/users/get-all-users"
 import { response } from "@/lib/utils"
 import { authenticator } from "@/middlewares/authenticator"
 import { errorHandler } from "@/middlewares/error-handler"
 import { validator } from "@/middlewares/validator"
-import { users } from "@/schema"
 import { z } from "zod"
-
-async function postHandler(request) {
-  const values = request.json()
-
-  const data = await db.insert(users).values(values).returning()
-
-  return response({ data, statusCode: 201 })
-}
 
 const getSchema = z
   .object({
@@ -44,7 +34,6 @@ async function getHandler(request) {
   return response({ data })
 }
 
-export const POST = errorHandler(postHandler)
 export const GET = errorHandler(
   authenticator(validator(getHandler, { query: getSchema }))
 )
