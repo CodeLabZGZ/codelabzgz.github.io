@@ -1,4 +1,4 @@
-import { getAllUsers } from "@/functions/users/get-all-users"
+import { getAll } from "@/functions/users/get-all"
 import { response } from "@/lib/utils"
 import { authenticator } from "@/middlewares/authenticator"
 import { errorHandler } from "@/middlewares/error-handler"
@@ -30,7 +30,7 @@ const getSchema = z
 
 async function getHandler(request) {
   const params = request.validatedQuery
-  const data = await getAllUsers({ ...params })
+  const data = await getAll({ ...params })
   return response({ data })
 }
 

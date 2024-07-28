@@ -11,7 +11,12 @@ import { scoreboards, scoreboardsRelations } from "@/schemas/scoreboards"
 import { sessions, verificationTokens } from "@/schemas/sessions"
 import { teams, teamsRelations } from "@/schemas/teams"
 import { tests, testsRelations } from "@/schemas/tests"
-import { users, usersRelations } from "@/schemas/users"
+import {
+  insertUserSchema,
+  selectUserSchema,
+  users,
+  usersRelations
+} from "@/schemas/users"
 
 // Exportar cada dependencia por separado
 export {
@@ -20,12 +25,14 @@ export {
   challengesRelations,
   events,
   eventsRelations,
+  insertUserSchema,
   members,
   membersRelations,
   participations,
   participationsRelations,
   scoreboards,
   scoreboardsRelations,
+  selectUserSchema,
   sessions,
   teams,
   teamsRelations,

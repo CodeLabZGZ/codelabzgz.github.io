@@ -1,6 +1,18 @@
 import { BadRequestException } from "@/lib/api-errors"
 
-export const validator = (fn, schemas) => async (req, res) => {
+/**
+ * Middleware de validación para solicitudes HTTP.
+ *
+ * @param {Function} fn - Función manejadora de la solicitud que se ejecutará después de la validación.
+ * @param {Object} schemas - Esquemas de validación para diferentes partes de la solicitud.
+ * @param {Object} [schemas.headers] - Esquema de validación para los encabezados de la solicitud.
+ * @param {Object} [schemas.path] - Esquema de validación para los parámetros de la ruta.
+ * @param {Object} [schemas.query] - Esquema de validación para los parámetros de consulta.
+ * @param {Object} [schemas.body] - Esquema de validación para el cuerpo de la solicitud.
+ * @returns {Function} Middleware de validación que procesa la solicitud y la pasa a la función manejadora si es válida.
+ * @throws {BadRequestException} Si alguna parte de la solicitud no pasa la validación.
+ */
+export const validator = (fn, schemas) => async (req, ctx) => {
   // Validar encabezados
   if (schemas.headers) {
     const headers = Object.fromEntries(req.headers.entries())
@@ -12,14 +24,13 @@ export const validator = (fn, schemas) => async (req, res) => {
   }
 
   // Validar parámetros de ruta (si existen)
-  if (schemas.routeParams) {
-    const url = new URL(req.nextUrl, `http://${req.headers.host}`)
-    const routeParams = { userId: url.pathname.split("/").pop() }
-    const routeParamsResult = schemas.routeParams.safeParse(routeParams)
-    if (!routeParamsResult.success) {
+  if (schemas.path) {
+    const { params } = ctx
+    const pathResult = schemas.path.safeParse(params)
+    if (!pathResult.success) {
       throw new BadRequestException()
     }
-    req.validatedParams = routeParamsResult.data
+    req.validatedParams = pathResult.data
   }
 
   // Validar query params
@@ -46,5 +57,5 @@ export const validator = (fn, schemas) => async (req, res) => {
     req.validatedBody = bodyResult.data
   }
 
-  return await fn(req, res)
+  return await fn(req, ctx)
 }

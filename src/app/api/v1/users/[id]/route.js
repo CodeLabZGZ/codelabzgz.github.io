@@ -1,76 +1,62 @@
-import { db } from "@/db"
-import { NotFoundException } from "@/lib/api-errors"
+import { getOne } from "@/functions/users/get-one"
+import { update } from "@/functions/users/update"
 import { response } from "@/lib/utils"
+import { authenticator } from "@/middlewares/authenticator"
 import { errorHandler } from "@/middlewares/error-handler"
-import { users } from "@/schema"
-import { eq } from "drizzle-orm"
+import { validator } from "@/middlewares/validator"
+import { insertUserSchema } from "@/schema"
+import { z } from "zod"
 
-async function putHandler(request, context) {
-  const id = context.params.id
-  const values = await request.json()
+const pathSchema = z.object({
+  id: z.string().uuid()
+})
 
-  const data = await db
-    .update(users)
-    .set(values)
-    .where(eq(users.id, id))
-    .returning()
-
-  if (data.length === 0) throw new NotFoundException()
-  return response({ data })
-}
-
-async function patchHandler(request, context) {
-  const id = context.params.id
-  const {
-    image,
-    name,
-    description,
-    username,
-    email,
-    emailVerified,
-    urls,
-    socialEmails,
-    marketingEmails,
-    securityEmails,
-    privacyPolicy,
-    imageRight
-  } = await request.json()
-
-  const values = {
-    ...(image !== undefined && { image }),
-    ...(name !== undefined && { name }),
-    ...(description !== undefined && { description }),
-    ...(username !== undefined && { username }),
-    ...(email !== undefined && { email }),
-    ...(emailVerified !== undefined && { emailVerified }),
-    ...(urls !== undefined && { urls }),
-    ...(socialEmails !== undefined && { socialEmails }),
-    ...(marketingEmails !== undefined && { marketingEmails }),
-    ...(securityEmails !== undefined && { securityEmails }),
-    ...(privacyPolicy !== undefined && { privacyPolicy }),
-    ...(imageRight !== undefined && { imageRight })
-  }
-
-  const data = await db
-    .update(users)
-    .set(values)
-    .where(eq(users.id, id))
-    .returning()
-
-  if (data.length === 0) throw new NotFoundException()
-  return response({ data })
-}
-
-async function getHandler(request, context) {
-  const id = context.params.id
-  const data = await db.query.users.findFirst({
-    where: eq(users.id, id)
+const getSchema = z
+  .object({
+    members: z.preprocess(val => val === "true", z.boolean()).optional(),
+    participations: z.preprocess(val => val === "true", z.boolean()).optional(),
+    scoreboards: z.preprocess(val => val === "true", z.boolean()).optional(),
+    populate: z.preprocess(val => val === "true", z.boolean()).default(false)
   })
+  .refine(
+    ({ members, participations, scoreboards }) => {
+      // Check if (members or participations) are present with scoreboards -> error
+      return !((members || participations) && scoreboards)
+    },
+    {
+      message:
+        "Cannot have 'members' and 'scoreboards' together, or 'participations' and 'scoreboards' together",
+      path: ["members", "scoreboards", "participations"]
+    }
+  )
 
-  if (!data) throw new NotFoundException()
+async function updateHandler(request) {
+  const { id } = request.validatedParams
+  const values = request.validatedBody
+  const data = await update({ id, values })
   return response({ data })
 }
 
-export const PUT = errorHandler(putHandler)
-export const PATCH = errorHandler(patchHandler)
-export const GET = errorHandler(getHandler)
+async function getHandler(request) {
+  const { id } = request.validatedParams
+  const params = request.validatedQuery
+  const data = await getOne({ id, ...params })
+  return response({ data })
+}
+
+export const PUT = errorHandler(
+  authenticator(
+    validator(updateHandler, { path: pathSchema, body: insertUserSchema })
+  )
+)
+export const PATCH = errorHandler(
+  authenticator(
+    validator(updateHandler, {
+      path: pathSchema,
+      body: insertUserSchema.partial()
+    })
+  )
+)
+export const GET = errorHandler(
+  authenticator(validator(getHandler, { path: pathSchema, query: getSchema }))
+)

@@ -1,9 +1,9 @@
 import { relations, sql } from "drizzle-orm"
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core"
+import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 import { members } from "./members.js"
 import { participations } from "./participations.js"
 import { scoreboards } from "./scoreboards.js"
-
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core"
 
 export const users = sqliteTable("user", {
   id: text("id").primaryKey(),
@@ -27,6 +27,12 @@ export const users = sqliteTable("user", {
     sql`CURRENT_TIMESTAMP`
   )
 })
+
+// Schema for inserting a user - can be used to validate API requests
+export const insertUserSchema = createInsertSchema(users)
+
+// Schema for selecting a user - can be used to validate API responses
+export const selectUserSchema = createSelectSchema(users)
 
 export const usersRelations = relations(users, ({ many }) => ({
   members: many(members),

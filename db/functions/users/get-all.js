@@ -1,6 +1,6 @@
 import { db } from "@/db"
 
-export const getAllUsers = async ({
+export const getAll = async ({
   members,
   participations,
   scoreboards,
