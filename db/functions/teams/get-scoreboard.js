@@ -1,7 +1,7 @@
 import { db } from "@/db"
 import { sql } from "drizzle-orm"
 
-export const getScoreboard = async ({ limit, offset }) => {
+export const getScoreboard = async () => {
   const data = db
     .all(
       sql`

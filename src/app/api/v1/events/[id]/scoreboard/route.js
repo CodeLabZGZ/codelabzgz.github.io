@@ -20,20 +20,12 @@ const pathSchema = z.object({
     .transform(value => parseInt(value, 10))
 })
 
-const getSchema = z.object({
-  limit: z
-    .preprocess(val => parseInt(val, 10), z.number().min(1).max(20))
-    .default(10),
-  offset: z.preprocess(val => parseInt(val, 10), z.number().min(0)).default(0)
-})
-
 async function getHandler(request) {
   const { id } = request.validatedParams
-  const params = request.validatedQuery
-  const data = await getScoreboard({ id, ...params })
+  const data = await getScoreboard({ id })
   return response({ data })
 }
 
 export const GET = errorHandler(
-  authenticator(validator(getHandler, { path: pathSchema, query: getSchema }))
+  authenticator(validator(getHandler, { path: pathSchema }))
 )
