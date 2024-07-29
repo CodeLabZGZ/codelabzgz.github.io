@@ -40,7 +40,7 @@ function mergeData({ id, users, team }) {
 
       return (a.rank || 0) - (b.rank || 0)
     }),
-    whoami: mergedMembers.find(({ user }) => user.id === id).role
+    whoami: mergedMembers.find(({ user }) => user.id === id)?.role
   }
 }
 

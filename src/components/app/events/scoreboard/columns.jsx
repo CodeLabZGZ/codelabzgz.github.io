@@ -11,14 +11,14 @@ import { DataTableColumnHeader } from "./data-table-column-header"
 
 export const columns = [
   {
-    accessorKey: "position",
+    accessorKey: "rank",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Puesto" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex w-[100px] items-center">
-          <span>{row.getValue("position")}</span>
+          <span>{row.getValue("rank")}</span>
         </div>
       )
     },
@@ -35,7 +35,7 @@ export const columns = [
       return (
         <div className="flex items-center space-x-1.5">
           <span className="min-w-[200px] max-w-[500px] truncate font-medium">
-            {row.getValue("participant")}
+            {row.getValue("participant")?.name}
           </span>
         </div>
       )
@@ -44,7 +44,7 @@ export const columns = [
     enableHiding: false
   },
   {
-    accessorKey: "total_points",
+    accessorKey: "points",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Puntos" />
     ),
@@ -54,35 +54,17 @@ export const columns = [
           <Tooltip>
             <TooltipTrigger>
               <span className="text-muted-foreground">
-                {formatNumber(row.getValue("total_points"))}
+                {formatNumber(row.getValue("points"))}
               </span>
             </TooltipTrigger>
             <TooltipContent className="font-mono">
               {row
-                .getValue("total_points")
+                .getValue("points")
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-      )
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id))
-    }
-  },
-  {
-    accessorKey: "challenges_solved",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Retos" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex w-[100px] items-center capitalize">
-          <span>
-            {row.getValue("challenges_solved")} / {row.original.challenges}
-          </span>
-        </div>
       )
     },
     filterFn: (row, id, value) => {

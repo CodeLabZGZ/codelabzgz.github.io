@@ -4,7 +4,7 @@ import "@/styles/github-dark.css"
 import "@/styles/github-markdown.css"
 import "@/styles/katex.css"
 
-import { Avatar } from "@/components/avatar"
+// import { Avatar } from "@/components/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button, buttonVariants } from "@/components/ui/button"
 import {
@@ -15,27 +15,26 @@ import {
   SheetHeader,
   SheetTitle
 } from "@/components/ui/sheet"
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from "@/components/ui/table"
+// import {
+//   Table,
+//   TableBody,
+//   TableCaption,
+//   TableCell,
+//   TableHead,
+//   TableHeader,
+//   TableRow
+// } from "@/components/ui/table"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger
 } from "@/components/ui/tooltip"
-import { formatNumber } from "@/lib/utils"
 import { Link } from "next-view-transitions"
 import { useState } from "react"
 import {
   TbDownload as Download,
-  TbExternalLink as ExternalLink,
+  // TbExternalLink as ExternalLink,
   TbUpload as Upload
 } from "react-icons/tb"
 
@@ -47,14 +46,14 @@ export default function PageComponent({ values, slug, data }) {
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <div className="mb-4 grid grid-cols-2">
         <div className="col-span-1 flex items-center gap-x-2.5">
-          <Avatar image={data.participant_image} value={data.participant} />
+          {/* <Avatar image={data.participant_image} value={data.participant} />
           <div className="flex flex-col items-start">
             <span className="">{data.participant}</span>
-          </div>
+          </div> */}
         </div>
-        <div className="col-span-1 grid grid-cols-3">
+        <div className="col-span-1 grid grid-cols-2">
           <div className="col-span-1 mx-auto flex flex-col items-center gap-x-2.5">
-            <span className="text-muted-foreground">{data.position}.º</span>
+            {/* <span className="text-muted-foreground">{data.position}.º</span> */}
             <span className="text-xs uppercase">puesto</span>
           </div>
           <TooltipProvider className="col-span-1 mx-auto">
@@ -62,29 +61,21 @@ export default function PageComponent({ values, slug, data }) {
               <TooltipTrigger>
                 <div className="flex flex-col items-center gap-x-2.5">
                   <span className="text-muted-foreground">
-                    {formatNumber(data.total_points)}
+                    {/* {formatNumber(data.total_points)} */}
                   </span>
                   <span className="text-xs uppercase">puntos</span>
                 </div>
               </TooltipTrigger>
               <TooltipContent className="font-mono">
-                {data.total_points
+                {/* {data.total_points
                   .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ".")} */}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <div className="col-span-1 mx-auto flex items-center justify-between">
-            <div className="flex flex-col items-center gap-x-2.5">
-              <span className="text-muted-foreground">
-                {data.challenges_solved} / {data.challenges}
-              </span>
-              <span className="text-xs uppercase">retos</span>
-            </div>
-          </div>
         </div>
       </div>
-      <Table>
+      {/* <Table>
         <TableCaption>
           <Link
             href={`/events/${slug}/scoreboard`}
@@ -122,7 +113,7 @@ export default function PageComponent({ values, slug, data }) {
             )
           )}
         </TableBody>
-      </Table>
+      </Table> */}
       <SheetContent
         side="left"
         className="flex h-full min-w-[30%] flex-col overflow-y-hidden"

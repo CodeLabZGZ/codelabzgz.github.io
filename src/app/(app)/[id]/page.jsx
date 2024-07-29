@@ -17,8 +17,11 @@ import {
   TableRow
 } from "@/components/ui/table"
 import { db } from "@/db"
+import { formatDate, formatNumber } from "@/lib/utils"
 import { sql } from "drizzle-orm"
 import { notFound } from "next/navigation"
+
+const options = { day: "numeric", month: "short", year: "numeric" }
 
 export default async function Page({ params: { id } }) {
   const { data: user, status: status } = await fetch(
@@ -33,17 +36,13 @@ export default async function Page({ params: { id } }) {
   const myranking = ranking.find(r => r.user.id === id)
 
   const __scoreboards = db.all(sql`
-    SELECT e.title as event, c.title as challenge, c.points, c.difficulty, e.type, sc2.timestamp
-    FROM (
-      SELECT sc.event, sc.challenge, sc.user, MAX(sc.points) AS points2
-      FROM scoreboards sc
-      WHERE user = 'e19f7678-a990-4595-8ee3-a1faac3d5963'
-      GROUP BY sc.event, sc.challenge, sc.user
-    ) d
-    INNER JOIN events e ON e.id = d.event
-    INNER JOIN challenges c ON c.title = d.challenge
-    INNER JOIN scoreboards sc2 ON sc2.event = d.event and sc2.challenge = d.challenge and sc2.user = d.user and d.points2 = sc2.points
-    ORDER BY sc2.timestamp DESC;
+    SELECT e.title as event, sc.challenge, c.points as cpoints, sc.points as spoints, sc.timestamp
+    FROM scoreboards sc
+    INNER JOIN challenges c ON c.title = sc.challenge
+    INNER JOIN events e ON e.id = sc.event
+    WHERE sc.user = ${id}
+    ORDER BY sc.timestamp DESC
+    LIMIT 10;
   `)
 
   return (
@@ -106,23 +105,39 @@ export default async function Page({ params: { id } }) {
               <TableHead>Evento</TableHead>
               <TableHead>Reto</TableHead>
               <TableHead className="sr-only">Fecha</TableHead>
-              <TableHead className="text-right">Puntos</TableHead>
+              <TableHead className="text-nowrap text-right">
+                Puntos (C)
+              </TableHead>
+              <TableHead className="text-nowrap text-right">
+                Puntos (S)
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {__scoreboards.map(scoreboard => (
               <TableRow key={scoreboard.invoice}>
-                <TableCell className="font-medium">
+                <TableCell className="w-[300px] font-medium">
                   {scoreboard.event}
                 </TableCell>
-                <TableCell>{scoreboard.challenge}</TableCell>
+                <TableCell className="w-[300px]">
+                  {scoreboard.challenge}
+                </TableCell>
                 <TableCell>
-                  <time dateTime={scoreboard.timestamp} className="capitalize">
-                    {formatter.format(new Date(scoreboard.timestamp))}
+                  <time
+                    dateTime={scoreboard.timestamp}
+                    className="text-nowrap capitalize"
+                  >
+                    {formatDate({
+                      date: new Date(scoreboard.timestamp),
+                      options
+                    })}
                   </time>
                 </TableCell>
-                <TableCell className="text-right font-mono text-xs">
-                  +[{scoreboard.points}pts]
+                <TableCell className="text-nowrap text-right font-mono text-xs">
+                  +[{scoreboard.cpoints}] pts
+                </TableCell>
+                <TableCell className="text-nowrap text-right font-mono text-xs">
+                  +[{formatNumber(scoreboard.spoints)}] pts
                 </TableCell>
               </TableRow>
             ))}
