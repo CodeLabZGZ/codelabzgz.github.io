@@ -21,7 +21,7 @@ export const scoreboards = sqliteTable(
     timestamp: integer("timestamp", { mode: "timestamp_ms" }).default(
       sql`CURRENT_TIMESTAMP`
     ),
-    points: text("points")
+    points: integer("points", { mode: "number" })
   },
   sb => ({
     compoundKey: primaryKey({

@@ -1,39 +1,39 @@
 import { db } from "@/db"
-import { challenges, scoreboards, teams, users } from "@/schemas"
-import { and, eq, isNull, sum } from "drizzle-orm"
-import { union } from "drizzle-orm/sqlite-core"
+import { sql } from "drizzle-orm"
 
-export const getScoreboard = async ({ id, limit, offset }) => {
-  const _users = db
-    .select({
-      participant: {
-        id: users.id,
-        image: users.image,
-        name: users.name
-      },
-      points: sum(challenges.points)
-    })
-    .from(scoreboards)
-    .innerJoin(challenges, eq(scoreboards.challenge, challenges.title))
-    .innerJoin(users, eq(scoreboards.user, users.id))
-    .where(and(eq(scoreboards.event, id), isNull(scoreboards.team)))
-    .groupBy(users.id, users.image, users.name)
+export const getScoreboard = async ({ id }) => {
+  const data = db
+    .all(
+      sql`
+    SELECT r.challenge, r.id, r.image, r.name, r.points, r.timestamp
+    FROM (
+    -- PUNTOS MAXIMOS DE UN EQUIPO EN EL EVENTO 1 / CHALLENGE - (INCLUYE FECHA
+    SELECT MT.challenge, t.slug as id, t.image, t.name, MT.points, lb.timestamp
+    FROM (
+      -- PUNTOS MAXIMOS DE UN EQUIPO EN EL EVENTO 1 / CHALLENGE - (NO INCLUYE FECHA)
+      SELECT sc.event, sc.challenge, sc.team, MAX(sc.points) as points
+      FROM scoreboards sc
+      WHERE event = ${id} AND sc.team not NULL
+      GROUP BY sc.event, sc.challenge, sc.team
+    ) MT
+    INNER JOIN scoreboards lb ON lb.event = MT.event AND lb.challenge = MT.challenge AND lb.team = MT.team AND lb.points = MT.points
+    INNER JOIN teams t ON t.slug = MT.team
+    UNION
+    -- PUNTOS MAXIMOS DE UN USUARIO SIN EQUIPO EN EL EVENTO 1 / CHALLENGE
+    SELECT sc.challenge, u.id, u.image, u.name, sc.points, sc.timestamp
+    FROM scoreboards sc
+    INNER JOIN user u ON u.id = sc.user
+    WHERE event = ${id} AND sc.team IS NULL
+    ) r
+    ORDER BY r.challenge, r.points DESC;
+  `
+    )
+    .map(({ challenge, points, timestamp, ...participant }) => ({
+      challenge,
+      participant: { ...participant },
+      points,
+      timestamp
+    }))
 
-  const _teams = db
-    .select({
-      participant: {
-        id: teams.slug,
-        image: teams.image,
-        name: teams.name
-      },
-      points: sum(challenges.points)
-    })
-    .from(scoreboards)
-    .innerJoin(challenges, eq(scoreboards.challenge, challenges.title))
-    .innerJoin(teams, eq(scoreboards.team, teams.slug))
-    .where(eq(scoreboards.event, id))
-    .groupBy(teams.slug, teams.image, teams.name)
-
-  const data = await union(_users, _teams)
   return data
 }
