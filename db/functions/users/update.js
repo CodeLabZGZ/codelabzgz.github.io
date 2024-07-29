@@ -4,8 +4,6 @@ import { users } from "@/schemas"
 import { eq } from "drizzle-orm"
 
 export const update = async ({ id, values }) => {
-  console.log(id, values)
-
   const data = await db
     .update(users)
     .set(values)

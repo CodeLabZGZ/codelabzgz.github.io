@@ -33,7 +33,6 @@ const getSchema = z
 async function updateHandler(request) {
   const { id } = request.validatedParams
   const values = request.validatedBody
-  console.log(id, values)
   const data = await update({ id, values })
   return response({ data })
 }

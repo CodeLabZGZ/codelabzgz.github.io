@@ -1,7 +1,6 @@
 import "@/styles/globals.css"
 
 import { Providers } from "@/app/providers"
-import SWR from "@/components/swr"
 import { Toaster } from "@/components/ui/sonner"
 import clsx from "clsx"
 import { ViewTransitions } from "next-view-transitions"
@@ -33,10 +32,8 @@ export default function RootLayout({ children }) {
         suppressHydrationWarning
       >
         <body className="flex min-h-full flex-col">
-          <SWR>
-            <Providers>{children}</Providers>
-            <Toaster />
-          </SWR>
+          <Providers>{children}</Providers>
+          <Toaster />
         </body>
       </html>
     </ViewTransitions>
