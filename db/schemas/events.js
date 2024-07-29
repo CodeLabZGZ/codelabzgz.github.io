@@ -5,7 +5,7 @@ import { participations } from "./participations.js"
 import { scoreboards } from "./scoreboards.js"
 
 export const events = sqliteTable("events", {
-  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+  slug: text("slug").primaryKey(),
   title: text("title").notNull(),
   banner: text("banner"),
   visibility: text("visibility", { enum: ["public", "private"] }).notNull(),

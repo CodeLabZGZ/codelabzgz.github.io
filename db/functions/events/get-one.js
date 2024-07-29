@@ -4,14 +4,14 @@ import { events } from "@/schemas"
 import { eq } from "drizzle-orm"
 
 export const getOne = async ({
-  id,
+  slug,
   challenges,
   participations,
   scoreboards,
   populate
 }) => {
   const data = await db.query.events.findFirst({
-    where: eq(events.id, id),
+    where: eq(events.slug, slug),
     with: {
       ...(challenges !== undefined && {
         challenges: {

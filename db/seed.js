@@ -53,8 +53,11 @@ function genEvents() {
   const dateA = faker.date.anytime()
   const dateB = faker.date.anytime()
 
+  const title = faker.lorem.words({ min: 3, max: 8 })
+
   return {
-    title: faker.lorem.words({ min: 3, max: 8 }),
+    slug: title.replaceAll(" ", "-").toLowerCase(),
+    title,
     visibility: faker.helpers.arrayElement(["public", "private"]),
     format: faker.helpers.arrayElement(["hackathon", "ideathon"]),
     location: faker.location.direction(),
@@ -127,7 +130,7 @@ function genScoreboard({ events, challenges, participations }) {
   const values = []
 
   participations.forEach(p => {
-    const event = events.find(e => e.id === p.event)
+    const event = events.find(e => e.slug === p.event)
     const problems = challenges.filter(c => c.event === p.event)
 
     problems.forEach(challenge => {
@@ -202,7 +205,7 @@ async function main() {
     .returning()
   const challengesData = await db
     .insert(challenges)
-    .values(genChallenges({ max: 5, events: eventsData.map(e => e.id) }))
+    .values(genChallenges({ max: 5, events: eventsData.map(e => e.slug) }))
     .returning()
 
   const participationsData = await db
@@ -211,7 +214,7 @@ async function main() {
       genParticipations({
         max: 7,
         members: users4teams,
-        events: eventsData.map(e => e.id)
+        events: eventsData.map(e => e.slug)
       })
     )
     .returning()

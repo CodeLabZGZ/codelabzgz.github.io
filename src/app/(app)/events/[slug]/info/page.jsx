@@ -1,3 +1,4 @@
+import { auth } from "@/auth"
 import {
   JoinLeaveButton,
   ShareButton
@@ -11,54 +12,26 @@ import {
   TbUsers as Users
 } from "react-icons/tb"
 
-import { auth } from "@/auth"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { db } from "@/db"
 import { getContentBySlug } from "@/lib/fetchers"
 import { formatDateInfoEvent } from "@/lib/utils"
-import { sql } from "drizzle-orm"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 
 export default async function Page({ params: { slug } }) {
-  const { user } = await auth()
-  const [event] = db.all(sql`
-    SELECT
-      e.*,
-      MAX(CASE WHEN p.user = ${user.id} THEN 1 ELSE 0 END) AS participating,
-      COALESCE(te.total_teams, 0) AS total_teams,
-      COALESCE(tp.total_people, 0) AS total_people,
-      COALESCE(tr.total_challenges, 0) AS total_challenges
-    FROM
-      events e
-      LEFT JOIN participations p ON p.event = e.id
-      LEFT JOIN (
-        SELECT event, COUNT(DISTINCT team) AS total_teams
-        FROM participations
-        GROUP BY event
-      ) te ON e.id = te.event
-      LEFT JOIN (
-        SELECT event, COUNT(DISTINCT user) AS total_people
-        FROM participations
-        GROUP BY event
-      ) tp ON e.id = tp.event
-      LEFT JOIN (
-        SELECT event, COUNT(*) AS total_challenges
-        FROM challenges
-        GROUP BY event
-      ) tr ON e.id = tr.event
-    WHERE
-      e.title = ${slug.replaceAll("-", " ")}
-    GROUP BY
-      e.id, te.total_teams, tp.total_people, tr.total_challenges;
-  `)
+  const session = await auth()
+  const { data: event, status } = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}?challenges=true&participations=true`
+  ).then(async res => {
+    const data = await res.json()
+    data["data"]["participating"] = data["data"].participations.some(
+      e => e.user === session?.user.id
+    )
+    return { ...data }
+  })
 
-  if (!event) return notFound()
-  const eventContent = await getContentBySlug(
-    `events/${slug}`,
-    "overview",
-    ".mdx"
-  )
+  if (status.code === 404 || !event) return notFound()
+  const ec = await getContentBySlug(`events/${slug}`, "overview", ".mdx")
 
   return (
     <div className="mx-auto w-full">
@@ -77,7 +50,7 @@ export default async function Page({ params: { slug } }) {
         </div>
         <div className="flex items-center gap-2">
           <JoinLeaveButton
-            event={event.id}
+            event={event.slug}
             state={Boolean(event.participating)}
           />
           <ShareButton />
@@ -114,7 +87,7 @@ export default async function Page({ params: { slug } }) {
                 <h3 className="text-lg font-bold">Formato</h3>
               </div>
               <p className="text-sm capitalize text-gray-500 dark:text-gray-400">
-                {event.type}
+                {event.format}
               </p>
             </div>
             <div className="grid gap-1">
@@ -133,7 +106,7 @@ export default async function Page({ params: { slug } }) {
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 <span className="font-blold text-white">
-                  {event.total_people}
+                  {event.participations.filter(({ user }) => user).length}
                 </span>{" "}
                 Personas se han unido
               </p>
@@ -145,7 +118,7 @@ export default async function Page({ params: { slug } }) {
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 <span className="font-blold text-white">
-                  {event.total_teams}
+                  {event.participations.filter(({ team }) => team).length}
                 </span>{" "}
                 Equipos se han unido
               </p>
@@ -157,7 +130,7 @@ export default async function Page({ params: { slug } }) {
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 <span className="font-blold text-white">
-                  {event.total_challenges}
+                  {event.challenges.filter(({ team }) => team).length}
                 </span>{" "}
                 Desafíos
               </p>
@@ -165,7 +138,7 @@ export default async function Page({ params: { slug } }) {
           </div>
         </div>
       </section>
-      <section className="space-y-12">{eventContent?.content}</section>
+      <section className="space-y-12">{ec?.content}</section>
     </div>
   )
 }

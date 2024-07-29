@@ -7,7 +7,7 @@ import { tests } from "./tests.js"
 export const challenges = sqliteTable(
   "challenges",
   {
-    event: integer("event", { mode: "number" }).references(() => events.id, {
+    event: text("event").references(() => events.slug, {
       onDelete: "cascade"
     }),
     title: text("title"),
@@ -25,7 +25,7 @@ export const challenges = sqliteTable(
 export const challengesRelations = relations(challenges, ({ one, many }) => ({
   event: one(events, {
     fields: [challenges.event],
-    references: [events.id]
+    references: [events.slug]
   }),
   tests: many(tests),
   scoreboards: many(scoreboards)

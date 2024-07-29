@@ -1,8 +1,5 @@
 import { columns } from "@/components/app/events/scoreboard/columns"
 import { DataTable } from "@/components/app/events/scoreboard/data-table"
-import { db } from "@/db"
-import { events } from "@/schema"
-import { eq } from "drizzle-orm"
 import { notFound } from "next/navigation"
 
 function groupByParticipant(data) {
@@ -32,15 +29,11 @@ function groupByParticipant(data) {
 }
 
 export default async function Page({ params: { slug } }) {
-  const [event] = await db
-    .select()
-    .from(events)
-    .where(eq(events.title, slug.replaceAll("-", " ")))
-  if (!event) return notFound()
-
-  const { data: scoreboard } = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/events/${event.id}/scoreboard`
+  const { data: scoreboard, status } = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/events/advent-university-24/scoreboard`
   ).then(res => res.json())
+
+  if (status.code === 404 || !scoreboard) return notFound()
 
   return <DataTable columns={columns} data={groupByParticipant(scoreboard)} />
 }

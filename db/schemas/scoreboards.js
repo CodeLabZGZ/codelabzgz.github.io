@@ -14,7 +14,7 @@ import { users } from "./users.js"
 export const scoreboards = sqliteTable(
   "scoreboards",
   {
-    event: integer("event", { mode: "number" }),
+    event: text("event"),
     challenge: text("challenge"),
     user: text("user").references(() => users.id),
     team: text("team").references(() => teams.slug),
@@ -45,7 +45,7 @@ export const scoreboardsRelations = relations(scoreboards, ({ one }) => ({
   }),
   event: one(events, {
     fields: [scoreboards.event],
-    references: [events.id]
+    references: [events.slug]
   }),
   user: one(users, {
     fields: [scoreboards.user],

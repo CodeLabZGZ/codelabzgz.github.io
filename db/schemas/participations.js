@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm"
-import { integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core"
+import { primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core"
 import { events } from "./events.js"
 import { teams } from "./teams.js"
 import { users } from "./users.js"
@@ -8,7 +8,7 @@ export const participations = sqliteTable(
   "participations",
   {
     user: text("user").references(() => users.id, { onDelete: "cascade" }),
-    event: integer("event", { mode: "number" }).references(() => events.id, {
+    event: text("event").references(() => events.slug, {
       onDelete: "cascade"
     }),
     team: text("team").references(() => teams.slug)
@@ -25,7 +25,7 @@ export const participationsRelations = relations(participations, ({ one }) => ({
   }),
   event: one(events, {
     fields: [participations.event],
-    references: [events.id]
+    references: [events.slug]
   }),
   team: one(teams, {
     fields: [participations.team],

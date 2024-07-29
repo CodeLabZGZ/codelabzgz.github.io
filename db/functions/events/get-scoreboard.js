@@ -1,7 +1,7 @@
 import { db } from "@/db"
 import { sql } from "drizzle-orm"
 
-export const getScoreboard = async ({ id }) => {
+export const getScoreboard = async ({ slug }) => {
   const data = db
     .all(
       sql`
@@ -13,7 +13,7 @@ FROM (
     -- PUNTOS MAXIMOS DE UN EQUIPO EN EL EVENTO 1 / CHALLENGE - (NO INCLUYE FECHA)
     SELECT sc.event, sc.challenge, sc.team, MAX(sc.points) as points
     FROM scoreboards sc
-    WHERE event = ${id} AND sc.team not NULL
+    WHERE event = ${slug} AND sc.team not NULL
     GROUP BY sc.event, sc.challenge, sc.team
   ) MT
   INNER JOIN scoreboards lb ON lb.event = MT.event AND lb.challenge = MT.challenge AND lb.team = MT.team AND lb.points = MT.points
@@ -23,7 +23,7 @@ FROM (
   SELECT sc.challenge, u.id, u.image, u.name, sc.points, sc.timestamp
   FROM scoreboards sc
   INNER JOIN user u ON u.id = sc.user
-  WHERE event = ${id} AND sc.team IS NULL
+  WHERE event = ${slug} AND sc.team IS NULL
 ) r
 ORDER BY r.challenge, r.points DESC, r.timestamp;
   `

@@ -12,7 +12,7 @@ export const tests = sqliteTable(
   "tests",
   {
     id: integer("id", { mode: "number" }),
-    event: integer("event", { mode: "number" }),
+    event: text("event"),
     challenge: text("challenge"),
     input: text("input", { mode: "json" }),
     output: text("output")
