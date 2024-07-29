@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table"
-
+import { cn } from "@/lib/utils"
 import {
   TbBrandDiscord as Discord,
   TbMail as Mail,
@@ -46,7 +46,16 @@ const scoreboards = [
   }
 ]
 
-export default function Details() {
+export default async function Details({ slug }) {
+  const { data: team } = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}?participations=true`
+  ).then(res => res.json())
+
+  const { data: ranking } = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/teams/scoreboard`
+  ).then(res => res.json())
+  const myranking = ranking.find(r => r.team.slug === slug)
+
   const opciones = { day: "numeric", month: "short", year: "numeric" }
   const formatter = new Intl.DateTimeFormat("es-ES", opciones)
 
@@ -55,59 +64,75 @@ export default function Details() {
       <section className="grid grid-cols-3 gap-x-4">
         <Card className="col-span-1 rounded">
           <CardHeader>
-            <CardTitle># 813</CardTitle>
+            <CardTitle>
+              {myranking ? `# ${myranking.rank}` : "Sin calsificación"}
+            </CardTitle>
             <CardDescription>Puesto global</CardDescription>
           </CardHeader>
         </Card>
         <Card className="col-span-1 rounded">
           <CardHeader>
-            <CardTitle>60</CardTitle>
+            <CardTitle>
+              {myranking ? `# ${myranking.points}` : "Sin calsificación"}
+            </CardTitle>
             <CardDescription>Puntuación total</CardDescription>
           </CardHeader>
         </Card>
         <Card className="col-span-1 rounded">
           <CardHeader>
-            <CardTitle>6</CardTitle>
+            <CardTitle>{team.participations.length}</CardTitle>
             <CardDescription>Eventos totales</CardDescription>
           </CardHeader>
         </Card>
       </section>
-      <div className="grid grid-cols-2 gap-x-16">
-        <section className="flex gap-x-4">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam quis
-          sapien sem. Nam vulputate gravida metus et viverra. Morbi et faucibus
-          odio. Vestibulum convallis libero in commodo pharetra. Curabitur
-          mattis ornare mauris in mollis.
+      <div className="grid grid-cols-2 gap-x-16 py-2">
+        <section
+          className={cn(
+            "flex gap-x-4",
+            team.description
+              ? ""
+              : "select-none items-center justify-center border-2 border-dashed text-sm text-muted-foreground"
+          )}
+        >
+          {team.description ?? "Este equipo no tiene descripción."}
         </section>
-        <section className="flex flex-col gap-y-2">
-          <a
-            href=""
-            className="flex items-center gap-x-2 hover:underline hover:underline-offset-4"
-          >
-            <Twitter className="h-5 w-5" />
-            @codelabzgz
-          </a>
-          <a
-            href=""
-            className="flex items-center gap-x-2 hover:underline hover:underline-offset-4"
-          >
-            <Discord className="h-5 w-5" />
-            codelab
-          </a>
-          <a
-            href=""
-            className="flex items-center gap-x-2 hover:underline hover:underline-offset-4"
-          >
-            <World className="h-5 w-5" />
-            codelab.dev
-          </a>
-          <a
-            href=""
-            className="flex items-center gap-x-2 hover:underline hover:underline-offset-4"
-          >
-            <Mail className="h-5 w-5" />
-            hi@codelab.dev
-          </a>
+        <section className="grid grid-cols-2 items-start gap-y-2">
+          {team.twitterVisibility === "public" && (
+            <a
+              href={team.twitter}
+              className="flex items-center gap-x-2 hover:underline hover:underline-offset-4"
+            >
+              <Twitter className="h-5 w-5" />
+              @codelabzgz
+            </a>
+          )}
+          {team.discordVisibility === "public" && (
+            <a
+              href={team.discord}
+              className="flex items-center gap-x-2 hover:underline hover:underline-offset-4"
+            >
+              <Discord className="h-5 w-5" />
+              codelab
+            </a>
+          )}
+          {team.websiteVisibility === "public" && (
+            <a
+              href={team.website}
+              className="flex items-center gap-x-2 hover:underline hover:underline-offset-4"
+            >
+              <World className="h-5 w-5" />
+              codelab.dev
+            </a>
+          )}
+          {team.emailVisibility === "public" && (
+            <a
+              href={team.email}
+              className="flex items-center gap-x-2 hover:underline hover:underline-offset-4"
+            >
+              <Mail className="h-5 w-5" />
+              hi@codelab.dev
+            </a>
+          )}
         </section>
       </div>
       <section className="grid grid-cols-2 gap-x-4">

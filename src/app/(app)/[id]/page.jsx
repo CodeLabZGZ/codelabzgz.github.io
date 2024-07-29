@@ -21,13 +21,13 @@ import { sql } from "drizzle-orm"
 import { notFound } from "next/navigation"
 
 export default async function Page({ params: { id } }) {
-  const { data: user, status: s1 } = await fetch(
+  const { data: user, status: status } = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/users/${id}?participations=true`
   ).then(res => res.json())
 
-  if (s1.code === 404) return notFound()
+  if (status.code === 404) return notFound()
 
-  const { data: ranking, status: s2 } = await fetch(
+  const { data: ranking } = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/users/scoreboard`
   ).then(res => res.json())
   const myranking = ranking.find(r => r.user.id === id)

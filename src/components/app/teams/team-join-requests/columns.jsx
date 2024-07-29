@@ -18,7 +18,7 @@ export const columns = [
       <DataTableColumnHeader column={column} title="Nombre" />
     ),
     cell: ({ row }) => {
-      const { image, name, username, status, updatedAt } = row.original
+      const { image, name, status, updatedAt } = row.original.user
       const letters = name
         .match(/\w+(?:-\w+)*/g)
         .slice(0, 2)
@@ -38,7 +38,7 @@ export const columns = [
                 <AvatarFallback>{letters}</AvatarFallback>
               </Avatar>
               <div className="space-y-1">
-                <h4 className="text-sm font-semibold">{username}</h4>
+                <h4 className="text-sm font-semibold">{name}</h4>
                 <p className="text-sm">{status}</p>
                 <div className="flex items-center pt-2">
                   <CalendarIcon className="mr-2 h-4 w-4 opacity-70" />{" "}
@@ -82,12 +82,16 @@ export const columns = [
     }
   },
   {
-    accessorKey: "events",
+    accessorKey: "rank",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Eventos" />
+      <DataTableColumnHeader column={column} title="Rank" />
     ),
     cell: ({ row }) => {
-      return <div className="w-[100px]">{row.getValue("events") || 0}</div>
+      return (
+        <div className="w-[100px] whitespace-nowrap">
+          {row.getValue("rank") ?? "Sin calsificación"}
+        </div>
+      )
     }
   },
   {
@@ -96,16 +100,7 @@ export const columns = [
       <DataTableColumnHeader column={column} title="Puntos" />
     ),
     cell: ({ row }) => {
-      return <div className="w-[100px]">{row.getValue("points") || 0}</div>
-    }
-  },
-  {
-    accessorKey: "awards",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Podios" />
-    ),
-    cell: ({ row }) => {
-      return <div className="w-[100px]">{row.getValue("awards") || 0}</div>
+      return <div className="w-[100px]">{row.getValue("points")}</div>
     }
   },
   {

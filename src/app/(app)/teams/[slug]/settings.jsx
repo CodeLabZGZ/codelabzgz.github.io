@@ -20,22 +20,22 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
 
+const urlPattern = /^https:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+
 const formSchema = z.object({
+  image: z
+    .string()
+    .url()
+    .refine(val => urlPattern.test(val), {
+      message: "La URL debe empezar por https y debe ser un dominio, no una IP"
+    })
+    .optional(),
   name: z.string().trim().min(2, {
     message: "El nombre debe tener al menos 2 caracteres."
   }),
   motto: z.string().trim().min(2, {
     message: "El apodo debe tener al menos 2 caracteres.."
   }),
-  slug: z
-    .string()
-    .trim()
-    .min(2, {
-      message: "El slug debe tener al menos 2 caracteres.."
-    })
-    .toLowerCase()
-    .regex(new RegExp(/^[A-Za-z\d_-\s]*$/)),
-
   teamDescription: z.string().trim().min(2, {
     message: "La descripcion debe tener al menos 2 caracteres.."
   }),
@@ -64,13 +64,11 @@ const formSchema = z.object({
 })
 
 export default function Settings(values) {
-  // 1. Define your form.
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       ...values,
       teamDescription: values.teamDescription ?? "",
-
       website: {
         visibility: values.websiteVisibility,
         value: values.website ?? ""
@@ -87,7 +85,6 @@ export default function Settings(values) {
     }
   })
 
-  // 2. Define a submit handler.
   function onSubmit(values) {
     const replacedSlug = values.slug.replaceAll(" ", "-")
     const promise = fetch(
@@ -112,22 +109,7 @@ export default function Settings(values) {
 
   function onSwitch(key, checked) {
     const visibilityValue = checked ? "private" : "public"
-    form.setValue("website.visibility", visibilityValue)
-    const promise = fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/teams/${values.name}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ [key]: { visibility: visibilityValue } })
-      }
-    )
-    toast.promise(promise, {
-      loading: "loading...",
-      success: "success",
-      error: "error"
-    })
+    form.setValue(`${key}.visibility`, visibilityValue)
   }
 
   return (
@@ -135,10 +117,26 @@ export default function Settings(values) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3.5">
         <FormField
           control={form.control}
+          name="image"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Logo</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="https://..." />
+              </FormControl>
+              <FormDescription>
+                Esta será la imagen pública de tu equipo.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nombre del equipo</FormLabel>
+              <FormLabel>Nombre</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -160,22 +158,6 @@ export default function Settings(values) {
               </FormControl>
               <FormDescription>
                 Este es el nombre por el que tu equipo es conocido.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="slug"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Slug</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormDescription>
-                Enlace personalizado para acceder a tu equipo.
               </FormDescription>
               <FormMessage />
             </FormItem>
