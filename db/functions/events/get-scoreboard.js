@@ -25,7 +25,7 @@ export const getScoreboard = async ({ id }) => {
     INNER JOIN user u ON u.id = sc.user
     WHERE event = ${id} AND sc.team IS NULL
     ) r
-    ORDER BY r.challenge, r.points DESC;
+    ORDER BY r.challenge, r.points DESC, r.timestamp;
   `
     )
     .map(({ challenge, points, timestamp, ...participant }) => ({
