@@ -3,7 +3,7 @@ import { response } from "@/lib/utils"
 import { authenticator } from "@/middlewares/authenticator"
 import { errorHandler } from "@/middlewares/error-handler"
 
-async function getHandler(request) {
+async function getHandler() {
   const data = await getScoreboard()
   return response({ data })
 }
