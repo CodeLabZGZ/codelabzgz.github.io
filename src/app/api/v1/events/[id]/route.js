@@ -1,6 +1,5 @@
 import { getOne } from "@/functions/events/get-one"
 import { response } from "@/lib/utils"
-import { authenticator } from "@/middlewares/authenticator"
 import { errorHandler } from "@/middlewares/error-handler"
 import { validator } from "@/middlewares/validator"
 import { z } from "zod"
@@ -48,5 +47,5 @@ async function getHandler(request) {
 }
 
 export const GET = errorHandler(
-  authenticator(validator(getHandler, { path: pathSchema, query: getSchema }))
+  validator(getHandler, { path: pathSchema, query: getSchema })
 )

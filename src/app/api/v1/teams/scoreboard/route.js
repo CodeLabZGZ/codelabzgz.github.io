@@ -1,6 +1,5 @@
 import { getScoreboard } from "@/functions/teams/get-scoreboard"
 import { response } from "@/lib/utils"
-import { authenticator } from "@/middlewares/authenticator"
 import { errorHandler } from "@/middlewares/error-handler"
 
 async function getHandler() {
@@ -8,4 +7,4 @@ async function getHandler() {
   return response({ data })
 }
 
-export const GET = errorHandler(authenticator(getHandler))
+export const GET = errorHandler(getHandler)

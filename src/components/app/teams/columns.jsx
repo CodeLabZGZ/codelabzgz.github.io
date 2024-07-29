@@ -58,14 +58,5 @@ export const columns = [
     cell: ({ row }) => {
       return <div className="w-[100px]">{row.getValue("members") || 0}</div>
     }
-  },
-  {
-    accessorKey: "podiums",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Podios" />
-    ),
-    cell: ({ row }) => {
-      return <div className="w-[100px]">{row.getValue("podiums") || 0}</div>
-    }
   }
 ]

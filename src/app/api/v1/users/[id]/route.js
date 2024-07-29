@@ -1,7 +1,7 @@
+import { auth } from "@/auth"
 import { getOne } from "@/functions/users/get-one"
 import { update } from "@/functions/users/update"
 import { response } from "@/lib/utils"
-import { authenticator } from "@/middlewares/authenticator"
 import { errorHandler } from "@/middlewares/error-handler"
 import { validator } from "@/middlewares/validator"
 import { insertUserSchema } from "@/schema"
@@ -33,6 +33,7 @@ const getSchema = z
 async function updateHandler(request) {
   const { id } = request.validatedParams
   const values = request.validatedBody
+  console.log(id, values)
   const data = await update({ id, values })
   return response({ data })
 }
@@ -45,18 +46,14 @@ async function getHandler(request) {
 }
 
 export const PUT = errorHandler(
-  authenticator(
-    validator(updateHandler, { path: pathSchema, body: insertUserSchema })
-  )
+  validator(updateHandler, { path: pathSchema, body: insertUserSchema })
 )
 export const PATCH = errorHandler(
-  authenticator(
-    validator(updateHandler, {
-      path: pathSchema,
-      body: insertUserSchema.partial()
-    })
-  )
+  validator(updateHandler, {
+    path: pathSchema,
+    body: insertUserSchema.partial()
+  })
 )
-export const GET = errorHandler(
-  authenticator(validator(getHandler, { path: pathSchema, query: getSchema }))
+export const GET = auth(
+  errorHandler(validator(getHandler, { path: pathSchema, query: getSchema }))
 )

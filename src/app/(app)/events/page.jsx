@@ -1,11 +1,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { events, participations } from "@/schema"
 
 import { columns } from "@/components/app/events/columns"
 import { buttonVariants } from "@/components/ui/button"
-import { db } from "@/db"
 import { auth } from "auth"
-import { sql } from "drizzle-orm"
 import Joined from "./joined"
 import OnGoing from "./ongoing"
 import Past from "./past"
@@ -15,16 +12,15 @@ const currentDate = new Date()
 
 export default async function Page() {
   const { user } = await auth()
-  const records = await db
-    .select({
-      ...events,
-      people: sql`COUNT(${participations.user})`,
-      participating: sql`MAX(CASE WHEN ${participations.user} = ${user.id} THEN 1 ELSE 0 END)`
-    })
-    .from(events)
-    .leftJoin(participations, sql`${participations.event} = ${events.id}`)
-    .groupBy(events.id, ...Object.keys(events))
-    .orderBy(events.startDate)
+  const { data } = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/events?participations=true`
+  ).then(res => res.json())
+
+  const records = data.map(({ participations, ...r }) => ({
+    ...r,
+    participating: participations.findIndex(p => p.user === user.id) !== -1,
+    people: participations.length
+  }))
 
   return (
     <>

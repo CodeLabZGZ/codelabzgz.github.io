@@ -17,53 +17,20 @@ import {
   TableRow
 } from "@/components/ui/table"
 import { db } from "@/db"
-import { users } from "@/schema"
-import { eq, sql } from "drizzle-orm"
+import { sql } from "drizzle-orm"
 import { notFound } from "next/navigation"
 
-function groupByType(events) {
-  return events.reduce((acc, event) => {
-    const { type } = event
+export default async function Page({ params: { id } }) {
+  const { data: user, status: s1 } = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/users/${id}?participations=true`
+  ).then(res => res.json())
 
-    if (!acc[type]) acc[type] = 0
-    acc[type] += 1
+  if (s1.code === 404) return notFound()
 
-    return acc
-  }, {})
-}
-
-function groupByMonthAndSumPoints(events) {
-  return events.reduce((acc, event) => {
-    const date = new Date(event.timestamp)
-    const month = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`
-
-    if (!acc[month]) acc[month] = 0
-    acc[month] += event.points
-
-    return acc
-  }, {})
-}
-
-export default async function Page({ params: { userId } }) {
-  const user = await db.query.users.findFirst({
-    columns: {
-      id: true,
-      image: true,
-      name: true,
-      username: true,
-      description: true
-    },
-    where: eq(users.id, userId)
-  })
-
-  if (!user) return notFound()
-
-  const totalChallenges = db.all(sql`
-    SELECT difficulty, COUNT(*) as count
-    FROM challenges
-    GROUP BY difficulty;
-  `)
-  console.log(totalChallenges)
+  const { data: ranking, status: s2 } = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/users/scoreboard`
+  ).then(res => res.json())
+  const myranking = ranking.find(r => r.user.id === id)
 
   const __scoreboards = db.all(sql`
     SELECT e.title as event, c.title as challenge, c.points, c.difficulty, e.type, sc2.timestamp
@@ -78,26 +45,6 @@ export default async function Page({ params: { userId } }) {
     INNER JOIN scoreboards sc2 ON sc2.event = d.event and sc2.challenge = d.challenge and sc2.user = d.user and d.points2 = sc2.points
     ORDER BY sc2.timestamp DESC;
   `)
-  console.log(__scoreboards)
-
-  const groupedByType = Object.entries(groupByType(__scoreboards)).map(
-    ([type, total]) => ({
-      type,
-      total
-    })
-  )
-  console.log(groupedByType)
-
-  const groupedByMonth = Object.entries(
-    groupByMonthAndSumPoints(__scoreboards)
-  ).map(([month, totalPoints]) => ({
-    month,
-    totalPoints
-  }))
-  console.log(groupedByMonth)
-
-  const opciones = { day: "numeric", month: "short", year: "numeric" }
-  const formatter = new Intl.DateTimeFormat("es-ES", opciones)
 
   return (
     <div className="space-y-4">
@@ -116,21 +63,23 @@ export default async function Page({ params: { userId } }) {
       <section className="grid grid-cols-3 gap-x-4">
         <Card className="col-span-1 rounded">
           <CardHeader>
-            <CardTitle># 813</CardTitle>
+            <CardTitle>
+              {myranking ? `# ${myranking.rank}` : "Sin calsificación"}
+            </CardTitle>
             <CardDescription>Puesto global</CardDescription>
           </CardHeader>
         </Card>
         <Card className="col-span-1 rounded">
           <CardHeader>
             <CardTitle>
-              {__scoreboards.reduce((prev, curr) => prev + curr.points, 0)}
+              {myranking ? myranking.points : "Sin calsificación"}
             </CardTitle>
             <CardDescription>Puntuación total</CardDescription>
           </CardHeader>
         </Card>
         <Card className="col-span-1 rounded">
           <CardHeader>
-            <CardTitle>6</CardTitle>
+            <CardTitle>{user.participations.length}</CardTitle>
             <CardDescription>Eventos totales</CardDescription>
           </CardHeader>
         </Card>

@@ -1,7 +1,6 @@
 import { getOne } from "@/functions/teams/get-one"
 import { update } from "@/functions/teams/update"
 import { response } from "@/lib/utils"
-import { authenticator } from "@/middlewares/authenticator"
 import { errorHandler } from "@/middlewares/error-handler"
 import { validator } from "@/middlewares/validator"
 import { insertTeamSchema } from "@/schema"
@@ -51,18 +50,14 @@ async function getHandler(request) {
 }
 
 export const PUT = errorHandler(
-  authenticator(
-    validator(updateHandler, { path: pathSchema, body: insertTeamSchema })
-  )
+  validator(updateHandler, { path: pathSchema, body: insertTeamSchema })
 )
 export const PATCH = errorHandler(
-  authenticator(
-    validator(updateHandler, {
-      path: pathSchema,
-      body: insertTeamSchema.partial()
-    })
-  )
+  validator(updateHandler, {
+    path: pathSchema,
+    body: insertTeamSchema.partial()
+  })
 )
 export const GET = errorHandler(
-  authenticator(validator(getHandler, { path: pathSchema, query: getSchema }))
+  validator(getHandler, { path: pathSchema, query: getSchema })
 )

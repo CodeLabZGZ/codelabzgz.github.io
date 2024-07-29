@@ -1,6 +1,5 @@
 import { getAll } from "@/functions/events/get-all"
 import { response } from "@/lib/utils"
-import { authenticator } from "@/middlewares/authenticator"
 import { errorHandler } from "@/middlewares/error-handler"
 import { validator } from "@/middlewares/validator"
 import { z } from "zod"
@@ -35,6 +34,4 @@ async function getHandler(request) {
   return response({ data })
 }
 
-export const GET = errorHandler(
-  authenticator(validator(getHandler, { query: getSchema }))
-)
+export const GET = errorHandler(validator(getHandler, { query: getSchema }))
