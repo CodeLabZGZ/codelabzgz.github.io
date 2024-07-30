@@ -1,18 +1,16 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import { auth } from "@/auth"
-import { db } from "@/db"
-import { users } from "@/schema"
-import { eq } from "drizzle-orm"
+import { notFound } from "next/navigation"
 import Account from "./account"
 import Notifications from "./notifications"
 
 export default async function Page() {
   const session = await auth()
-  const [account] = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, session.user.id))
+  const { data, status } = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/users/${session?.user?.id}`
+  ).then(res => res.json())
+  if (status.code === 404) return notFound()
 
   return (
     <>
@@ -26,10 +24,10 @@ export default async function Page() {
         </TabsList>
         <main>
           <TabsContent value="account" className="space-y-4">
-            <Account data={account} />
+            <Account data={data} />
           </TabsContent>
           <TabsContent value="notifications" className="space-y-4">
-            <Notifications data={account} />
+            <Notifications data={data} />
           </TabsContent>
         </main>
       </Tabs>

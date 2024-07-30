@@ -19,7 +19,10 @@ export default async function Page() {
       role: members.find(m => m.user === user.id)?.role,
       members: members.filter(({ role }) => role !== "pending").length
     }))
-    .sort((a, b) => (a.role ? -1 : 1))
+    .sort((a, b) => {
+      const roleOrder = { admin: 1, member: 2, pending: 3 }
+      return roleOrder[a.role] - roleOrder[b.role]
+    })
 
   return (
     <>

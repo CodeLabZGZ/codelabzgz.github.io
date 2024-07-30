@@ -39,7 +39,7 @@ export default function Notifications({ data }) {
             </div>
             <Switch
               defaultChecked={data.marketingEmails}
-              onCheckedChange={e => handleSubmit("marketingEmails", Number(e))}
+              onCheckedChange={e => handleSubmit("marketingEmails", e)}
             />
           </div>
           <div className="flex flex-row items-center justify-between gap-x-2 rounded-lg border p-4">

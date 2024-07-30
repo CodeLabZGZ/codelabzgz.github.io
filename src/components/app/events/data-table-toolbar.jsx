@@ -19,7 +19,7 @@ export function DataTableToolbar({ table }) {
           onChange={event =>
             table.getColumn("title")?.setFilterValue(event.target.value)
           }
-          className="h-8 w-[150px] lg:w-[250px]"
+          className="h-9 w-[150px] lg:w-[250px]"
         />
         {table.getColumn("visibility") && (
           <DataTableFacetedFilter
