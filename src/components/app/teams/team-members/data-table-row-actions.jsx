@@ -1,19 +1,34 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
-
-import { Button } from "@/components/ui/button"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { TbUserMinus } from "react-icons/tb"
+import { toast } from "sonner"
 
-export function DataTableRowActions() {
+export function DataTableRowActions({ row }) {
+  const { user, slug } = row.original
+
   const handleKick = e => {
     e.preventDefault()
+
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}/members`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user: user.id })
+    })
+      .then(res => {
+        toast.message("Se ha eliminado a name del equipo.")
+        return res.json()
+      })
+      .catch(() => {
+        toast.error("Error: name")
+      })
   }
 
   return (

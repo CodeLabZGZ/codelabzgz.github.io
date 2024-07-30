@@ -32,7 +32,7 @@ const formSchema = z.object({
   })
 })
 
-export function JoinTeam({ userId }) {
+export function JoinTeam() {
   const [open, setOpen] = useState(false)
 
   const form = useForm({
@@ -40,20 +40,15 @@ export function JoinTeam({ userId }) {
   })
 
   async function onSubmit(values) {
-    const { name: teamId } = values
+    const { name } = values
 
-    const bodyJoin = { userId }
-
-    const joinPromise = fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/teams/${teamId}/members`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(bodyJoin)
-      }
-    )
+    const joinPromise = fetch(`${process.env.NEXT_PUBLIC_API_URL}/teams`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ team: name })
+    })
 
     toast.promise(joinPromise, {
       loading: "Enviando solicitud...",

@@ -10,31 +10,22 @@ import { TbUserMinus, TbUserPlus } from "react-icons/tb"
 
 import { Button } from "@/components/ui/button"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
-import { useSession } from "next-auth/react"
 import { toast } from "sonner"
 
 export function DataTableRowActions({ row }) {
-  const { id, slug } = row.original
-
-  const { data: session } = useSession()
+  const { user, slug } = row.original
 
   const handleAccept = e => {
     e.preventDefault()
 
-    const body = { userId: session?.user.id, reqId: id }
-
-    // accept the request
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}/request`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}/members`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
+      body: JSON.stringify({ user: user.id, role: "member" })
     })
       .then(res => {
-        if (!res.ok) throw Error("status")
+        toast.message("Se ha añadido a name al equipo.")
         return res.json()
-      })
-      .then(() => {
-        toast.message(`Se ha añadido a name al equipo.`)
       })
       .catch(() => {
         toast.error(`Error: name`)
@@ -44,30 +35,17 @@ export function DataTableRowActions({ row }) {
   const handleReject = e => {
     e.preventDefault()
 
-    if (!slug) toast.error("¡No hay ningún equipo seleccionado!")
-
-    const searchParams = new URLSearchParams({
-      userId: session?.user.id,
-      reqId: id
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}/members`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user: user.id })
     })
-
-    // accept the request
-    fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}/request?${searchParams}`,
-      {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" }
-      }
-    )
       .then(res => {
-        if (!res.ok) throw Error("status")
+        toast.message("Se ha eliminado a name del equipo.")
         return res.json()
       })
-      .then(() => {
-        toast.message(`Se ha eliminado a name del equipo.`)
-      })
       .catch(() => {
-        toast.error(`Error: name`)
+        toast.error("Error: name")
       })
   }
 

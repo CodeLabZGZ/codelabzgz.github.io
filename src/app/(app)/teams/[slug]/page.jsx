@@ -86,7 +86,9 @@ export default async function Page({ params: { slug } }) {
           </TabsContent>
           <TabsContent value="team-players" className="space-y-4">
             <Players
-              values={team.members.filter(({ role }) => role !== "pending")}
+              values={team.members
+                .filter(({ role }) => role !== "pending")
+                .map(row => ({ ...row, slug }))}
             />
           </TabsContent>
           <TabsContent value="settings" className="space-y-4">

@@ -30,6 +30,5 @@ export const insert = async ({ id, values }) => {
   })
 
   const data = await promise()
-  console.log(data)
   return data
 }

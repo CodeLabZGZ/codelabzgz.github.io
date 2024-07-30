@@ -17,7 +17,7 @@ export default async function Page() {
     .map(({ members, ...r }) => ({
       ...r,
       role: members.find(m => m.user === user.id)?.role,
-      members: members.length
+      members: members.filter(({ role }) => role !== "pending").length
     }))
     .sort((a, b) => (a.role ? -1 : 1))
 
