@@ -39,7 +39,7 @@ const formSchema = z.object({
   })
 })
 
-export function CreateTeamForm({ userId, onSubmitCb }) {
+export function CreateTeamForm({ callback }) {
   const form = useForm({
     resolver: zodResolver(formSchema)
   })
@@ -48,7 +48,6 @@ export function CreateTeamForm({ userId, onSubmitCb }) {
     const { name, motto, slug } = values
 
     const reqBody = {
-      userId,
       name,
       motto,
       slug
@@ -81,7 +80,7 @@ export function CreateTeamForm({ userId, onSubmitCb }) {
     })
 
     // once the request is processed, execute submit callback
-    teamReq.then(() => onSubmitCb())
+    teamReq.then(() => callback())
   }
 
   return (
@@ -148,7 +147,7 @@ export function CreateTeamForm({ userId, onSubmitCb }) {
           />
           <DialogFooter>
             <Button type="submit" className="mt-3.5">
-              Save changes
+              Crear equipo
             </Button>
           </DialogFooter>
         </form>
@@ -165,7 +164,7 @@ export function CreateTeam({ id }) {
       <DialogTrigger asChild>
         <Button variant="outline">Crear equipo</Button>
       </DialogTrigger>
-      <CreateTeamForm userId={id} onSubmitCb={() => setOpen(false)} />
+      <CreateTeamForm userId={id} callback={() => setOpen(false)} />
     </Dialog>
   )
 }

@@ -51,15 +51,15 @@ export function TeamSwitcher({ className }) {
         `${process.env.NEXT_PUBLIC_API_URL}/users/${session.user.id}?members=true&populate=true`
       ).then(async res => {
         const { data } = await res.json()
-        const teams = data.members.map(
-          ({ team: { slug, image, name }, role }) => ({
+        const teams = data.members
+          .filter(e => e.role !== "pending")
+          .map(({ team: { slug, image, name }, role }) => ({
             id: slug,
             image,
             label: name,
             value: slug,
             role
-          })
-        )
+          }))
         setTeamsData(teams)
       })
     }

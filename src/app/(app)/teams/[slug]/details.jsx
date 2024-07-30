@@ -85,52 +85,52 @@ export default async function Details({ slug }) {
           </CardHeader>
         </Card>
       </section>
-      <div className="grid grid-cols-2 gap-x-16 py-2">
+      <div className="grid grid-cols-2 gap-x-4 py-2">
         <section
           className={cn(
             "flex gap-x-4",
             team.description
               ? ""
-              : "select-none items-center justify-center border-2 border-dashed text-sm text-muted-foreground"
+              : "select-none items-center justify-center border-2 border-dashed py-6 text-sm text-muted-foreground"
           )}
         >
           {team.description ?? "Este equipo no tiene descripción."}
         </section>
         <section className="grid grid-cols-2 items-start gap-y-2">
-          {team.twitterVisibility === "public" && (
+          {team.twitterVisibility === "public" && team.twitter && (
             <a
               href={team.twitter}
               className="flex items-center gap-x-2 hover:underline hover:underline-offset-4"
             >
               <Twitter className="h-5 w-5" />
-              @codelabzgz
+              {team.twitter}
             </a>
           )}
-          {team.discordVisibility === "public" && (
+          {team.discordVisibility === "public" && team.discord && (
             <a
               href={team.discord}
               className="flex items-center gap-x-2 hover:underline hover:underline-offset-4"
             >
               <Discord className="h-5 w-5" />
-              codelab
+              {team.discord}
             </a>
           )}
-          {team.websiteVisibility === "public" && (
+          {team.websiteVisibility === "public" && team.website && (
             <a
               href={team.website}
               className="flex items-center gap-x-2 hover:underline hover:underline-offset-4"
             >
               <World className="h-5 w-5" />
-              codelab.dev
+              {team.website}
             </a>
           )}
-          {team.emailVisibility === "public" && (
+          {team.emailVisibility === "public" && team.email && (
             <a
               href={team.email}
               className="flex items-center gap-x-2 hover:underline hover:underline-offset-4"
             >
               <Mail className="h-5 w-5" />
-              hi@codelab.dev
+              {team.email}
             </a>
           )}
         </section>

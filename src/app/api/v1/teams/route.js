@@ -1,16 +1,19 @@
+import { auth } from "@/auth"
 import { getAll } from "@/functions/teams/get-all"
+import { insert } from "@/functions/teams/insert"
 import { response } from "@/lib/utils"
 import { errorHandler } from "@/middlewares/error-handler"
 import { validator } from "@/middlewares/validator"
+import { insertTeamSchema } from "@/schemas"
 import { z } from "zod"
 
-// async function postHandler(request) {
-//   const values = request.json()
+async function postHandler(request) {
+  const { id } = request.auth.user
+  const values = request.validatedBody
+  const data = await insert({ id, values })
 
-//   const data = await db.insert(teams).values(values).returning()
-
-//   return response({ data, statusCode: 201 })
-// }
+  return response({ data, statusCode: 201 })
+}
 
 const getSchema = z
   .object({
@@ -41,5 +44,7 @@ async function getHandler(request) {
   return response({ data })
 }
 
-// export const POST = errorHandler(postHandler)
+export const POST = auth(
+  errorHandler(validator(postHandler, { body: insertTeamSchema }))
+)
 export const GET = errorHandler(validator(getHandler, { query: getSchema }))

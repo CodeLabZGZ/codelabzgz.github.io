@@ -100,7 +100,7 @@ export function JoinTeam({ userId }) {
             />
             <DialogFooter>
               <Button type="submit" className="mt-3.5">
-                Enviar solicitud{" "}
+                Enviar solicitud
               </Button>
             </DialogFooter>
           </form>

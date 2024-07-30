@@ -39,7 +39,7 @@ export default async function Page({ params: { id } }) {
     SELECT e.title as event, sc.challenge, c.points as cpoints, sc.points as spoints, sc.timestamp
     FROM scoreboards sc
     INNER JOIN challenges c ON c.title = sc.challenge
-    INNER JOIN events e ON e.id = sc.event
+    INNER JOIN events e ON e.slug = sc.event
     WHERE sc.user = ${id}
     ORDER BY sc.timestamp DESC
     LIMIT 10;
