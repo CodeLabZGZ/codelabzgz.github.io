@@ -27,7 +27,7 @@ export function DataTableRowActions({ row }) {
   const router = useRouter()
   const { participation } = useParticipation()
 
-  const { id, title, startDate, endDate, participating } = row.original
+  const { title, startDate, endDate, participating, slug } = row.original
 
   return (
     <DropdownMenu>
@@ -48,7 +48,7 @@ export function DataTableRowActions({ row }) {
                 className="flex w-full items-center gap-x-2"
                 onClick={() => {
                   const promise = fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/events/${id}/join`,
+                    `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}/join`,
                     {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
@@ -82,7 +82,7 @@ export function DataTableRowActions({ row }) {
                 className="flex w-full items-center gap-x-2"
                 onClick={async () => {
                   const promise = fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/events/${id}/leave`,
+                    `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}/leave`,
                     { method: "DELETE" }
                   )
 
@@ -105,7 +105,7 @@ export function DataTableRowActions({ row }) {
           ))}
         <DropdownMenuItem>
           <Link
-            href={`/events/${title.replaceAll(" ", "-")}/info`}
+            href={`/events/${slug}/info`}
             className="flex w-full items-center gap-x-2"
           >
             <TbInfoSquare className="h-4 w-4" />
@@ -115,7 +115,7 @@ export function DataTableRowActions({ row }) {
         {new Date(startDate) <= currentDate && (
           <DropdownMenuItem>
             <Link
-              href={`/events/${title.replaceAll(" ", "-")}/scoreboard`}
+              href={`/events/${slug}/scoreboard`}
               className="flex w-full items-center gap-x-2"
             >
               <TbTimeline className="h-4 w-4" />
@@ -126,7 +126,7 @@ export function DataTableRowActions({ row }) {
         {new Date(endDate) <= currentDate && participating ? (
           <DropdownMenuItem className="flex items-center gap-x-2">
             <Link
-              href={`/events/${title.replaceAll(" ", "-")}/cert`}
+              href={`/events/${slug}/cert`}
               className="flex w-full items-center gap-x-2"
             >
               <TbCertificate className="h-4 w-4" />

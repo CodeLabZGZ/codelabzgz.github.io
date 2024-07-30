@@ -49,7 +49,12 @@ export const validator = (fn, schemas) => async (req, ctx) => {
     schemas.body &&
     (req.method === "POST" || req.method === "PUT" || req.method === "PATCH")
   ) {
-    const body = await req.json()
+    let body
+    try {
+      body = await req.json()
+    } catch (e) {
+      body = undefined
+    }
     const bodyResult = schemas.body.safeParse(body)
     if (!bodyResult.success) {
       throw new BadRequestException()

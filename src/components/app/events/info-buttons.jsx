@@ -16,7 +16,7 @@ export function JoinLeaveButton({ event, state }) {
       onClick={() => {
         if (state) {
           const promise2Leave = fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/events/${event}/leave`,
+            `${process.env.NEXT_PUBLIC_API_URL}/events/${event}/participation`,
             { method: "DELETE" }
           )
 
@@ -32,15 +32,14 @@ export function JoinLeaveButton({ event, state }) {
           })
         } else {
           const promise2Join = fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/events/${event}/join`,
+            `${process.env.NEXT_PUBLIC_API_URL}/events/${event}/participation`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(
-                participation?.type === "teams"
-                  ? { team: participation.label }
-                  : {}
-              )
+              body:
+                participation?.type === "team"
+                  ? JSON.stringify({ team: participation.value })
+                  : undefined
             }
           )
 
