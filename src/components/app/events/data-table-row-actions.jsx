@@ -134,7 +134,7 @@ export function DataTableRowActions({ row }) {
             </Link>
           </DropdownMenuItem>
         ) : null}
-        {currentDate <= new Date(endDate) && (
+        {participating && currentDate <= new Date(endDate) ? (
           <>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
@@ -146,7 +146,7 @@ export function DataTableRowActions({ row }) {
               </Link>
             </DropdownMenuItem>
           </>
-        )}
+        ) : null}
       </DropdownMenuContent>
     </DropdownMenu>
   )

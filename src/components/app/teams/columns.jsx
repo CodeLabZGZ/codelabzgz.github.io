@@ -1,7 +1,6 @@
 "use client"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-
 import { DataTableColumnHeader } from "./data-table-column-header"
 
 export const columns = [
@@ -11,7 +10,7 @@ export const columns = [
       <DataTableColumnHeader column={column} title="Nombre" />
     ),
     cell: ({ row }) => {
-      const { logo, motto } = row.original
+      const { image, motto } = row.original
       const letters = row
         .getValue("name")
         .match(/\w+(?:-\w+)*/g)
@@ -21,7 +20,7 @@ export const columns = [
       return (
         <div className="flex items-center space-x-2">
           <Avatar>
-            <AvatarImage src={logo} alt="@shadcn" />
+            <AvatarImage src={image} alt={row.getValue("name")} />
             <AvatarFallback className="uppercase">{letters}</AvatarFallback>
           </Avatar>
           <div className="flex max-w-[400px] flex-col gap-y-1 truncate">
