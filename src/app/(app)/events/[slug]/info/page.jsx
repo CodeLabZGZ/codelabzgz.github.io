@@ -84,24 +84,26 @@ export default async function Page({ params: { slug } }) {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link
-                    href={`/events/${slug}`}
-                    className={buttonVariants({
-                      variant: "outline",
-                      size: "icon"
-                    })}
-                  >
-                    <ExternalLink className="h-5 w-5" />
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Página del evento</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            {Boolean(event.participating) && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href={`/events/${slug}`}
+                      className={buttonVariants({
+                        variant: "outline",
+                        size: "icon"
+                      })}
+                    >
+                      <ExternalLink className="h-5 w-5" />
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Página del evento</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
           </div>
         </div>
         <hr className="absolute -bottom-4 w-full" />

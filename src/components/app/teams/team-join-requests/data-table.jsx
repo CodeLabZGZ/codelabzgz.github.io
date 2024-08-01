@@ -19,8 +19,8 @@ import {
   useReactTable
 } from "@tanstack/react-table"
 
+import { DataTablePagination } from "@/components/app/data-table-pagination"
 import { useState } from "react"
-import { DataTablePagination } from "./data-table-pagination"
 
 export function DataTable({ columns, data }) {
   const [rowSelection, setRowSelection] = useState({})
