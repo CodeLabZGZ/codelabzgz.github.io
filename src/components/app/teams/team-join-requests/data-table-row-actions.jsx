@@ -10,9 +10,11 @@ import { TbUserMinus, TbUserPlus } from "react-icons/tb"
 
 import { Button } from "@/components/ui/button"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
 export function DataTableRowActions({ row }) {
+  const router = useRouter()
   const { user, slug } = row.original
 
   const handleAccept = e => {
@@ -25,6 +27,7 @@ export function DataTableRowActions({ row }) {
     })
       .then(res => {
         toast.message("Se ha añadido a name al equipo.")
+        router.refresh()
         return res.json()
       })
       .catch(() => {
@@ -42,6 +45,7 @@ export function DataTableRowActions({ row }) {
     })
       .then(res => {
         toast.message("Se ha eliminado a name del equipo.")
+        router.refresh()
         return res.json()
       })
       .catch(() => {

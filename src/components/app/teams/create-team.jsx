@@ -22,6 +22,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -39,7 +41,9 @@ const formSchema = z.object({
   })
 })
 
-export function CreateTeamForm({ callback }) {
+export function CreateTeamForm() {
+  const router = useRouter()
+  const session = useSession()
   const form = useForm({
     resolver: zodResolver(formSchema)
   })
@@ -47,18 +51,17 @@ export function CreateTeamForm({ callback }) {
   async function onSubmit(values) {
     const { name, motto, slug } = values
 
-    const reqBody = {
-      name,
-      motto,
-      slug
-    }
-
     const teamReq = fetch(`${process.env.NEXT_PUBLIC_API_URL}/teams`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(reqBody)
+      body: JSON.stringify({
+        email: session?.data?.user?.email,
+        name,
+        motto,
+        slug
+      })
     })
 
     toast.promise(teamReq, {
@@ -80,7 +83,7 @@ export function CreateTeamForm({ callback }) {
     })
 
     // once the request is processed, execute submit callback
-    teamReq.then(() => callback())
+    teamReq.then(() => router.refresh())
   }
 
   return (

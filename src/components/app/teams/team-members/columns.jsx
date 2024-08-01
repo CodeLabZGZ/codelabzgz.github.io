@@ -83,7 +83,7 @@ export const columns = [
     cell: ({ row }) => {
       return (
         <div className="w-[100px] whitespace-nowrap">
-          {row.getValue("rank") ?? "Sin calsificación"}
+          {row.getValue("rank") ?? "Sin clasificación"}
         </div>
       )
     }

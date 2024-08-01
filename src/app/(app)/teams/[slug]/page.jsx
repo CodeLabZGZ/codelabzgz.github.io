@@ -57,7 +57,7 @@ export default async function Page({ params: { slug } }) {
   ).then(res => res.json())
 
   const team = mergeData({ id: session.user.id, users: ranking, team: data })
-
+  console.log(team)
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between space-y-2">

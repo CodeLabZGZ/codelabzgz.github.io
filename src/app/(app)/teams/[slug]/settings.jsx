@@ -20,25 +20,15 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
 
-const urlPattern = /^https:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-
 const formSchema = z.object({
-  image: z
-    .string()
-    .url()
-    .refine(val => urlPattern.test(val), {
-      message: "La URL debe empezar por https y debe ser un dominio, no una IP"
-    })
-    .optional(),
+  image: z.string().url().optional().nullable(),
   name: z.string().trim().min(2, {
     message: "El nombre debe tener al menos 2 caracteres."
   }),
   motto: z.string().trim().min(2, {
     message: "El apodo debe tener al menos 2 caracteres.."
   }),
-  teamDescription: z.string().trim().min(2, {
-    message: "La descripcion debe tener al menos 2 caracteres.."
-  }),
+  description: z.string().trim(),
   website: z
     .object({
       value: z.union([z.string().url(), z.literal("")]),
@@ -63,40 +53,49 @@ const formSchema = z.object({
   })
 })
 
-export default function Settings(values) {
+export default function Settings(props) {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      ...values,
-      teamDescription: values.teamDescription ?? "",
+      ...props,
+      description: props.description ?? "",
       website: {
-        visibility: values.websiteVisibility,
-        value: values.website ?? ""
+        visibility: props.websiteVisibility,
+        value: props.website ?? ""
       },
       twitter: {
-        visibility: values.twitterVisibility,
-        value: values.twitter ?? ""
+        visibility: props.twitterVisibility,
+        value: props.twitter ?? ""
       },
       discord: {
-        visibility: values.discordVisibility,
-        value: values.discord ?? ""
+        visibility: props.discordVisibility,
+        value: props.discord ?? ""
       },
-      email: { visibility: values.emailVisibility, value: values.email ?? "" }
+      email: { visibility: props.emailVisibility, value: props.email ?? "" }
     }
   })
 
   function onSubmit(values) {
-    const replacedSlug = values.slug.replaceAll(" ", "-")
+    const { email, twitter, discord, website, ...rest } = values
+
     const promise = fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/teams/${values.name}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/teams/${props.slug}`,
       {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          ...values,
-          slug: replacedSlug
+          ...rest,
+          email: email.value,
+          emailVisibility: email.visibility,
+          twitter: twitter.value,
+          twitterVisibility: twitter.visibility,
+          discord: discord.value,
+          discordVisibility: discord.visibility,
+          website: website.value,
+          websiteVisibility: website.visibility,
+          slug: props.slug
         })
       }
     )
@@ -165,7 +164,7 @@ export default function Settings(values) {
         />
         <FormField
           control={form.control}
-          name="teamDescription"
+          name="description"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Descripción</FormLabel>
@@ -194,7 +193,7 @@ export default function Settings(values) {
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="website-switch"
-                    defaultChecked={values.websiteVisibility === "private"}
+                    defaultChecked={props.websiteVisibility === "private"}
                     onCheckedChange={e => onSwitch("website", e)}
                   />
                   <Label htmlFor="website-switch">Oculto al público</Label>
@@ -218,7 +217,7 @@ export default function Settings(values) {
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="twitter-switch"
-                    defaultChecked={values.twitterVisibility === "private"}
+                    defaultChecked={props.twitterVisibility === "private"}
                     onCheckedChange={e => onSwitch("twitter", e)}
                   />
                   <Label htmlFor="twitter-switch">Oculto al público</Label>
@@ -244,7 +243,7 @@ export default function Settings(values) {
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="discord-switch"
-                    defaultChecked={values.discordVisibility === "private"}
+                    defaultChecked={props.discordVisibility === "private"}
                     onCheckedChange={e => onSwitch("discord", e)}
                   />
                   <Label htmlFor="discord-switch">Oculto al público</Label>
@@ -270,7 +269,7 @@ export default function Settings(values) {
                 <div className="flex items-center space-x-2">
                   <Switch
                     id="email-switch"
-                    defaultChecked={values.emailVisibility === "private"}
+                    defaultChecked={props.emailVisibility === "private"}
                     onCheckedChange={e => onSwitch("email", e)}
                   />
                   <Label htmlFor="email-switch">Oculto al público</Label>

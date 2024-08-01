@@ -8,7 +8,7 @@ import { scoreboards } from "./scoreboards.js"
 export const teams = sqliteTable("teams", {
   name: text("name").unique(),
   motto: text("motto").notNull(),
-  teamDescription: text("teamDescription"),
+  description: text("description"),
   slug: text("slug").primaryKey(),
   image: text("image"),
   website: text("website"),

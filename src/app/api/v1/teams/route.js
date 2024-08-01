@@ -11,6 +11,7 @@ import { z } from "zod"
 async function postHandler(request) {
   const { id } = request.auth.user
   const values = request.validatedBody
+  console.log(id, values)
   const data = await insert({ id, values })
 
   return response({ data, statusCode: 201 })
@@ -23,11 +24,9 @@ const updateSchema = z.object({
 async function updateHandler(request) {
   const { id } = request.auth.user
   const { team } = request.validatedBody
-  console.log(id, team)
   const data = await update({
     values: { user: id, team, role: "pending" }
   })
-  console.log(data)
 
   return response({ data })
 }

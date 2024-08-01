@@ -8,10 +8,12 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
+import { useRouter } from "next/navigation"
 import { TbUserMinus } from "react-icons/tb"
 import { toast } from "sonner"
 
 export function DataTableRowActions({ row }) {
+  const router = useRouter()
   const { user, slug } = row.original
 
   const handleKick = e => {
@@ -24,6 +26,7 @@ export function DataTableRowActions({ row }) {
     })
       .then(res => {
         toast.message("Se ha eliminado a name del equipo.")
+        router.refresh()
         return res.json()
       })
       .catch(() => {
