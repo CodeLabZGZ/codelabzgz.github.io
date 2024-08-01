@@ -40,9 +40,15 @@ export default async function Page({ params: { slug } }) {
     )
     data["data"]["participating"] = Boolean(participation)
     data["data"]["participant"] = {
-      id: participation?.team?.slug ?? participation?.user?.id,
-      image: participation?.team?.image ?? participation?.user?.image,
-      name: participation?.team?.name ?? participation?.user?.name
+      id: participation?.team
+        ? participation?.team?.slug
+        : participation?.user?.id,
+      image: participation?.team
+        ? participation?.team?.image
+        : participation?.user?.image,
+      name: participation?.team
+        ? participation?.team?.name
+        : participation?.user?.name
     }
     return { ...data }
   })
@@ -61,7 +67,11 @@ export default async function Page({ params: { slug } }) {
 
   return (
     <div className="text-white">
-      <PageComponent data={{ ...data, ranking }} content={content} />
+      <PageComponent
+        data={{ ...data, ranking }}
+        content={content}
+        slug={slug}
+      />
     </div>
   )
 }

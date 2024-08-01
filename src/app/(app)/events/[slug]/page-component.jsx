@@ -38,7 +38,7 @@ import {
   TbUpload as Upload
 } from "react-icons/tb"
 
-export default function PageComponent({ data, content }) {
+export default function PageComponent({ data, content, slug }) {
   const [isOpen, setIsOpen] = useState(false)
   const [active, setActive] = useState(null)
 
@@ -91,7 +91,7 @@ export default function PageComponent({ data, content }) {
                     )
                   ).length
                 }
-                / {data.challenges.length}
+                /{data.challenges.length}
               </span>
               <span className="text-xs uppercase">retos</span>
             </div>
@@ -101,7 +101,7 @@ export default function PageComponent({ data, content }) {
       <Table>
         <TableCaption>
           <Link
-            href={`/events/slug/scoreboard`}
+            href={`/events/${slug}/scoreboard`}
             className={buttonVariants({
               variant: "link",
               className: "flex items-center justify-center gap-x-2"

@@ -4,6 +4,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import {
@@ -27,7 +28,7 @@ export function DataTableRowActions({ row }) {
   const router = useRouter()
   const { participation } = useParticipation()
 
-  const { title, startDate, endDate, participating, slug } = row.original
+  const { startDate, endDate, participating, slug } = row.original
 
   return (
     <DropdownMenu>
@@ -48,15 +49,14 @@ export function DataTableRowActions({ row }) {
                 className="flex w-full items-center gap-x-2"
                 onClick={() => {
                   const promise = fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}/join`,
+                    `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}/participation`,
                     {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify(
+                      body:
                         participation?.type === "team"
-                          ? { team: participation.label }
-                          : {}
-                      )
+                          ? JSON.stringify({ team: participation.value })
+                          : undefined
                     }
                   )
 
@@ -82,7 +82,7 @@ export function DataTableRowActions({ row }) {
                 className="flex w-full items-center gap-x-2"
                 onClick={async () => {
                   const promise = fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}/leave`,
+                    `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}/participation`,
                     { method: "DELETE" }
                   )
 
@@ -134,6 +134,19 @@ export function DataTableRowActions({ row }) {
             </Link>
           </DropdownMenuItem>
         ) : null}
+        {currentDate <= new Date(endDate) && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <Link
+                href={`/events/${slug}`}
+                className="flex w-full items-center justify-center gap-x-2"
+              >
+                Entrar
+              </Link>
+            </DropdownMenuItem>
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   )

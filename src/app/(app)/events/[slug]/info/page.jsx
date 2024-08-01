@@ -3,20 +3,29 @@ import {
   JoinLeaveButton,
   ShareButton
 } from "@/components/app/events/info-buttons"
-import {
-  TbPuzzle as Challenge,
-  TbFlag2 as Format,
-  TbMapPin as Location,
-  TbUsersGroup as Teams,
-  TbCloud as Type,
-  TbUsers as Users
-} from "react-icons/tb"
-
 import { AspectRatio } from "@/components/ui/aspect-ratio"
+import { buttonVariants } from "@/components/ui/button"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from "@/components/ui/tooltip"
 import { getContentBySlug } from "@/lib/fetchers"
 import { formatDateInfoEvent } from "@/lib/utils"
 import Image from "next/image"
+import Link from "next/link"
 import { notFound } from "next/navigation"
+import {
+  TbPuzzle as Challenge,
+  TbExternalLink as ExternalLink,
+  TbFlag2 as Format,
+  TbMapPin as Location,
+  TbUsersGroup as Teams,
+  TbTimeline as TimeLine,
+  TbCloud as Type,
+  TbUsers as Users
+} from "react-icons/tb"
 
 export default async function Page({ params: { slug } }) {
   const session = await auth()
@@ -48,12 +57,52 @@ export default async function Page({ params: { slug } }) {
             })}
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <JoinLeaveButton
-            event={event.slug}
-            state={Boolean(event.participating)}
-          />
-          <ShareButton />
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <JoinLeaveButton
+              event={event.slug}
+              state={Boolean(event.participating)}
+            />
+            <ShareButton />
+          </div>
+          <div className="flex items-center gap-2">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    href={`/events/${slug}/scoreboard`}
+                    className={buttonVariants({
+                      variant: "outline",
+                      size: "icon"
+                    })}
+                  >
+                    <TimeLine className="h-5 w-5" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Tablón de resultados</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    href={`/events/${slug}`}
+                    className={buttonVariants({
+                      variant: "outline",
+                      size: "icon"
+                    })}
+                  >
+                    <ExternalLink className="h-5 w-5" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Página del evento</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </div>
         <hr className="absolute -bottom-4 w-full" />
       </section>

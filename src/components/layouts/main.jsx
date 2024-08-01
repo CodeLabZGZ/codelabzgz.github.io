@@ -1,12 +1,12 @@
 import { Intro, IntroFooter } from "@/components/landing/intro"
 
 import { auth } from "@/auth"
+import { UserNav } from "@/components/app/user-nav"
 import { Banner } from "@/components/landing/banner"
 import { StarField } from "@/components/landing/star-field"
 import { ThemeToggle } from "@/components/landing/theme-toggle"
 import { Link } from "next-view-transitions"
 import { useId } from "react"
-
 function Timeline() {
   const id = useId()
 
@@ -99,21 +99,16 @@ export async function Layout({ children }) {
       <div className="fixed top-4 z-50 flex w-full items-center justify-between px-6 lg:px-8">
         <ThemeToggle />
         <div className="ml-auto">
-          {!session?.user ? (
+          {!session?.user && (
             <Link
               href="/auth/login"
               className="text-sm font-semibold leading-6 text-gray-900 dark:text-white"
             >
               Iniciar sesión <span aria-hidden="true">&rarr;</span>
             </Link>
-          ) : (
-            <Link
-              href="/events"
-              className="text-sm font-semibold leading-6 text-gray-900 dark:text-white"
-            >
-              Entrar <span aria-hidden="true">&rarr;</span>
-            </Link>
           )}
+
+          <UserNav />
         </div>
       </div>
       <FixedSidebar main={<Intro />} footer={<IntroFooter />} />

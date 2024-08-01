@@ -18,6 +18,7 @@ import { useTeam } from "@/stores/team"
 import { signOut, useSession } from "next-auth/react"
 import { useTheme } from "next-themes"
 import { Link } from "next-view-transitions"
+import { usePathname } from "next/navigation"
 import {
   TbMoonStars as Dark,
   TbDoorExit as Exit,
@@ -34,6 +35,7 @@ export function UserNav() {
   const { resolvedTheme, setTheme } = useTheme()
   const otherTheme = resolvedTheme === "dark" ? "light" : "dark"
   const { selectedTeam } = useTeam()
+  const pathname = usePathname()
 
   return (
     <DropdownMenu>
@@ -125,9 +127,18 @@ export function UserNav() {
             </DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href="/" className="flex w-full items-center gap-x-2.5">
-              Página de inicio
-            </Link>
+            {pathname === "/" ? (
+              <Link
+                href="/events"
+                className="flex w-full items-center gap-x-2.5"
+              >
+                Volver a la app
+              </Link>
+            ) : (
+              <Link href="/" className="flex w-full items-center gap-x-2.5">
+                Página de inicio
+              </Link>
+            )}
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

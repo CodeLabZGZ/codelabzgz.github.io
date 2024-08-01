@@ -1,3 +1,4 @@
+import { auth } from "@/auth"
 import { columns } from "@/components/app/events/scoreboard/columns"
 import { DataTable } from "@/components/app/events/scoreboard/data-table"
 import { notFound } from "next/navigation"
@@ -29,11 +30,28 @@ function groupByParticipant(data) {
 }
 
 export default async function Page({ params: { slug } }) {
+  const session = await auth()
   const { data: scoreboard, status } = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/events/advent-university-24/scoreboard`
   ).then(res => res.json())
 
   if (status.code === 404 || !scoreboard) return notFound()
 
-  return <DataTable columns={columns} data={groupByParticipant(scoreboard)} />
+  const participating = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/events/advent-university-24?participations=true`
+  ).then(async res => {
+    const { data } = await res.json()
+    return (
+      data.participations.findIndex(r => r.user === session?.user?.id) !== -1
+    )
+  })
+
+  return (
+    <DataTable
+      columns={columns}
+      data={groupByParticipant(scoreboard)}
+      participating={participating}
+      slug={slug}
+    />
+  )
 }

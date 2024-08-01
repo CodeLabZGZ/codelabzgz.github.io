@@ -23,7 +23,7 @@ import { useState } from "react"
 import { DataTablePagination } from "./data-table-pagination"
 import { DataTableToolbar } from "./data-table-toolbar"
 
-export function DataTable({ columns, data }) {
+export function DataTable({ columns, data, participating, slug }) {
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState({})
   const [columnFilters, setColumnFilters] = useState([])
@@ -53,7 +53,11 @@ export function DataTable({ columns, data }) {
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} />
+      <DataTableToolbar
+        table={table}
+        participating={participating}
+        slug={slug}
+      />
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map(headerGroup => (
