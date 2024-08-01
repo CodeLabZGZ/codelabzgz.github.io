@@ -38,6 +38,8 @@ import {
   TbUpload as Upload
 } from "react-icons/tb"
 
+const currentDate = new Date()
+
 export default function PageComponent({ data, content, slug }) {
   const [isOpen, setIsOpen] = useState(false)
   const [active, setActive] = useState(null)
@@ -55,7 +57,7 @@ export default function PageComponent({ data, content, slug }) {
           </div>
         </div>
         <div className="col-span-1 grid grid-cols-3">
-          <div className="col-span-1 mx-auto flex flex-col items-center gap-x-2.5">
+          <div className="col-span-1 mx-auto flex cursor-default flex-col items-center gap-x-2.5">
             <span className="text-muted-foreground">
               {data.ranking ? `${data.ranking.rank}.º` : "---"}
             </span>
@@ -63,7 +65,7 @@ export default function PageComponent({ data, content, slug }) {
           </div>
           <TooltipProvider className="col-span-1 mx-auto">
             <Tooltip>
-              <TooltipTrigger>
+              <TooltipTrigger className="cursor-default">
                 <div className="flex flex-col items-center gap-x-2.5">
                   <span className="text-muted-foreground">
                     {data.ranking ? formatNumber(data.ranking.points) : "---"}
@@ -72,16 +74,17 @@ export default function PageComponent({ data, content, slug }) {
                 </div>
               </TooltipTrigger>
               <TooltipContent className="font-mono">
-                {data.ranking &&
-                  data.ranking.points
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                {data.ranking
+                  ? data.ranking.points
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                  : "---"}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
           <div className="col-span-1 mx-auto flex items-center justify-between">
             <div className="flex flex-col items-center gap-x-2.5">
-              <span className="text-muted-foreground">
+              <span className="cursor-default text-muted-foreground">
                 {
                   data.challenges.filter(({ scoreboards }) =>
                     scoreboards.some(
@@ -119,25 +122,36 @@ export default function PageComponent({ data, content, slug }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.challenges?.map(({ title, points, difficulty }, index) => (
-            <TableRow
-              key={title}
-              onClick={() => {
-                setIsOpen(true)
-                setActive(
-                  content.find(
-                    ({ frontmatter }) =>
-                      frontmatter.title.toLowerCase() === title.toLowerCase()
-                  )
-                )
-              }}
-              className="cursor-pointer"
-            >
-              <TableCell className="font-medium">{title}</TableCell>
-              <TableCell>{points}</TableCell>
-              <TableCell>{difficulty}</TableCell>
+          {currentDate < new Date(data.startDate) ? (
+            <TableRow>
+              <TableCell
+                colSpan={3}
+                className="max-w-prose text-center font-medium"
+              >
+                Los retos se harán visibles una vez comience el evento.
+              </TableCell>
             </TableRow>
-          ))}
+          ) : (
+            data.challenges?.map(({ title, points, difficulty }, index) => (
+              <TableRow
+                key={title}
+                onClick={() => {
+                  setIsOpen(true)
+                  setActive(
+                    content.find(
+                      ({ frontmatter }) =>
+                        frontmatter.title.toLowerCase() === title.toLowerCase()
+                    )
+                  )
+                }}
+                className="cursor-pointer"
+              >
+                <TableCell className="font-medium">{title}</TableCell>
+                <TableCell>{points}</TableCell>
+                <TableCell>{difficulty}</TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
       <SheetContent
