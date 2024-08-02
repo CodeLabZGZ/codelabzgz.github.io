@@ -1,6 +1,7 @@
 import { auth } from "@/auth"
 import { columns } from "@/components/app/events/scoreboard/columns"
 import { DataTable } from "@/components/app/events/scoreboard/data-table"
+import axios from "axios"
 import { notFound } from "next/navigation"
 
 function groupByParticipant(data) {
@@ -31,20 +32,29 @@ function groupByParticipant(data) {
 
 export default async function Page({ params: { slug } }) {
   const session = await auth()
-  const { data: scoreboard, status } = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/events/advent-university-24/scoreboard`
-  ).then(res => res.json())
+  const scoreboard = await axios
+    .get(`${process.env.NEXT_PUBLIC_API_URL}/events/${slug}/scoreboard`)
+    .then(({ data }) => data.data)
+    .catch(({ response }) => {
+      if (response.status === 404) return notFound()
+      throw new Error()
+    })
 
-  if (status.code === 404 || !scoreboard) return notFound()
-
-  const participating = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/events/advent-university-24?participations=true`
-  ).then(async res => {
-    const { data } = await res.json()
-    return (
-      data.participations.findIndex(r => r.user === session?.user?.id) !== -1
+  const participating = await axios
+    .get(
+      `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}?participations=true`
     )
-  })
+    .then(({ data }) => {
+      return (
+        data.data.participations.findIndex(
+          r => r.user === session?.user?.id
+        ) !== -1
+      )
+    })
+    .catch(({ response }) => {
+      if (response.status === 404) return notFound()
+      throw new Error()
+    })
 
   return (
     <DataTable

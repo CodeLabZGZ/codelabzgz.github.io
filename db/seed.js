@@ -1,8 +1,8 @@
 import "dotenv/config"
 
 import { faker } from "@faker-js/faker"
-import Database from "better-sqlite3"
-import { drizzle } from "drizzle-orm/better-sqlite3"
+import { createClient } from "@libsql/client"
+import { drizzle } from "drizzle-orm/libsql"
 import shuffle from "just-shuffle"
 import { challenges } from "./schemas/challenges.js"
 import { events } from "./schemas/events.js"
@@ -177,7 +177,9 @@ function genTest(challengesData) {
 }
 
 async function main() {
-  const client = new Database("db/sqlite.db")
+  const client = createClient({
+    url: process.env.DATABASE_URL
+  })
   const db = drizzle(client)
 
   const usersData = await db

@@ -2,7 +2,7 @@ import { db } from "@/db"
 import { sql } from "drizzle-orm"
 
 export const getScoreboard = async ({ slug }) => {
-  const data = db
+  const data = await db
     .all(
       sql`
 SELECT r.challenge, r.id, r.image, r.name, r.points, r.timestamp
@@ -28,12 +28,14 @@ FROM (
 ORDER BY r.challenge, r.points DESC, r.timestamp;
   `
     )
-    .map(({ challenge, points, timestamp, ...participant }) => ({
-      challenge,
-      participant: { ...participant },
-      points,
-      timestamp
-    }))
+    .then(data =>
+      data.map(({ challenge, points, timestamp, ...participant }) => ({
+        challenge,
+        participant: { ...participant },
+        points,
+        timestamp
+      }))
+    )
 
   return data
 }

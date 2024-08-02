@@ -2,6 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import { auth } from "@/auth"
 import { Avatar } from "@/components/avatar"
+import axios from "axios"
 import { notFound } from "next/navigation"
 import Details from "./details"
 import JoinRequest from "./join-request"
@@ -27,6 +28,8 @@ function mergeData({ id, users, team }) {
     return member
   })
 
+  console.log(mergedMembers)
+
   return {
     ...team,
     members: mergedMembers.sort((a, b) => {
@@ -46,18 +49,25 @@ function mergeData({ id, users, team }) {
 
 export default async function Page({ params: { slug } }) {
   const session = await auth()
-  const { data, status } = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}?members=true&populate=true`
-  ).then(res => res.json())
+  const teams = await axios
+    .get(
+      `${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}?members=true&populate=true`
+    )
+    .then(({ data }) => data.data)
+    .catch(({ response }) => {
+      if (response.status === 404) return notFound()
+      throw new Error()
+    })
 
-  if (status.code === 404) return notFound()
+  const ranking = await axios
+    .get(`${process.env.NEXT_PUBLIC_API_URL}/users/scoreboard`)
+    .then(({ data }) => data.data)
+    .catch(({ response }) => {
+      if (response.status === 404) return notFound()
+      throw new Error()
+    })
 
-  const { data: ranking } = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/users/scoreboard`
-  ).then(res => res.json())
-
-  const team = mergeData({ id: session.user.id, users: ranking, team: data })
-  console.log(team)
+  const team = mergeData({ id: session.user.id, users: ranking, team: teams })
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between space-y-2">

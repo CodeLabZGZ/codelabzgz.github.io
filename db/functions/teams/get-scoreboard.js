@@ -2,7 +2,7 @@ import { db } from "@/db"
 import { sql } from "drizzle-orm"
 
 export const getScoreboard = async () => {
-  const data = db
+  const data = await db
     .all(
       sql`
 -- TOTAL DE PUNTOS / EQUIPO + INFO DEL EQUIPO
@@ -24,11 +24,13 @@ INNER JOIN teams t ON t.slug = r.team
 ORDER BY r.cpoints DESC, r.spoints DESC;
   `
     )
-    .map(({ points, ...team }, rank) => ({
-      rank: rank + 1,
-      team: { ...team },
-      points
-    }))
+    .then(data =>
+      data.map(({ points, ...team }, rank) => ({
+        rank: rank + 1,
+        team: { ...team },
+        points
+      }))
+    )
 
   return data
 }

@@ -1,5 +1,6 @@
 import { auth } from "@/auth"
 import { getContent } from "@/lib/fetchers"
+import axios from "axios"
 import { notFound } from "next/navigation"
 import PageComponent from "./page-component"
 
@@ -31,37 +32,44 @@ function groupByParticipant(data) {
 
 export default async function Page({ params: { slug } }) {
   const session = await auth()
-  const { data, status } = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}?populate=true&participations=true&challenges=true`
-  ).then(async res => {
-    const data = await res.json()
-    const participation = data["data"].participations.find(
-      ({ user }) => user.id === session?.user.id
+  const data = await axios
+    .get(
+      `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}?populate=true&participations=true&challenges=true`
     )
-    data["data"]["participating"] = Boolean(participation)
-    data["data"]["participant"] = {
-      id: participation?.team
-        ? participation?.team?.slug
-        : participation?.user?.id,
-      image: participation?.team
-        ? participation?.team?.image
-        : participation?.user?.image,
-      name: participation?.team
-        ? participation?.team?.name
-        : participation?.user?.name
-    }
-    return { ...data }
-  })
+    .then(({ data }) => {
+      const participation = data["data"].participations.find(
+        ({ user }) => user.id === session?.user.id
+      )
+      if (!participation) return notFound()
 
-  if (status.code === 404 || !data.participating) return notFound()
+      data["data"]["participant"] = {
+        id: participation?.team
+          ? participation?.team?.slug
+          : participation?.user?.id,
+        image: participation?.team
+          ? participation?.team?.image
+          : participation?.user?.image,
+        name: participation?.team
+          ? participation?.team?.name
+          : participation?.user?.name
+      }
+      return data.data
+    })
+    .catch(({ response }) => {
+      if (response.status === 404) return notFound()
+      throw new Error()
+    })
 
-  const ranking = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/events/advent-university-24/scoreboard`
-  ).then(async res => {
-    const { data: scoreboard } = await res.json()
-    const ranking = groupByParticipant(scoreboard)
-    return ranking.find(r => r.participant.id === data.participant.id)
-  })
+  const ranking = await axios
+    .get(`${process.env.NEXT_PUBLIC_API_URL}/events/${slug}/scoreboard`)
+    .then(({ data: res }) => {
+      const ranking = groupByParticipant(res.data)
+      return ranking.find(r => r.participant.id === data.participant.id)
+    })
+    .catch(({ response }) => {
+      if (response.status === 404) return notFound()
+      throw new Error()
+    })
 
   const { data: content } = await getContent(`events/${slug}`)
 

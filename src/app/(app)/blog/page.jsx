@@ -1,12 +1,12 @@
 import { buttonVariants } from "@/components/ui/button"
 import { getContent } from "@/lib/fetchers"
+import { formatDate } from "@/lib/utils"
 import Link from "next/link"
+
+const options = { day: "numeric", month: "short", year: "numeric" }
 
 export default async function Page() {
   const { data } = await getContent(`posts`)
-
-  const opciones = { day: "numeric", month: "short", year: "numeric" }
-  const formatter = new Intl.DateTimeFormat("es-ES", opciones)
 
   return (
     <div className="mx-auto max-w-prose">
@@ -39,7 +39,7 @@ export default async function Page() {
                 <div className="flex items-center gap-x-2 text-sm">
                   <p>{author}</p>|
                   <time dateTime={date} className="capitalize">
-                    {formatter.format(new Date(date))}
+                    {formatDate({ date: new Date(date), options })}
                   </time>
                 </div>
               </Link>

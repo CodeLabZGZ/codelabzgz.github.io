@@ -15,7 +15,8 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table"
-import { cn } from "@/lib/utils"
+import { cn, formatDate } from "@/lib/utils"
+import axios from "axios"
 import {
   TbBrandDiscord as Discord,
   TbMail as Mail,
@@ -46,18 +47,24 @@ const scoreboards = [
   }
 ]
 
+const options = { day: "numeric", month: "short", year: "numeric" }
+
 export default async function Details({ slug }) {
-  const { data: team } = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}?participations=true`
-  ).then(res => res.json())
+  const team = await axios
+    .get(`${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}?participations=true`)
+    .then(({ data }) => data.data)
+    .catch(({ response }) => {
+      if (response.status === 404) return notFound()
+      throw new Error()
+    })
 
-  const { data: ranking } = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/teams/scoreboard`
-  ).then(res => res.json())
-  const myranking = ranking.find(r => r.team.slug === slug)
-
-  const opciones = { day: "numeric", month: "short", year: "numeric" }
-  const formatter = new Intl.DateTimeFormat("es-ES", opciones)
+  const ranking = await axios
+    .get(`${process.env.NEXT_PUBLIC_API_URL}/teams/scoreboard`)
+    .then(({ data }) => data.data.find(r => r.team.slug === slug))
+    .catch(({ response }) => {
+      if (response.status === 404) return notFound()
+      throw new Error()
+    })
 
   return (
     <div className="space-y-4">
@@ -65,7 +72,7 @@ export default async function Details({ slug }) {
         <Card className="col-span-1 rounded">
           <CardHeader>
             <CardTitle>
-              {myranking ? `# ${myranking.rank}` : "Sin clasificación"}
+              {ranking ? `# ${ranking.rank}` : "Sin clasificación"}
             </CardTitle>
             <CardDescription>Puesto global</CardDescription>
           </CardHeader>
@@ -73,7 +80,7 @@ export default async function Details({ slug }) {
         <Card className="col-span-1 rounded">
           <CardHeader>
             <CardTitle>
-              {myranking ? `# ${myranking.points}` : "Sin clasificación"}
+              {ranking ? `# ${ranking.points}` : "Sin clasificación"}
             </CardTitle>
             <CardDescription>Puntuación total</CardDescription>
           </CardHeader>
@@ -167,7 +174,7 @@ export default async function Details({ slug }) {
                   </TableCell>
                   <TableCell className="cursor-default text-right font-mono text-xs group-hover:underline group-hover:underline-offset-4">
                     <time dateTime={scoreboard.date} className="capitalize">
-                      {formatter.format(new Date(scoreboard.date))}
+                      {formatDate({ date: new Date(scoreboard.date), options })}
                     </time>
                   </TableCell>
                 </TableRow>

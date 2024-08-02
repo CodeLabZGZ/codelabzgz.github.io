@@ -1,14 +1,13 @@
 import "dotenv/config"
 
-import path from "path"
-
 /** @type { import("drizzle-kit").Config } */
 export default {
   dialect: "sqlite",
+  driver: "turso",
   schema: "./db/schemas/*.js",
   out: "./db/drizzle",
   dbCredentials: {
-    url: "file:" + path.resolve(__dirname, process.env.DATABASE_URL)
+    url: process.env.DATABASE_URL
   },
   strict: true,
   verbose: true

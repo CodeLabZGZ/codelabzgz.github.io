@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/sonner"
 import clsx from "clsx"
 import { ViewTransitions } from "next-view-transitions"
 import { Inter } from "next/font/google"
+import { SessionProvider } from "next-auth/react"
+import { auth } from "@/auth"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -23,19 +25,27 @@ export const metadata = {
   }
 }
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const session = await auth()
   return (
     <ViewTransitions>
-      <html
-        lang="es"
-        className={clsx("h-full antialiased", inter.variable)}
-        suppressHydrationWarning
+      <SessionProvider 
+        session={session} 
+        refetchInterval={60*5} 
+        refetchOnWindowFocus={true}
+        refetchWhenOffline={false}
       >
-        <body className="flex min-h-full flex-col">
-          <Providers>{children}</Providers>
-          <Toaster />
-        </body>
-      </html>
+        <html
+          lang="es"
+          className={clsx("h-full antialiased", inter.variable)}
+          suppressHydrationWarning
+        >
+          <body className="flex min-h-full flex-col">
+            <Providers>{children}</Providers>
+            <Toaster />
+          </body>
+        </html>
+      </SessionProvider>
     </ViewTransitions>
   )
 }

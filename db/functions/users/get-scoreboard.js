@@ -2,7 +2,7 @@ import { db } from "@/db"
 import { sql } from "drizzle-orm"
 
 export const getScoreboard = async () => {
-  const data = db
+  const data = await db
     .all(
       sql`
 SELECT u.id, u.image, u.name, SUM(r.cpoints) AS points
@@ -41,11 +41,12 @@ GROUP BY r.user
 ORDER BY points DESC, SUM(r.spoints) DESC
   `
     )
-    .map(({ points, ...user }, rank) => ({
-      rank: rank + 1,
-      user: { ...user },
-      points
-    }))
-
+    .then(data =>
+      data.map(({ points, ...user }, rank) => ({
+        rank: rank + 1,
+        user: { ...user },
+        points
+      }))
+    )
   return data
 }

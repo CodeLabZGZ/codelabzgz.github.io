@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/tooltip"
 import { getContentBySlug } from "@/lib/fetchers"
 import { formatDateInfoEvent } from "@/lib/utils"
+import axios from "axios"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -29,17 +30,21 @@ import {
 
 export default async function Page({ params: { slug } }) {
   const session = await auth()
-  const { data: event, status } = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}?challenges=true&participations=true`
-  ).then(async res => {
-    const data = await res.json()
-    data["data"]["participating"] = data["data"].participations.some(
-      e => e.user === session?.user.id
+  const event = await axios
+    .get(
+      `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}?challenges=true&participations=true`
     )
-    return { ...data }
-  })
+    .then(({ data }) => {
+      data["data"]["participating"] = data["data"].participations.some(
+        e => e.user === session?.user.id
+      )
+      return data.data
+    })
+    .catch(({ response }) => {
+      if (response.status === 404) return notFound()
+      throw new Error()
+    })
 
-  if (status.code === 404 || !event) return notFound()
   const ec = await getContentBySlug(`events/${slug}`, "overview", ".mdx")
 
   return (

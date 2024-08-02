@@ -4,24 +4,25 @@ import { columns } from "@/components/app/teams/columns"
 import { CreateTeam } from "@/components/app/teams/create-team"
 import { JoinTeam } from "@/components/app/teams/join-team"
 import { auth } from "auth"
+import axios from "axios"
 import All from "./all"
 import MyTeams from "./my-teams"
 
 export default async function Page() {
   const { user } = await auth()
-  const { data } = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/teams?members=true`
-  ).then(res => res.json())
-
-  const records = data
-    .map(({ members, ...r }) => ({
-      ...r,
-      role: members.find(m => m.user === user.id)?.role,
-      members: members.filter(({ role }) => role !== "pending").length
-    }))
-    .sort((a, b) => {
-      const roleOrder = { admin: 1, member: 2, pending: 3 }
-      return roleOrder[a.role] - roleOrder[b.role]
+  const records = await axios
+    .get(`${process.env.NEXT_PUBLIC_API_URL}/teams?members=true`)
+    .then(({ data }) => {
+      return data.data
+        .map(({ members, ...r }) => ({
+          ...r,
+          role: members.find(m => m.user === user.id)?.role,
+          members: members.filter(({ role }) => role !== "pending").length
+        }))
+        .sort((a, b) => {
+          const roleOrder = { admin: 1, member: 2, pending: 3 }
+          return roleOrder[a.role] - roleOrder[b.role]
+        })
     })
 
   return (

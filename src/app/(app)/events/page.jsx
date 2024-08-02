@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { columns } from "@/components/app/events/columns"
 import { buttonVariants } from "@/components/ui/button"
 import { auth } from "auth"
+import axios from "axios"
 import Joined from "./joined"
 import OnGoing from "./ongoing"
 import Past from "./past"
@@ -12,15 +13,15 @@ const currentDate = new Date()
 
 export default async function Page() {
   const { user } = await auth()
-  const { data } = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/events?participations=true`
-  ).then(res => res.json())
-
-  const records = data.map(({ participations, ...r }) => ({
-    ...r,
-    participating: participations.findIndex(p => p.user === user.id) !== -1,
-    people: participations.length
-  }))
+  const records = await axios
+    .get(`${process.env.NEXT_PUBLIC_API_URL}/events?participations=true`)
+    .then(({ data }) => {
+      return data.data.map(({ participations, ...r }) => ({
+        ...r,
+        participating: participations.findIndex(p => p.user === user.id) !== -1,
+        people: participations.length
+      }))
+    })
 
   return (
     <>

@@ -1,6 +1,7 @@
 import { Avatar } from "@/components/avatar"
 import { buttonVariants } from "@/components/ui/button"
 import { getContentBySlug } from "@/lib/fetchers"
+import { formatDate } from "@/lib/utils"
 import "@/styles/github-dark.css"
 import "@/styles/github-markdown.css"
 import "@/styles/katex.css"
@@ -8,12 +9,11 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { TbChevronLeft as ChevronLeft } from "react-icons/tb"
 
+const options = { day: "numeric", month: "short", year: "numeric" }
+
 export default async function Page({ params: { slug } }) {
   const post = await getContentBySlug("posts", slug, ".md")
   if (!post) return notFound()
-
-  const opciones = { day: "numeric", month: "short", year: "numeric" }
-  const formatter = new Intl.DateTimeFormat("es-ES", opciones)
 
   return (
     <div className="mx-auto max-w-prose space-y-6">
@@ -36,7 +36,7 @@ export default async function Page({ params: { slug } }) {
             <span className="text-xs text-muted-foreground">
               Publicado el{" "}
               <time dateTime={post.frontmatter.date} className="capitalize">
-                {formatter.format(new Date(post.frontmatter.date))}
+                {formatDate({ date: new Date(post.frontmatter.date), options })}
               </time>
             </span>
           </div>

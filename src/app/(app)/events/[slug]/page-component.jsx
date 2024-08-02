@@ -138,7 +138,7 @@ export default function PageComponent({ data, content, slug }) {
                 onClick={() => {
                   setIsOpen(true)
                   setActive(
-                    content.find(
+                    content?.find(
                       ({ frontmatter }) =>
                         frontmatter.title.toLowerCase() === title.toLowerCase()
                     )

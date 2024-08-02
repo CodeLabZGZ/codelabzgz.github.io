@@ -17,25 +17,34 @@ import {
   TableRow
 } from "@/components/ui/table"
 import { db } from "@/db"
-import { formatDate, formatNumber } from "@/lib/utils"
+import axios from "axios"
 import { sql } from "drizzle-orm"
 import { notFound } from "next/navigation"
 
 const options = { day: "numeric", month: "short", year: "numeric" }
 
 export default async function Page({ params: { id } }) {
-  const { data: user, status: status } = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/users/${id}?participations=true`
-  ).then(res => res.json())
+  const {
+    data: { data: user }
+  } = await axios
+    .get(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}?participations=true`)
+    .catch(({ response }) => {
+      if (response.status === 404) return notFound()
+      throw new Error()
+    })
 
-  if (status.code === 404) return notFound()
-
-  const { data: ranking } = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/users/scoreboard`
-  ).then(res => res.json())
+  const {
+    data: { data: ranking }
+  } = await axios
+    .get(`${process.env.NEXT_PUBLIC_API_URL}/users/scoreboard`)
+    .catch(({ response }) => {
+      if (response.status === 404) return notFound()
+      throw new Error()
+    })
   const myranking = ranking.find(r => r.user.id === id)
 
-  const __scoreboards = db.all(sql`
+  const __scoreboards = await db.all(
+    sql`
     SELECT e.title as event, sc.challenge, c.points as cpoints, sc.points as spoints, sc.timestamp
     FROM scoreboards sc
     INNER JOIN challenges c ON c.title = sc.challenge
@@ -43,7 +52,8 @@ export default async function Page({ params: { id } }) {
     WHERE sc.user = ${id}
     ORDER BY sc.timestamp DESC
     LIMIT 10;
-  `)
+  `
+  )
 
   return (
     <div className="space-y-4">

@@ -1,25 +1,20 @@
-import NextAuth from "next-auth"
-import { NextResponse } from "next/server"
-import authConfig from "./auth.config"
-
-export const { auth } = NextAuth(authConfig)
-
-const protectedRoutes = ["/events", "/teams", "/settings"]
-
-export default async function middleware(request) {
-  const session = await auth()
-  const { pathname, origin } = request.nextUrl
-
-  const isProtectedRoute = protectedRoutes.some(prefix =>
-    pathname.startsWith(prefix)
-  )
-
-  if (!session && isProtectedRoute) {
-    const absoluteURL = new URL("/auth/login", origin)
-    return NextResponse.redirect(absoluteURL.toString())
-  }
-}
+export { auth as middleware } from "@/auth"
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"]
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    {
+      source: '/((?!api|_next/static|_next/image|favicon.ico).*)',
+      missing: [
+        { type: 'header', key: 'next-router-prefetch' },
+        { type: 'header', key: 'purpose', value: 'prefetch' },
+      ],
+    },
+  ],
 }

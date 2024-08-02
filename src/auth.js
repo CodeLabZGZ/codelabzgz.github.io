@@ -1,14 +1,19 @@
 import { db } from "@/db"
 import { DrizzleAdapter } from "@auth/drizzle-adapter"
 import NextAuth from "next-auth"
-import authConfig from "./auth.config"
+import Discord from "next-auth/providers/discord"
+import Github from "next-auth/providers/github"
 
-export const {
-  handlers: { GET, POST },
-  auth
-} = NextAuth({
+export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: DrizzleAdapter(db),
+  providers: [Github, Discord],
   callbacks: {
+    authorized: async ({ request, auth }) => {
+      console.log("req", request.url)
+      console.log("auth", auth)
+      // Logged in users are authenticated, otherwise redirect to login page
+      return !!auth
+    },
     session: async ({ session, token }) => {
       if (session?.user) session.user.id = token.sub
       return session
@@ -18,6 +23,8 @@ export const {
       return token
     }
   },
-  session: { strategy: "jwt" },
-  ...authConfig
+  session: {
+    strategy: "jwt",
+    maxAge: 24 * 60 * 60
+  }
 })
