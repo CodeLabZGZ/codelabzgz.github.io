@@ -36,3 +36,5 @@ yarn-error.log*
 # database
 db/drizzle/
 db/**/*.db
+local.db-shm
+local.db-wal
