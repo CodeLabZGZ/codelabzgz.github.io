@@ -1,3 +1,4 @@
+import { auth } from "@/auth"
 import { getScoreboard } from "@/functions/users/get-scoreboard"
 import { response } from "@/lib/utils"
 import { errorHandler } from "@/middlewares/error-handler"
@@ -7,4 +8,4 @@ async function getHandler() {
   return response({ data })
 }
 
-export const GET = errorHandler(getHandler)
+export const GET = auth(errorHandler(getHandler))

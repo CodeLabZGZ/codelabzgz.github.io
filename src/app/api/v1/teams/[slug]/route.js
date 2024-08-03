@@ -1,3 +1,4 @@
+import { auth } from "@/auth"
 import { getOne } from "@/functions/teams/get-one"
 import { update } from "@/functions/teams/update"
 import { response } from "@/lib/utils"
@@ -47,15 +48,19 @@ async function getHandler(request) {
   return response({ data })
 }
 
-export const PUT = errorHandler(
-  validator(updateHandler, { path: pathSchema, body: insertTeamSchema })
+export const PUT = auth(
+  errorHandler(
+    validator(updateHandler, { path: pathSchema, body: insertTeamSchema })
+  )
 )
-export const PATCH = errorHandler(
-  validator(updateHandler, {
-    path: pathSchema,
-    body: insertTeamSchema.partial()
-  })
+export const PATCH = auth(
+  errorHandler(
+    validator(updateHandler, {
+      path: pathSchema,
+      body: insertTeamSchema.partial()
+    })
+  )
 )
-export const GET = errorHandler(
-  validator(getHandler, { path: pathSchema, query: getSchema })
+export const GET = auth(
+  errorHandler(validator(getHandler, { path: pathSchema, query: getSchema }))
 )

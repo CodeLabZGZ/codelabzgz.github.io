@@ -44,14 +44,18 @@ async function getHandler(request) {
   return response({ data })
 }
 
-export const PUT = errorHandler(
-  validator(updateHandler, { path: pathSchema, body: insertUserSchema })
+export const PUT = auth(
+  errorHandler(
+    validator(updateHandler, { path: pathSchema, body: insertUserSchema })
+  )
 )
-export const PATCH = errorHandler(
-  validator(updateHandler, {
-    path: pathSchema,
-    body: insertUserSchema.partial()
-  })
+export const PATCH = auth(
+  errorHandler(
+    validator(updateHandler, {
+      path: pathSchema,
+      body: insertUserSchema.partial()
+    })
+  )
 )
 export const GET = auth(
   errorHandler(validator(getHandler, { path: pathSchema, query: getSchema }))

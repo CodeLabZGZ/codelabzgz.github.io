@@ -1,3 +1,4 @@
+import { auth } from "@/auth"
 import { updateMembers } from "@/functions/teams/update"
 import { response } from "@/lib/utils"
 import { errorHandler } from "@/middlewares/error-handler"
@@ -22,9 +23,11 @@ async function updateHandler(request) {
   return response({ data })
 }
 
-export const PATCH = errorHandler(
-  validator(updateHandler, {
-    path: pathSchema,
-    body: patchSchema.partial()
-  })
+export const PATCH = auth(
+  errorHandler(
+    validator(updateHandler, {
+      path: pathSchema,
+      body: patchSchema.partial()
+    })
+  )
 )

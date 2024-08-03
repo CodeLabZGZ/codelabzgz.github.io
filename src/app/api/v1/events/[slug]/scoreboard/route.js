@@ -1,3 +1,4 @@
+import { auth } from "@/auth"
 import { getScoreboard } from "@/functions/events/get-scoreboard"
 import { response } from "@/lib/utils"
 import { errorHandler } from "@/middlewares/error-handler"
@@ -16,4 +17,6 @@ async function getHandler(request) {
   return response({ data })
 }
 
-export const GET = errorHandler(validator(getHandler, { path: pathSchema }))
+export const GET = auth(
+  errorHandler(validator(getHandler, { path: pathSchema }))
+)

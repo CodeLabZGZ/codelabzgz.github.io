@@ -1,3 +1,4 @@
+import { auth } from "@/auth"
 import { getOne } from "@/functions/events/get-one"
 import { response } from "@/lib/utils"
 import { errorHandler } from "@/middlewares/error-handler"
@@ -36,6 +37,6 @@ async function getHandler(request) {
   return response({ data })
 }
 
-export const GET = errorHandler(
-  validator(getHandler, { path: pathSchema, query: getSchema })
+export const GET = auth(
+  errorHandler(validator(getHandler, { path: pathSchema, query: getSchema }))
 )

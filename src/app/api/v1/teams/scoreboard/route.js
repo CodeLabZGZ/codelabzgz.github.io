@@ -7,4 +7,4 @@ async function getHandler() {
   return response({ data })
 }
 
-export const GET = errorHandler(getHandler)
+export const GET = auth(errorHandler(getHandler))
