@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { useParticipation } from "@/stores/participation"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
+import axios from "axios"
 import { Link } from "next-view-transitions"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
@@ -29,6 +30,56 @@ export function DataTableRowActions({ row }) {
   const { participation } = useParticipation()
 
   const { startDate, endDate, participating, slug } = row.original
+
+  function handleJoin() {
+    const promise = axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}/participation`,
+      participation?.type === "team"
+        ? { team: participation.value }
+        : undefined,
+      { "Content-Type": "application/json" }
+    )
+
+    toast.promise(promise, {
+      loading: "Estamos procesando tu solicitud, espera un poco...",
+      success: () => {
+        router.refresh()
+        if (participation?.type === "team" && participation.value) {
+          return (
+            <p>
+              Te has unido al evento con el equipo{" "}
+              <span className="truncate whitespace-nowrap font-bold">
+                {participation.label}
+              </span>
+              .
+            </p>
+          )
+        }
+        return (
+          <p>
+            Te has unido al evento <span className="font-bold">sin equipo</span>
+            .
+          </p>
+        )
+      },
+      error: err => err.message
+    })
+  }
+
+  function handleLeave() {
+    const promise = axios.delete(
+      `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}/participation`
+    )
+
+    toast.promise(promise, {
+      loading: "Estamos procesando tu solicitud, espera un poco...",
+      success: () => {
+        router.refresh()
+        return `Has abandonado el evento.`
+      },
+      error: err => err.message
+    })
+  }
 
   return (
     <DropdownMenu>
@@ -47,30 +98,7 @@ export function DataTableRowActions({ row }) {
             <DropdownMenuItem>
               <button
                 className="flex w-full items-center gap-x-2"
-                onClick={() => {
-                  const promise = fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}/participation`,
-                    {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body:
-                        participation?.type === "team"
-                          ? JSON.stringify({ team: participation.value })
-                          : undefined
-                    }
-                  )
-
-                  toast.promise(promise, {
-                    loading: "Loading...",
-                    success: async () => {
-                      router.refresh()
-                      return "ok"
-                    },
-                    error: async () => {
-                      return "error"
-                    }
-                  })
-                }}
+                onClick={() => handleJoin()}
               >
                 <TbTicket className="h-4 w-4" />
                 Inscribete
@@ -80,23 +108,7 @@ export function DataTableRowActions({ row }) {
             <DropdownMenuItem>
               <button
                 className="flex w-full items-center gap-x-2"
-                onClick={async () => {
-                  const promise = fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}/participation`,
-                    { method: "DELETE" }
-                  )
-
-                  toast.promise(promise, {
-                    loading: "Loading...",
-                    success: async () => {
-                      router.refresh()
-                      return "ok"
-                    },
-                    error: async () => {
-                      return "error"
-                    }
-                  })
-                }}
+                onClick={() => handleLeave()}
               >
                 <TbTicketOff className="h-4 w-4" />
                 Abandonar

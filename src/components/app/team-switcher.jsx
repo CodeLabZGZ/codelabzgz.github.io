@@ -28,6 +28,7 @@ import { Button } from "@/components/ui/button"
 import { cn, isEmptyObject } from "@/lib/utils"
 import { useParticipation } from "@/stores/participation"
 import { useTeam } from "@/stores/team"
+import axios from "axios"
 import { useSession } from "next-auth/react"
 
 const GROUPS_INITIAL = [
@@ -47,21 +48,22 @@ export function TeamSwitcher({ className }) {
 
   useEffect(() => {
     if (status === "authenticated") {
-      fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/users/${session.user.id}?members=true&populate=true`
-      ).then(async res => {
-        const { data } = await res.json()
-        const teams = data.members
-          .filter(e => e.role !== "pending")
-          .map(({ team: { slug, image, name }, role }) => ({
-            id: slug,
-            image,
-            label: name,
-            value: slug,
-            role
-          }))
-        setTeamsData(teams)
-      })
+      axios
+        .get(
+          `${process.env.NEXT_PUBLIC_API_URL}/users/${session.user.id}?members=true&populate=true`
+        )
+        .then(({ data }) => {
+          const teams = data.data.members
+            .filter(e => e.role !== "pending")
+            .map(({ team: { slug, image, name }, role }) => ({
+              id: slug,
+              image,
+              label: name,
+              value: slug,
+              role
+            }))
+          setTeamsData(teams)
+        })
     }
   }, [status, session])
 

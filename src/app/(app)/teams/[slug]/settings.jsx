@@ -1,5 +1,6 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -9,13 +10,13 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form"
-
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { zodResolver } from "@hookform/resolvers/zod"
+import axios from "axios"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
@@ -54,6 +55,7 @@ const formSchema = z.object({
 })
 
 export default function Settings(props) {
+  const router = useRouter()
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -78,31 +80,30 @@ export default function Settings(props) {
   function onSubmit(values) {
     const { email, twitter, discord, website, ...rest } = values
 
-    const promise = fetch(
+    const promise = axios.put(
       `${process.env.NEXT_PUBLIC_API_URL}/teams/${props.slug}`,
       {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          ...rest,
-          email: email.value,
-          emailVisibility: email.visibility,
-          twitter: twitter.value,
-          twitterVisibility: twitter.visibility,
-          discord: discord.value,
-          discordVisibility: discord.visibility,
-          website: website.value,
-          websiteVisibility: website.visibility,
-          slug: props.slug
-        })
-      }
+        ...rest,
+        email: email.value,
+        emailVisibility: email.visibility,
+        twitter: twitter.value,
+        twitterVisibility: twitter.visibility,
+        discord: discord.value,
+        discordVisibility: discord.visibility,
+        website: website.value,
+        websiteVisibility: website.visibility,
+        slug: props.slug
+      },
+      { "Content-Type": "application/json" }
     )
+
     toast.promise(promise, {
-      loading: "loading...",
-      success: "success",
-      error: "error"
+      loading: "Estamos procesando tu solicitud, espera un poco...",
+      success: () => {
+        router.refresh()
+        return "Se han guardado los cambios."
+      },
+      error: err => err.message
     })
   }
 

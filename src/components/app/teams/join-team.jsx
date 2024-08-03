@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
+import axios from "axios"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -42,13 +43,11 @@ export function JoinTeam() {
   async function onSubmit(values) {
     const { name } = values
 
-    const joinPromise = fetch(`${process.env.NEXT_PUBLIC_API_URL}/teams`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ team: name })
-    })
+    const joinPromise = axios.put(
+      `${process.env.NEXT_PUBLIC_API_URL}/teams`,
+      { team: name },
+      { "Content-Type": "application/json" }
+    )
 
     toast.promise(joinPromise, {
       loading: "Enviando solicitud...",

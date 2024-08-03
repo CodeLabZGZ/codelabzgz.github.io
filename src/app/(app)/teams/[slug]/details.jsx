@@ -80,7 +80,7 @@ export default async function Details({ slug }) {
         <Card className="col-span-1 rounded">
           <CardHeader>
             <CardTitle>
-              {ranking ? `# ${ranking.points}` : "Sin clasificación"}
+              {ranking ? `${ranking.points}` : "Sin clasificación"}
             </CardTitle>
             <CardDescription>Puntuación total</CardDescription>
           </CardHeader>

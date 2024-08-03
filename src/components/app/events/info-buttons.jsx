@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { useParticipation } from "@/stores/participation"
 import { Share2Icon } from "@radix-ui/react-icons"
+import axios from "axios"
 import { usePathname, useRouter } from "next/navigation"
 import { toast } from "sonner"
 
@@ -10,52 +11,62 @@ export function JoinLeaveButton({ event, state }) {
   const router = useRouter()
   const { participation } = useParticipation()
 
+  function handleJoin() {
+    const promise = axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/events/${event}/participation`,
+      participation?.type === "team"
+        ? { team: participation.value }
+        : undefined,
+      { "Content-Type": "application/json" }
+    )
+
+    toast.promise(promise, {
+      loading: "Estamos procesando tu solicitud, espera un poco...",
+      success: () => {
+        router.refresh()
+        if (participation?.type === "team" && participation.value) {
+          return (
+            <p>
+              Te has unido al evento con el equipo{" "}
+              <span className="truncate whitespace-nowrap font-bold">
+                {participation.label}
+              </span>
+              .
+            </p>
+          )
+        }
+        return (
+          <p>
+            Te has unido al evento <span className="font-bold">sin equipo</span>
+            .
+          </p>
+        )
+      },
+      error: err => err.message
+    })
+  }
+
+  function handleLeave() {
+    const promise = axios.delete(
+      `${process.env.NEXT_PUBLIC_API_URL}/events/${event}/participation`
+    )
+
+    toast.promise(promise, {
+      loading: "Estamos procesando tu solicitud, espera un poco...",
+      success: () => {
+        router.refresh()
+        return `Has abandonado el evento.`
+      },
+      error: err => err.message
+    })
+  }
+
   return (
     <Button
       variant="secondary"
       onClick={() => {
-        if (state) {
-          const promise2Leave = fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/events/${event}/participation`,
-            { method: "DELETE" }
-          )
-
-          toast.promise(promise2Leave, {
-            loading: "Loading...",
-            success: async () => {
-              router.refresh()
-              return "ok"
-            },
-            error: async () => {
-              return "error"
-            }
-          })
-        } else {
-          const promise2Join = fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/events/${event}/participation`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body:
-                participation?.type === "team"
-                  ? JSON.stringify({ team: participation.value })
-                  : undefined
-            }
-          )
-
-          toast.promise(promise2Join, {
-            loading: "Loading...",
-            success: async () => {
-              router.refresh()
-              return "ok"
-            },
-            error: async () => {
-              return "error"
-            }
-          })
-        }
-
-        router.refresh()
+        if (!state) handleJoin()
+        else handleLeave()
       }}
     >
       {state ? "Abandonar" : "Inscribete"}

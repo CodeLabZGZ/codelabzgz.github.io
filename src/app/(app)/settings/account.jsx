@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
+import axios from "axios"
 import { useEffect, useState } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -89,21 +90,16 @@ export default function Account({ data }) {
       urls: values.urls.map(u => u.value)
     }
 
-    const promise = fetch(
+    const promise = axios.put(
       `${process.env.NEXT_PUBLIC_API_URL}/users/${data.id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-      }
+      body,
+      { "Content-Type": "application/json" }
     )
 
     toast.promise(promise, {
-      loading: "loading...",
-      success: "success",
-      error: "error"
+      loading: "Estamos procesando tu solicitud, espera un poco...",
+      success: "Se han guardado los cambios.",
+      error: err => err.message
     })
   }
 

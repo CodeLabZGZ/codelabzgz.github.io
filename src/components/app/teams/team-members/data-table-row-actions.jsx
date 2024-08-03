@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
+import axios from "axios"
 import { useRouter } from "next/navigation"
 import { TbUserMinus } from "react-icons/tb"
 import { toast } from "sonner"
@@ -19,19 +20,20 @@ export function DataTableRowActions({ row }) {
   const handleKick = e => {
     e.preventDefault()
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}/members`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user: user.id })
-    })
-      .then(res => {
-        toast.message("Se ha eliminado a name del equipo.")
+    const promise = axios.patch(
+      `${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}/members`,
+      { user: user.id },
+      { "Content-Type": "application/json" }
+    )
+
+    toast.promise(promise, {
+      loading: "Estamos procesando tu solicitud, espera un poco...",
+      success: () => {
         router.refresh()
-        return res.json()
-      })
-      .catch(() => {
-        toast.error("Error: name")
-      })
+        return `Se ha eliminado a ${user.name} del equipo.`
+      },
+      error: err => err.message
+    })
   }
 
   return (

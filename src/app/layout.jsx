@@ -1,12 +1,12 @@
 import "@/styles/globals.css"
 
 import { Providers } from "@/app/providers"
+import { auth } from "@/auth"
 import { Toaster } from "@/components/ui/sonner"
 import clsx from "clsx"
+import { SessionProvider } from "next-auth/react"
 import { ViewTransitions } from "next-view-transitions"
 import { Inter } from "next/font/google"
-import { SessionProvider } from "next-auth/react"
-import { auth } from "@/auth"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,9 +29,9 @@ export default async function RootLayout({ children }) {
   const session = await auth()
   return (
     <ViewTransitions>
-      <SessionProvider 
-        session={session} 
-        refetchInterval={60*5} 
+      <SessionProvider
+        session={session}
+        refetchInterval={60 * 5}
         refetchOnWindowFocus={true}
         refetchWhenOffline={false}
       >
@@ -42,7 +42,7 @@ export default async function RootLayout({ children }) {
         >
           <body className="flex min-h-full flex-col">
             <Providers>{children}</Providers>
-            <Toaster />
+            <Toaster richColors />
           </body>
         </html>
       </SessionProvider>
