@@ -45,7 +45,12 @@ export function CreateTeamForm() {
   const router = useRouter()
   const session = useSession()
   const form = useForm({
-    resolver: zodResolver(formSchema)
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      motto: "",
+      slug: ""
+    }
   })
 
   async function onSubmit(values) {

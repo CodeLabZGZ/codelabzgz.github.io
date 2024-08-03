@@ -1,6 +1,6 @@
-import { LineChart } from "@/components/app/teams/line-chart"
-import { RadarChart } from "@/components/app/teams/radar-chart"
-import { RadialChart } from "@/components/app/teams/radial-chart"
+import { LineChart } from "@/components/app/profile/line-chart"
+import { RadarChart } from "@/components/app/profile/radar-chart"
+import { RadialChart } from "@/components/app/profile/radial-chart"
 import { Avatar } from "@/components/avatar"
 import {
   Card,
@@ -17,6 +17,7 @@ import {
   TableRow
 } from "@/components/ui/table"
 import { db } from "@/db"
+import { cn } from "@/lib/utils"
 import axios from "axios"
 import { sql } from "drizzle-orm"
 import { notFound } from "next/navigation"
@@ -67,7 +68,18 @@ export default async function Page({ params: { id } }) {
             )}
           </div>
         </div>
-        <p>{user.description}</p>
+        <p
+          className={cn(
+            "flex gap-x-4",
+            user.description
+              ? ""
+              : "select-none items-center justify-center border-2 border-dashed p-6 text-sm text-muted-foreground"
+          )}
+        >
+          {user.description
+            ? user.description
+            : "Este usuario es muy vago y no ha puesto una descripción."}
+        </p>
       </section>
       <section className="grid grid-cols-3 gap-x-4">
         <Card className="col-span-1 rounded">

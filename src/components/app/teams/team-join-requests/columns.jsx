@@ -105,7 +105,10 @@ export const columns = [
   },
   {
     id: "actions",
-    cell: ({ row }) =>
-      row.original.role !== "admin" && <DataTableRowActions row={row} />
+    cell: ({ row }) => {
+      const { whoami } = row.original
+      const show = whoami === "admin"
+      return show ? <DataTableRowActions row={row} /> : null
+    }
   }
 ]

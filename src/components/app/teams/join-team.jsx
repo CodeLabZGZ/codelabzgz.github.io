@@ -39,7 +39,10 @@ export function JoinTeam({ teams }) {
   const [open, setOpen] = useState(false)
 
   const form = useForm({
-    resolver: zodResolver(formSchema)
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: ""
+    }
   })
 
   async function onSubmit(values) {

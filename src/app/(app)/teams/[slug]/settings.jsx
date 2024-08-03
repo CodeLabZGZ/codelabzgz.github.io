@@ -197,7 +197,7 @@ export default function Settings(props) {
                     defaultChecked={props.websiteVisibility === "private"}
                     onCheckedChange={e => onSwitch("website", e)}
                   />
-                  <Label htmlFor="website-switch">Oculto al público</Label>
+                  <Label htmlFor="website-switch">Ocultar al público</Label>
                 </div>
               </div>
               <FormControl>
@@ -221,11 +221,11 @@ export default function Settings(props) {
                     defaultChecked={props.twitterVisibility === "private"}
                     onCheckedChange={e => onSwitch("twitter", e)}
                   />
-                  <Label htmlFor="twitter-switch">Oculto al público</Label>
+                  <Label htmlFor="twitter-switch">Ocultar al público</Label>
                 </div>
               </div>
               <FormControl>
-                <Input placeholder="https://www.discord.gg" {...field} />
+                <Input placeholder="https://x.com/..." {...field} />
               </FormControl>
               <FormDescription>
                 Enlace a la cuenta de Twitter de tu equipo.
@@ -247,7 +247,7 @@ export default function Settings(props) {
                     defaultChecked={props.discordVisibility === "private"}
                     onCheckedChange={e => onSwitch("discord", e)}
                   />
-                  <Label htmlFor="discord-switch">Oculto al público</Label>
+                  <Label htmlFor="discord-switch">Ocultar al público</Label>
                 </div>
               </div>
               <FormControl>
@@ -273,7 +273,7 @@ export default function Settings(props) {
                     defaultChecked={props.emailVisibility === "private"}
                     onCheckedChange={e => onSwitch("email", e)}
                   />
-                  <Label htmlFor="email-switch">Oculto al público</Label>
+                  <Label htmlFor="email-switch">Ocultar al público</Label>
                 </div>
               </div>
               <FormControl>

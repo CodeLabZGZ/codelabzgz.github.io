@@ -98,12 +98,14 @@ export default async function Details({ slug }) {
             "flex gap-x-4",
             team.description
               ? ""
-              : "select-none items-center justify-center border-2 border-dashed py-6 text-sm text-muted-foreground"
+              : "select-none items-center justify-center border-2 border-dashed p-6 text-sm text-muted-foreground"
           )}
         >
-          {team.description ?? "Este equipo no tiene descripción."}
+          {team.description
+            ? team.description
+            : "Este equipo es muy vago y no ha puesto una descripción."}
         </section>
-        <section className="grid grid-cols-2 items-start gap-y-2">
+        <section className="flex flex-col items-start gap-y-2">
           {team.twitterVisibility === "public" && team.twitter && (
             <a
               href={team.twitter}
@@ -133,7 +135,7 @@ export default async function Details({ slug }) {
           )}
           {team.emailVisibility === "public" && team.email && (
             <a
-              href={team.email}
+              href={`mailto:${team.email}`}
               className="flex items-center gap-x-2 hover:underline hover:underline-offset-4"
             >
               <Mail className="h-5 w-5" />

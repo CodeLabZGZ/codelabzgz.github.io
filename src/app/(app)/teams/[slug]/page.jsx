@@ -91,7 +91,7 @@ export default async function Page({ params: { slug } }) {
             <Players
               values={team.members
                 .filter(({ role }) => role !== "pending")
-                .map(row => ({ ...row, slug }))}
+                .map(row => ({ ...row, whoami: team.whoami, slug }))}
             />
           </TabsContent>
           <TabsContent value="settings" className="space-y-4">
@@ -101,7 +101,7 @@ export default async function Page({ params: { slug } }) {
             <JoinRequest
               values={team.members
                 .filter(({ role }) => role === "pending")
-                .map(row => ({ ...row, slug }))}
+                .map(row => ({ ...row, whoami: team.whoami, slug }))}
             />
           </TabsContent>
         </main>

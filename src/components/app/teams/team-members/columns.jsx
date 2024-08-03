@@ -99,7 +99,10 @@ export const columns = [
   },
   {
     id: "actions",
-    cell: ({ row }) =>
-      row.original.role !== "admin" && <DataTableRowActions row={row} />
+    cell: ({ row }) => {
+      const { role, whoami } = row.original
+      const show = role !== "admin" && whoami === "admin"
+      return show ? <DataTableRowActions row={row} /> : null
+    }
   }
 ]
