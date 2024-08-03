@@ -28,19 +28,12 @@ function mergeData({ id, users, team }) {
     return member
   })
 
-  console.log(mergedMembers)
-
   return {
     ...team,
     members: mergedMembers.sort((a, b) => {
       const roleOrder = { admin: 1, member: 2, pending: 3 }
-
-      // Comparar roles
       const roleComparison = (roleOrder[a.role] || 4) - (roleOrder[b.role] || 4)
-      if (roleComparison !== 0) {
-        return roleComparison
-      }
-
+      if (roleComparison !== 0) return roleComparison
       return (a.rank || 0) - (b.rank || 0)
     }),
     whoami: mergedMembers.find(({ user }) => user.id === id)?.role

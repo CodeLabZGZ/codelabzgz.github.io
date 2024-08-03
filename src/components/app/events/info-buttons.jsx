@@ -7,13 +7,15 @@ import axios from "axios"
 import { usePathname, useRouter } from "next/navigation"
 import { toast } from "sonner"
 
+const currentDate = new Date()
+
 export function JoinLeaveButton({ event, state }) {
   const router = useRouter()
   const { participation } = useParticipation()
 
   function handleJoin() {
     const promise = axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/events/${event}/participation`,
+      `${process.env.NEXT_PUBLIC_API_URL}/events/${event.slug}/participation`,
       participation?.type === "team"
         ? { team: participation.value }
         : undefined,
@@ -48,7 +50,7 @@ export function JoinLeaveButton({ event, state }) {
 
   function handleLeave() {
     const promise = axios.delete(
-      `${process.env.NEXT_PUBLIC_API_URL}/events/${event}/participation`
+      `${process.env.NEXT_PUBLIC_API_URL}/events/${event.slug}/participation`
     )
 
     toast.promise(promise, {
@@ -62,15 +64,17 @@ export function JoinLeaveButton({ event, state }) {
   }
 
   return (
-    <Button
-      variant="secondary"
-      onClick={() => {
-        if (!state) handleJoin()
-        else handleLeave()
-      }}
-    >
-      {state ? "Abandonar" : "Inscribete"}
-    </Button>
+    currentDate <= new Date(event.endDate) && (
+      <Button
+        variant="secondary"
+        onClick={() => {
+          if (!state) handleJoin()
+          else handleLeave()
+        }}
+      >
+        {state ? "Abandonar" : "Inscribete"}
+      </Button>
+    )
   )
 }
 

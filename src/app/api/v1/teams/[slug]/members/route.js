@@ -18,7 +18,6 @@ const patchSchema = z.object({
 async function updateHandler(request) {
   const { slug } = request.validatedParams
   const values = request.validatedBody
-  console.log(slug, values)
   const data = await updateMembers({ slug, values })
   return response({ data })
 }

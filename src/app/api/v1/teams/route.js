@@ -11,7 +11,6 @@ import { z } from "zod"
 async function postHandler(request) {
   const { id } = request.auth.user
   const values = request.validatedBody
-  console.log(id, values)
   const data = await insert({ id, values })
 
   return response({ data, statusCode: 201 })
@@ -37,10 +36,8 @@ const getSchema = z
     participations: z.preprocess(val => val === "true", z.boolean()).optional(),
     scoreboards: z.preprocess(val => val === "true", z.boolean()).optional(),
     populate: z.preprocess(val => val === "true", z.boolean()).default(false),
-    limit: z
-      .preprocess(val => parseInt(val, 10), z.number().min(1).max(20))
-      .default(10),
-    offset: z.preprocess(val => parseInt(val, 10), z.number().min(0)).default(0)
+    limit: z.preprocess(val => parseInt(val, 10), z.number().min(1)).optional(),
+    offset: z.preprocess(val => parseInt(val, 10), z.number().min(0)).optional()
   })
   .refine(
     ({ members, participations, scoreboards }) => {

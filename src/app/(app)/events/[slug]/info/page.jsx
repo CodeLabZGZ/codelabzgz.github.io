@@ -65,7 +65,7 @@ export default async function Page({ params: { slug } }) {
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <JoinLeaveButton
-              event={event.slug}
+              event={event}
               state={Boolean(event.participating)}
             />
             <ShareButton />

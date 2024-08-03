@@ -4,29 +4,25 @@ import { members, teams } from "@/schemas"
 
 export const insert = async ({ id, values }) => {
   const promise = new Promise(async resolve => {
-    await db.transaction(async tx => {
-      tx.insert(teams)
-        .values(values)
-        .returning()
-        .then(async teams => {
-          await tx
-            .insert(members)
-            .values({ user: id, team: teams[0].slug, role: "admin" })
-            .catch(async _ => {
-              tx.rollback()
-              throw new ConflictException()
-            })
-
-          resolve(teams[0])
-        })
-        .catch(err => {
-          console.log(err)
-          if (err.message.includes("UNIQUE constraint failed")) {
+    try {
+      db.transaction(async tx => {
+        const [team] = await tx.insert(teams).values(values).returning()
+        await tx
+          .insert(members)
+          .values({ user: id, team: team.slug, role: "admin" })
+          .catch(async _ => {
+            tx.rollback()
             throw new ConflictException()
-          }
-          throw new HTTPException(500, "")
-        })
-    })
+          })
+
+        resolve(team)
+      })
+    } catch (error) {
+      if (err.message.includes("UNIQUE constraint failed")) {
+        throw new ConflictException()
+      }
+      throw new HTTPException(500, "")
+    }
   })
 
   const data = await promise()

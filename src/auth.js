@@ -9,8 +9,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [Github, Discord],
   callbacks: {
     authorized: async ({ request, auth }) => {
-      console.log("req", request.url)
-      console.log("auth", auth)
       // Logged in users are authenticated, otherwise redirect to login page
       return !!auth
     },

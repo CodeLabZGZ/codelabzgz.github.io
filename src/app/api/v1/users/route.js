@@ -10,10 +10,8 @@ const getSchema = z
     participations: z.preprocess(val => val === "true", z.boolean()).optional(),
     scoreboards: z.preprocess(val => val === "true", z.boolean()).optional(),
     populate: z.preprocess(val => val === "true", z.boolean()).default(false),
-    limit: z
-      .preprocess(val => parseInt(val, 10), z.number().min(1).max(20))
-      .default(10),
-    offset: z.preprocess(val => parseInt(val, 10), z.number().min(0)).default(0)
+    limit: z.preprocess(val => parseInt(val, 10), z.number().min(1)).optional(),
+    offset: z.preprocess(val => parseInt(val, 10), z.number().min(0)).optional()
   })
   .refine(
     ({ members, participations, scoreboards }) => {

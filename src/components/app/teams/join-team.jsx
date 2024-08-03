@@ -22,6 +22,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
 import axios from "axios"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -33,7 +34,8 @@ const formSchema = z.object({
   })
 })
 
-export function JoinTeam() {
+export function JoinTeam({ teams }) {
+  const router = useRouter()
   const [open, setOpen] = useState(false)
 
   const form = useForm({
@@ -42,17 +44,32 @@ export function JoinTeam() {
 
   async function onSubmit(values) {
     const { name } = values
+    const team = teams.find(r => r.name === name)
+    if (!team)
+      return toast.error(
+        <p>
+          No existe el equipo <span className="font-bold">{name}</span>.
+        </p>
+      )
 
-    const joinPromise = axios.put(
+    const promise = axios.put(
       `${process.env.NEXT_PUBLIC_API_URL}/teams`,
-      { team: name },
+      { team: team.slug },
       { "Content-Type": "application/json" }
     )
 
-    toast.promise(joinPromise, {
-      loading: "Enviando solicitud...",
-      success:
-        "Petición enviada con éxito. Puede que el equipo tarde en aceptar tu petición",
+    toast.promise(promise, {
+      loading: "Estamos procesando tu solicitud, espera un poco...",
+      success: () => {
+        router.refresh()
+        return (
+          <p>
+            Solicitud enviada al equipo{" "}
+            <span className="truncate whitespace-nowrap font-bold">{name}</span>
+            .
+          </p>
+        )
+      },
       error: err => err.message
     })
     setOpen(false)

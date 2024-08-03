@@ -21,7 +21,10 @@ export default async function Page() {
         }))
         .sort((a, b) => {
           const roleOrder = { admin: 1, member: 2, pending: 3 }
-          return roleOrder[a.role] - roleOrder[b.role]
+          const roleComparison =
+            (roleOrder[a.role] || 4) - (roleOrder[b.role] || 4)
+          if (roleComparison !== 0) return roleComparison
+          return (a.rank || 0) - (b.rank || 0)
         })
     })
 
@@ -30,7 +33,7 @@ export default async function Page() {
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Equipos</h2>
         <div className="flex items-center gap-x-2">
-          <JoinTeam />
+          <JoinTeam teams={records} />
           <CreateTeam />
         </div>
       </div>

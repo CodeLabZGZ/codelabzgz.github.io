@@ -17,7 +17,6 @@ export const validator = (fn, schemas) => async (req, ctx) => {
   if (schemas.headers) {
     const headers = Object.fromEntries(req.headers.entries())
     const headersResult = schemas.headers.safeParse(headers)
-    console.log(`[VALIDATOR][QUERY]:`, JSON.stringify(headersResult, null, 2))
     if (!headersResult.success) {
       throw new BadRequestException()
     }
@@ -28,7 +27,6 @@ export const validator = (fn, schemas) => async (req, ctx) => {
   if (schemas.path) {
     const { params } = ctx
     const pathResult = schemas.path.safeParse(params)
-    console.log(`[VALIDATOR][QUERY]:`, JSON.stringify(pathResult, null, 2))
     if (!pathResult.success) {
       throw new BadRequestException()
     }
@@ -40,10 +38,6 @@ export const validator = (fn, schemas) => async (req, ctx) => {
     const url = new URL(req.nextUrl)
     const queryParams = Object.fromEntries(url.searchParams.entries())
     const queryParamsResult = schemas.query.safeParse(queryParams)
-    console.log(
-      `[VALIDATOR][QUERY]:`,
-      JSON.stringify(queryParamsResult, null, 2)
-    )
     if (!queryParamsResult.success) {
       throw new BadRequestException()
     }
@@ -61,9 +55,7 @@ export const validator = (fn, schemas) => async (req, ctx) => {
     } catch (e) {
       body = undefined
     }
-    console.log(`[VALIDATOR][BODY]:`, JSON.stringify(body, null, 2))
     const bodyResult = schemas.body.safeParse(body)
-    console.log(`[VALIDATOR][BODY]:`, JSON.stringify(bodyResult, null, 2))
     if (!bodyResult.success) {
       throw new BadRequestException()
     }

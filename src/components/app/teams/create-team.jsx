@@ -51,7 +51,7 @@ export function CreateTeamForm() {
   async function onSubmit(values) {
     const { name, motto, slug } = values
 
-    const teamReq = axios.post(
+    const promise = axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/teams`,
       {
         email: session?.data?.user?.email,
@@ -62,26 +62,20 @@ export function CreateTeamForm() {
       { "Content-Type": "application/json" }
     )
 
-    toast.promise(teamReq, {
-      loading: "Estamos creando tu equipo...",
-      success: ({ name, slug }) => (
-        <>
-          Tu equipo{" "}
-          <a
-            href={`/teams/${slug}`}
-            target="_black"
-            referrerPolicy="no-referrer"
-          >
-            <strong>{name}</strong>
-          </a>{" "}
-          ha sido creado.
-        </>
-      ),
+    toast.promise(promise, {
+      loading: "Estamos procesando tu solicitud, espera un poco...",
+      success: () => {
+        router.refresh()
+        return (
+          <p>
+            Se ha creado el equipo{" "}
+            <span className="truncate whitespace-nowrap font-bold">{name}</span>
+            .
+          </p>
+        )
+      },
       error: err => err.message
     })
-
-    // once the request is processed, execute submit callback
-    teamReq.then(() => router.refresh())
   }
 
   return (

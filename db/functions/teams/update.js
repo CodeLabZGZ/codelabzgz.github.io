@@ -17,7 +17,6 @@ export const update = async ({ slug, values }) => {
 export const updateMembers = async ({ slug, values }) => {
   let data
   if (values.role) {
-    console.log("role ok", slug, values)
     data = await db
       .update(members)
       .set(values)
@@ -37,6 +36,6 @@ export const updateMembers = async ({ slug, values }) => {
 }
 
 export const insert = async ({ values }) => {
-  const data = await db.insert(members).values(values).returning()
+  const [data] = await db.insert(members).values(values).returning()
   return data
 }
