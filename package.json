@@ -105,6 +105,7 @@
     "prettier": "3.3.3",
     "prettier-plugin-organize-imports": "^4.0.0",
     "prettier-plugin-tailwindcss": "^0.6.5",
-    "sharp": "^0.33.4"
+    "sharp": "^0.33.4",
+    "vercel": "^35.2.3"
   }
 }
