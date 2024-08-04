@@ -1,30 +1,22 @@
-# Upgraded Pancake
+# codelabzgz.github.io
 
-[![node](https://img.shields.io/badge/node-20.x-blue)](https://nodejs.org/en/download)
+[![node](https://img.shields.io/badge/node-18.x-blue)](https://nodejs.org/en/download)
 [![npm](https://img.shields.io/badge/npm-10.x-blue)](https://www.npmjs.com/)
 
 [![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white)](https://eslint.org/)
-[![commitlint](https://img.shields.io/badge/commitlint-000?logo=commitlint&logoColor=fff&style=for-the-badge)](https://commitlint.js.org)
 [![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
-[![cypress](https://img.shields.io/badge/-cypress-%23E5E5E5?style=for-the-badge&logo=cypress&logoColor=058a5e)](https://www.cypress.io/)
 
 ## Getting started
 
-To get started, first install dependencies via npm:
+To get started, first install the dependencies with npm:
 
 ```bash
-npm install
+npm i
 ```
 
-Next, create a `.env.local` file in the root of your project and set the `NEXT_PUBLIC_SITE_URL` environment variable to your site's public URL:
-
-```
-NEXT_PUBLIC_SITE_URL=https://example.com
-```
-
-Then start the development server:
+Next, rename the `.env.example` file to `.env` and set the environment variables. Then start the development server.
 
 ```bash
 npm run dev
@@ -33,21 +25,15 @@ npm run dev
 ### Run for a development environment
 
 ```bash
-git clone https://github.com/CodeLabZGZ/codelabzgz.github.io.git
+git clone -b develop --depth 1 https://github.com/CodeLabZGZ/codelabzgz.github.io.git
 npm i
 npm run dev
 ```
 
 ### Run for a production environment
 
-```bash
-git clone --depth 1 https://github.com/CodeLabZGZ/codelabzgz.github.io.git
-npm ci
-npm run build
-npm run start
-```
-
-### Compile for docker
+> [!IMPORTANT]
+> For production deployment do not forget to launch judge0. [Instructions](https://github.com/judge0/judge0/blob/master/CHANGELOG.md#deployment-procedure)
 
 ```bash
 docker build -t codelab:latest .
@@ -55,6 +41,18 @@ docker build -t codelab:latest .
 
 ```bash
 docker run -p 3000:3000 --env-file .env codelab:latest
+```
+
+---
+
+```bash
+docker compose up -d
+```
+
+---
+
+```bash
+make start
 ```
 
 ## Customizing
@@ -69,26 +67,21 @@ We'll cover a lot of the fundamentals here to help you get going quickly, but at
 
 The template is built as a pretty standard Next.js website, but using the `src` folder so things like the `app` directory are located at `./src/app` instead of being top-level.
 
-
 #### Folder structure
 
 - `app`: Place where the main structure and code that follows every page of the application is stored.
 - `components`: Reusable code snippets that are used throughout all of the pages
-- `context`: Encapsulates a global state that can be accessed from anywhere in the application.
+- `stores`: Encapsulates a global state that can be accessed from anywhere in the application (we use [zustand](https://zustand-demo.pmnd.rs/) to manage global states).
 - `hooks`: Encapsulates small pieces of code that represent a certain type of logic.
-- `lib`: Chaos property, stores here functionalities that do not have to do with the rest of the mentioned sections. 
+- `lib`: Chaos property, stores here functionalities that do not have to do with the rest of the mentioned sections.
 - `public`: Static content that is publicly accessible
-- `styles`: Contains the styles of the application. Override or new styles in [`tailwind.config.ts`](tailwind.config.ts).
+- `styles`: Contains the styles of the application. Override or new styles in [`tailwind.config.js`](tailwind.config.js).
 
 #### Naming convention
 
 - camelCase for variable names and object properties (e.g: exampleExample)
 - PascalCase for type names and classes (e.g: ExampleExample)
 - kebab-case for module names (e.g: example-example)
-
-### Title and metadata
-
-You can update your site's metadata in `./src/config/site.ts`.
 
 ### Hero content
 

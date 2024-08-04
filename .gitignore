@@ -16,6 +16,7 @@
 /build
 
 # misc
+.eslintcache
 .DS_Store
 *.pem
 
@@ -27,12 +28,13 @@ yarn-error.log*
 # local env files
 .env
 .env*.local
+.judge0.conf
 
 # vercel
 .vercel
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-.eslintcache
+# database
+db/drizzle/
+db/**/*.db
+local.db-shm
+local.db-wal

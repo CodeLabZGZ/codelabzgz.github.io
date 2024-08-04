@@ -1,30 +1,31 @@
-import nextMDX from '@next/mdx'
-import { recmaPlugins } from './mdx/recma.mjs'
-import { rehypePlugins } from './mdx/rehype.mjs'
-import { remarkPlugins } from './mdx/remark.mjs'
+import nextMDX from "@next/mdx"
+import { recmaPlugins } from "./mdx/recma.mjs"
+import { rehypePlugins } from "./mdx/rehype.mjs"
+import { remarkPlugins } from "./mdx/remark.mjs"
 
 const withMDX = nextMDX({
-  extension: /\.mdx?$/,
+  extension: /\.(md|mdx)$/,
   options: {
     remarkPlugins,
     rehypePlugins,
-    recmaPlugins,
-  },
+    recmaPlugins
+  }
 })
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx'],
+  pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
   poweredByHeader: false,
-  output: "export",
+  output: "standalone",
+  reactStrictMode: true,
   images: {
-    unoptimized: true,
+    unoptimized: true
   },
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
-    ignoreDuringBuilds: true,
-  },
+    ignoreDuringBuilds: true
+  }
 }
 
 export default withMDX(nextConfig)
