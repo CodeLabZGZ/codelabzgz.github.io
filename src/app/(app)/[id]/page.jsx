@@ -31,7 +31,6 @@ export default async function Page({ params: { id } }) {
     .get(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}?participations=true`)
     .catch(({ response }) => {
       if (response.status === 404) return notFound()
-      throw new Error()
     })
 
   const {
@@ -40,7 +39,6 @@ export default async function Page({ params: { id } }) {
     .get(`${process.env.NEXT_PUBLIC_API_URL}/users/scoreboard`)
     .catch(({ response }) => {
       if (response.status === 404) return notFound()
-      throw new Error()
     })
   const myranking = ranking.find(r => r.user.id === id)
 

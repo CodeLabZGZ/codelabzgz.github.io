@@ -37,7 +37,6 @@ export default async function Page({ params: { slug } }) {
     .then(({ data }) => data.data)
     .catch(({ response }) => {
       if (response.status === 404) return notFound()
-      throw new Error()
     })
 
   const participating = await axios
@@ -53,7 +52,6 @@ export default async function Page({ params: { slug } }) {
     })
     .catch(({ response }) => {
       if (response.status === 404) return notFound()
-      throw new Error()
     })
 
   return (

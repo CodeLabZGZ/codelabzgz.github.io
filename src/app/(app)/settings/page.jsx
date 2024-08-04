@@ -12,7 +12,6 @@ export default async function Page() {
     .then(({ data }) => data.data)
     .catch(({ response }) => {
       if (response.status === 404) return notFound()
-      throw new Error()
     })
 
   return (

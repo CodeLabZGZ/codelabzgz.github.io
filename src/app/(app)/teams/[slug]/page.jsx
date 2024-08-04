@@ -49,7 +49,6 @@ export default async function Page({ params: { slug } }) {
     .then(({ data }) => data.data)
     .catch(({ response }) => {
       if (response.status === 404) return notFound()
-      throw new Error()
     })
 
   const ranking = await axios
@@ -57,7 +56,6 @@ export default async function Page({ params: { slug } }) {
     .then(({ data }) => data.data)
     .catch(({ response }) => {
       if (response.status === 404) return notFound()
-      throw new Error()
     })
 
   const team = mergeData({ id: session.user.id, users: ranking, team: teams })

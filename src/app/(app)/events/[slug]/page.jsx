@@ -57,7 +57,6 @@ export default async function Page({ params: { slug } }) {
     })
     .catch(({ response }) => {
       if (response.status === 404) return notFound()
-      throw new Error()
     })
 
   const ranking = await axios
@@ -68,7 +67,6 @@ export default async function Page({ params: { slug } }) {
     })
     .catch(({ response }) => {
       if (response.status === 404) return notFound()
-      throw new Error()
     })
 
   const { data: content } = await getContent(`events/${slug}`)

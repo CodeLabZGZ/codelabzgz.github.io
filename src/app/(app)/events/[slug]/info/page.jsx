@@ -42,7 +42,6 @@ export default async function Page({ params: { slug } }) {
     })
     .catch(({ response }) => {
       if (response.status === 404) return notFound()
-      throw new Error()
     })
 
   const ec = await getContentBySlug(`events/${slug}`, "overview", ".mdx")

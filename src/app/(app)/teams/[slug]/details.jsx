@@ -55,7 +55,6 @@ export default async function Details({ slug }) {
     .then(({ data }) => data.data)
     .catch(({ response }) => {
       if (response.status === 404) return notFound()
-      throw new Error()
     })
 
   const ranking = await axios
@@ -63,7 +62,6 @@ export default async function Details({ slug }) {
     .then(({ data }) => data.data.find(r => r.team.slug === slug))
     .catch(({ response }) => {
       if (response.status === 404) return notFound()
-      throw new Error()
     })
 
   return (
