@@ -9,7 +9,7 @@ export const events = sqliteTable("events", {
   title: text("title").notNull(),
   banner: text("banner"),
   visibility: text("visibility", { enum: ["public", "private"] }).notNull(),
-  format: text("type", { enum: ["hackathon", "ideathon"] }).notNull(),
+  format: text("type", { enum: ["hackathon", "ideathon", "ctf"] }).notNull(),
   location: text("location").notNull(),
   startDate: integer("startDate", { mode: "timestamp_ms" }).notNull(),
   endDate: integer("endDate", { mode: "timestamp_ms" }).notNull(),
