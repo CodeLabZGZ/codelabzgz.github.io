@@ -72,7 +72,7 @@ function Glow() {
 
 function FixedSidebar({ main, footer }) {
   return (
-    <div className="relative flex-none overflow-hidden px-6 lg:pointer-events-none lg:fixed lg:inset-0 lg:z-40 lg:flex lg:px-0">
+    <div className="relative flex-none overflow-hidden bg-gray-950 px-6 lg:pointer-events-none lg:fixed lg:inset-0 lg:z-40 lg:flex lg:px-0">
       <Glow />
       <div className="relative flex w-full lg:pointer-events-auto lg:mr-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] lg:overflow-y-auto lg:overflow-x-hidden lg:pl-[max(4rem,calc(50%-38rem))]">
         <div className="mx-auto max-w-lg lg:mx-0 lg:flex lg:w-96 lg:max-w-none lg:flex-col lg:before:flex-1 lg:before:pt-6">
@@ -96,13 +96,13 @@ export async function Layout({ children }) {
 
   return (
     <div className="bg-white dark:bg-gray-950">
-      <div className="fixed top-4 z-50 flex w-full items-center justify-between px-6 lg:px-8">
+      <div className="absolute top-4 z-50 flex w-full items-center justify-between px-6 lg:px-8">
         <ThemeToggle />
         <div className="ml-auto">
           {!session?.user && (
             <Link
               href="/auth/login"
-              className="text-sm font-semibold leading-6 text-gray-900 dark:text-white"
+              className="text-sm font-semibold leading-6 text-white"
             >
               Iniciar sesión <span aria-hidden="true">&rarr;</span>
             </Link>
