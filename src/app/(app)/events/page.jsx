@@ -16,11 +16,24 @@ export default async function Page() {
   )
     .then(res => res.json())
     .then(({ data }) => {
-      return data.map(({ participations, ...r }) => ({
-        ...r,
-        participating: participations.findIndex(p => p.user === user.id) !== -1,
-        people: participations.length
-      }))
+      return data
+        .map(({ participations, ...r }) => ({
+          ...r,
+          participating:
+            participations.findIndex(p => p.user === user.id) !== -1,
+          people: participations.length
+        }))
+        .sort((a, b) => {
+          const startDateA = new Date(a.startDate)
+          const startDateB = new Date(b.startDate)
+          const endDateA = new Date(a.endDate)
+          const endDateB = new Date(b.endDate)
+
+          return (
+            startDateA - currentDate - (startDateB - currentDate) ||
+            endDateA - currentDate - (endDateB - currentDate)
+          )
+        })
     })
     .catch(err => console.error(err.message))
 
