@@ -11,7 +11,13 @@ export const participations = sqliteTable(
     event: text("event").references(() => events.slug, {
       onDelete: "cascade"
     }),
-    team: text("team").references(() => teams.slug)
+    team: text("team").references(() => teams.slug),
+    createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(
+      sql`CURRENT_TIMESTAMP`
+    ),
+    updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(
+      sql`CURRENT_TIMESTAMP`
+    )
   },
   p => ({
     compoundKey: primaryKey({ columns: [p.user, p.event] })
