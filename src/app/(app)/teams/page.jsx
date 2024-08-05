@@ -4,25 +4,20 @@ import { columns } from "@/components/app/teams/columns"
 import { CreateTeam } from "@/components/app/teams/create-team"
 import { JoinTeam } from "@/components/app/teams/join-team"
 import { auth } from "auth"
-import axios from "axios"
+import { notFound } from "next/navigation"
 import All from "./all"
 import MyTeams from "./my-teams"
 
 export default async function Page() {
   const { user } = await auth()
 
-  const test = await fetch(
+  const records = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/teams?members=true`
   )
     .then(res => res.json())
-    .catch(err => console.error(err.message))
-
-  console.log(test)
-
-  const records = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/teams?members=true`)
-    .then(({ data }) => {
-      return data.data
+    .then(({ data, status }) => {
+      if (status.code === 404) return notFound()
+      return data
         .map(({ members, ...r }) => ({
           ...r,
           role: members.find(m => m.user === user.id)?.role,
