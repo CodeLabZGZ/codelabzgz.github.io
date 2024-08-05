@@ -3,6 +3,7 @@ import "@/styles/globals.css"
 import { Providers } from "@/app/providers"
 import { auth } from "@/auth"
 import { Toaster } from "@/components/ui/sonner"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import clsx from "clsx"
 import { SessionProvider } from "next-auth/react"
 import { ViewTransitions } from "next-view-transitions"
@@ -43,6 +44,7 @@ export default async function RootLayout({ children }) {
           <body className="flex min-h-full flex-col">
             <Providers>{children}</Providers>
             <Toaster richColors />
+            <SpeedInsights />
           </body>
         </html>
       </SessionProvider>

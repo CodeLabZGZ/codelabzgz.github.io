@@ -24,5 +24,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: "jwt",
     maxAge: 24 * 60 * 60
-  }
+  },
+  pages: {
+    signIn: "/auth/login",
+    error: "/auth/login",
+    newUser: "/settings",
+    signOut: "/"
+  },
+  useSecureCookies: process.env.NODE_ENV === "production"
 })

@@ -18,7 +18,7 @@ import { signIn } from "next-auth/react"
 export default function Page() {
   return (
     <div className="flex h-screen w-screen items-center justify-center">
-      <div className="max-w-sm px-6">
+      <form className="max-w-sm px-6">
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl">Accede a la plataforma</CardTitle>
@@ -66,7 +66,7 @@ export default function Page() {
             <Button className="w-full">Acceder</Button>
           </CardFooter>
         </Card>
-      </div>
+      </form>
     </div>
   )
 }

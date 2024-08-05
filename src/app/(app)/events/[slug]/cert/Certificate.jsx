@@ -22,9 +22,7 @@ export default function Page({ event, name, date, cert }) {
         link.href = dataUrl
         link.click()
       })
-      .catch(err => {
-        console.log(err)
-      })
+      .catch(err => console.error(err))
   }, [ref])
 
   return (
