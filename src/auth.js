@@ -30,5 +30,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: "/auth/login",
     newUser: "/settings",
     signOut: "/"
-  }
+  },
+  useSecureCookies: process.env.NODE_ENV === "production",
+  debug: process.env.NODE_ENV !== "production"
 })
