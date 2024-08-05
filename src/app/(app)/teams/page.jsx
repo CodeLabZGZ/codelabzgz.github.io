@@ -27,6 +27,7 @@ export default async function Page() {
           return (a.rank || 0) - (b.rank || 0)
         })
     })
+    .catch(err => console.error(err.message))
 
   return (
     <>

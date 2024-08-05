@@ -1,7 +1,6 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
 import { columns } from "@/components/app/events/columns"
 import { buttonVariants } from "@/components/ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { auth } from "auth"
 import axios from "axios"
 import Joined from "./joined"
@@ -22,6 +21,7 @@ export default async function Page() {
         people: participations.length
       }))
     })
+    .catch(err => console.error(err.message))
 
   return (
     <>
