@@ -5,16 +5,13 @@ import { Intro, IntroFooter } from "@/components/landing/intro"
 import { UserNav } from "@/components/app/user-nav"
 import { Banner } from "@/components/landing/banner"
 import { StarField } from "@/components/landing/star-field"
-import { cn } from "@/lib/utils"
-import { useSession } from "next-auth/react"
-import { Link } from "next-view-transitions"
 import { useEffect, useId, useState } from "react"
 
 function Timeline() {
   const id = useId()
 
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden lg:right-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] lg:overflow-visible">
+    <div className="pointer-events-none absolute inset-0 overflow-hidden lg:right-[calc(max(2rem,50%-38rem)+40rem)] lg:z-50 lg:min-w-[32rem] lg:overflow-visible">
       <svg
         className="absolute left-[max(0px,calc(50%-18.125rem))] top-0 h-full w-1.5 lg:left-full lg:ml-1 xl:left-auto xl:right-1 xl:ml-0"
         aria-hidden="true"
@@ -96,7 +93,6 @@ function FixedSidebar({ main, footer }) {
 
 export function Layout({ children }) {
   const [color, setColor] = useState("text-white")
-  const { data: session, status } = useSession()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -113,19 +109,7 @@ export function Layout({ children }) {
     <div className="bg-white dark:bg-gray-950">
       <div className="fixed top-4 z-50 flex w-full items-center justify-between px-6 lg:px-8">
         <div className="ml-auto">
-          {status !== "authenticated" || !session?.user ? (
-            <Link
-              href="/auth/login"
-              className={cn(
-                "text-sm font-semibold leading-6 lg:text-gray-950 lg:dark:text-white",
-                color
-              )}
-            >
-              Iniciar sesión <span aria-hidden="true">&rarr;</span>
-            </Link>
-          ) : (
-            <UserNav />
-          )}
+          <UserNav color={color} />
         </div>
       </div>
       <FixedSidebar main={<Intro />} footer={<IntroFooter />} />
