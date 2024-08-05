@@ -1,12 +1,15 @@
+"use client"
+
 import { Intro, IntroFooter } from "@/components/landing/intro"
 
-import { auth } from "@/auth"
 import { UserNav } from "@/components/app/user-nav"
 import { Banner } from "@/components/landing/banner"
 import { StarField } from "@/components/landing/star-field"
-import { ThemeToggle } from "@/components/landing/theme-toggle"
+import { cn } from "@/lib/utils"
+import { useSession } from "next-auth/react"
 import { Link } from "next-view-transitions"
-import { useId } from "react"
+import { useEffect, useId, useState } from "react"
+
 function Timeline() {
   const id = useId()
 
@@ -72,7 +75,7 @@ function Glow() {
 
 function FixedSidebar({ main, footer }) {
   return (
-    <div className="relative flex-none overflow-hidden bg-gray-950 px-6 lg:pointer-events-none lg:fixed lg:inset-0 lg:z-40 lg:flex lg:px-0">
+    <div className="relative h-screen flex-none overflow-hidden bg-gray-950 px-6 lg:pointer-events-none lg:fixed lg:inset-0 lg:flex lg:bg-white lg:px-0 lg:dark:bg-gray-950">
       <Glow />
       <div className="relative flex w-full lg:pointer-events-auto lg:mr-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] lg:overflow-y-auto lg:overflow-x-hidden lg:pl-[max(4rem,calc(50%-38rem))]">
         <div className="mx-auto max-w-lg lg:mx-0 lg:flex lg:w-96 lg:max-w-none lg:flex-col lg:before:flex-1 lg:before:pt-6">
@@ -91,24 +94,38 @@ function FixedSidebar({ main, footer }) {
   )
 }
 
-export async function Layout({ children }) {
-  const session = await auth()
+export function Layout({ children }) {
+  const [color, setColor] = useState("text-white")
+  const { data: session, status } = useSession()
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY
+      if (scrollPosition > window.innerHeight) setColor("text-gray-950")
+      else setColor("text-white")
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   return (
     <div className="bg-white dark:bg-gray-950">
-      <div className="absolute top-4 z-50 flex w-full items-center justify-between px-6 lg:px-8">
-        <ThemeToggle />
+      <div className="fixed top-4 z-50 flex w-full items-center justify-between px-6 lg:px-8">
         <div className="ml-auto">
-          {!session?.user && (
+          {status !== "authenticated" || !session?.user ? (
             <Link
               href="/auth/login"
-              className="text-sm font-semibold leading-6 text-white"
+              className={cn(
+                "text-sm font-semibold leading-6 lg:text-gray-950 lg:dark:text-white",
+                color
+              )}
             >
               Iniciar sesión <span aria-hidden="true">&rarr;</span>
             </Link>
+          ) : (
+            <UserNav />
           )}
-
-          <UserNav />
         </div>
       </div>
       <FixedSidebar main={<Intro />} footer={<IntroFooter />} />
