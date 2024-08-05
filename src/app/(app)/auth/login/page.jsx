@@ -57,12 +57,19 @@ export default function Page() {
               </div>
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="m@example.com" />
+              <Label htmlFor="email">Correo electrónico</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="m@example.com"
+                disabled={true}
+              />
             </div>
           </CardContent>
           <CardFooter>
-            <Button className="w-full">Acceder</Button>
+            <Button className="w-full" disabled={true}>
+              Acceder
+            </Button>
           </CardFooter>
         </Card>
       </div>
