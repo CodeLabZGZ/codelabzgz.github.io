@@ -5,13 +5,16 @@ import { CreateTeam } from "@/components/app/teams/create-team"
 import { JoinTeam } from "@/components/app/teams/join-team"
 import { auth } from "auth"
 import axios from "axios"
+import { headers } from "next/headers"
 import All from "./all"
 import MyTeams from "./my-teams"
 
 export default async function Page() {
   const { user } = await auth()
   const records = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/teams?members=true`)
+    .get(`${process.env.NEXT_PUBLIC_API_URL}/teams?members=true`, {
+      headers: headers()
+    })
     .then(({ data }) => {
       return data.data
         .map(({ members, ...r }) => ({
