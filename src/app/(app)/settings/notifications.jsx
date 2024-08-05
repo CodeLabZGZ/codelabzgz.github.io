@@ -1,16 +1,18 @@
 "use client"
 
 import { Switch } from "@/components/ui/switch"
-import axios from "axios"
 import Link from "next/link"
 import { toast } from "sonner"
 
 export default function Notifications({ data }) {
   function handleSubmit(key, value) {
-    const promise = axios.patch(
+    const promise = fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/users/${data.id}`,
-      { [key]: value },
-      { "Content-Type": "application/json" }
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ [key]: value })
+      }
     )
     toast.promise(promise, {
       loading: "Estamos procesando tu solicitud, espera un poco...",

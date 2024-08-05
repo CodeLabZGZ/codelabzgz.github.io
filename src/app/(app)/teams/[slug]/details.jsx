@@ -16,7 +16,7 @@ import {
   TableRow
 } from "@/components/ui/table"
 import { cn, formatDate } from "@/lib/utils"
-import axios from "axios"
+import { notFound } from "next/navigation"
 import {
   TbBrandDiscord as Discord,
   TbMail as Mail,
@@ -50,19 +50,25 @@ const scoreboards = [
 const options = { day: "numeric", month: "short", year: "numeric" }
 
 export default async function Details({ slug }) {
-  const team = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}?participations=true`)
-    .then(({ data }) => data.data)
-    .catch(({ response }) => {
-      if (response.status === 404) return notFound()
+  const team = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}?participations=true`
+  )
+    .then(res => res.json())
+    .then(({ data, status }) => {
+      if (status.code === 404) return notFound()
+      return data
     })
+    .catch(err => console.error(err.message))
 
-  const ranking = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/teams/scoreboard`)
-    .then(({ data }) => data.data.find(r => r.team.slug === slug))
-    .catch(({ response }) => {
-      if (response.status === 404) return notFound()
+  const ranking = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/teams/scoreboard`
+  )
+    .then(res => res.json())
+    .then(({ data, status }) => {
+      if (status.code === 404) return notFound()
+      return data?.find(r => r.team.slug === slug)
     })
+    .catch(err => console.error(err.message))
 
   return (
     <div className="space-y-4">

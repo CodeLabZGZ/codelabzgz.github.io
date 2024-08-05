@@ -4,7 +4,6 @@ import { columns } from "@/components/app/teams/columns"
 import { CreateTeam } from "@/components/app/teams/create-team"
 import { JoinTeam } from "@/components/app/teams/join-team"
 import { auth } from "auth"
-import { notFound } from "next/navigation"
 import All from "./all"
 import MyTeams from "./my-teams"
 
@@ -15,8 +14,7 @@ export default async function Page() {
     `${process.env.NEXT_PUBLIC_API_URL}/teams?members=true`
   )
     .then(res => res.json())
-    .then(({ data, status }) => {
-      if (status.code === 404) return notFound()
+    .then(({ data }) => {
       return data
         .map(({ members, ...r }) => ({
           ...r,

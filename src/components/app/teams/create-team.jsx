@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
-import axios from "axios"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -56,16 +55,16 @@ export function CreateTeamForm() {
   async function onSubmit(values) {
     const { name, motto, slug } = values
 
-    const promise = axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/teams`,
-      {
+    const promise = fetch(`${process.env.NEXT_PUBLIC_API_URL}/teams`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
         email: session?.data?.user?.email,
         name,
         motto,
         slug
-      },
-      { "Content-Type": "application/json" }
-    )
+      })
+    })
 
     toast.promise(promise, {
       loading: "Estamos procesando tu solicitud, espera un poco...",

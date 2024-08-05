@@ -10,7 +10,6 @@ import { TbUserMinus, TbUserPlus } from "react-icons/tb"
 
 import { Button } from "@/components/ui/button"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
-import axios from "axios"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
@@ -21,10 +20,13 @@ export function DataTableRowActions({ row }) {
   const handleAccept = e => {
     e.preventDefault()
 
-    const promise = axios.patch(
+    const promise = fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}/members`,
-      { user: user.id, role: "member" },
-      { "Content-Type": "application/json" }
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user: user.id, role: "member" })
+      }
     )
 
     toast.promise(promise, {
@@ -40,10 +42,13 @@ export function DataTableRowActions({ row }) {
   const handleReject = e => {
     e.preventDefault()
 
-    const promise = axios.patch(
+    const promise = fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}/members`,
-      { user: user.id },
-      { "Content-Type": "application/json" }
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user: user.id })
+      }
     )
 
     toast.promise(promise, {

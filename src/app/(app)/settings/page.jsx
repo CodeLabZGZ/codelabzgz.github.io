@@ -1,18 +1,20 @@
 import { auth } from "@/auth"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import axios from "axios"
 import { notFound } from "next/navigation"
 import Account from "./account"
 import Notifications from "./notifications"
 
 export default async function Page() {
   const session = await auth()
-  const data = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/users/${session?.user?.id}`)
-    .then(({ data }) => data.data)
-    .catch(({ response }) => {
-      if (response.status === 404) return notFound()
+  const data = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/users/${session?.user?.id}`
+  )
+    .then(res => res.json())
+    .then(({ data, status }) => {
+      if (status.code === 404) return notFound()
+      return data
     })
+    .catch(err => console.error(err.message))
 
   return (
     <>

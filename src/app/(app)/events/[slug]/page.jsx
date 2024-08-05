@@ -1,6 +1,5 @@
 import { auth } from "@/auth"
 import { getContent } from "@/lib/fetchers"
-import axios from "axios"
 import { notFound } from "next/navigation"
 import PageComponent from "./page-component"
 
@@ -32,17 +31,19 @@ function groupByParticipant(data) {
 
 export default async function Page({ params: { slug } }) {
   const session = await auth()
-  const data = await axios
-    .get(
-      `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}?populate=true&participations=true&challenges=true`
-    )
-    .then(({ data }) => {
-      const participation = data["data"].participations.find(
+  const data = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}?populate=true&participations=true&challenges=true`
+  )
+    .then(res => res.json())
+    .then(({ data, status }) => {
+      if (status.code === 404) return notFound()
+
+      const participation = data.participations?.find(
         ({ user }) => user.id === session?.user.id
       )
       if (!participation) return notFound()
 
-      data["data"]["participant"] = {
+      data.participant = {
         id: participation?.team
           ? participation?.team?.slug
           : participation?.user?.id,
@@ -53,21 +54,21 @@ export default async function Page({ params: { slug } }) {
           ? participation?.team?.name
           : participation?.user?.name
       }
-      return data.data
+      return data
     })
-    .catch(({ response }) => {
-      if (response.status === 404) return notFound()
-    })
+    .catch(err => console.error(err.message))
 
-  const ranking = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/events/${slug}/scoreboard`)
-    .then(({ data: res }) => {
+  const ranking = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}/scoreboard`
+  )
+    .then(res => res.json())
+    .then(({ data: res, status }) => {
+      if (status.code === 404) return notFound()
+
       const ranking = groupByParticipant(res.data)
       return ranking.find(r => r.participant.id === data.participant.id)
     })
-    .catch(({ response }) => {
-      if (response.status === 404) return notFound()
-    })
+    .catch(err => console.error(err.message))
 
   const { data: content } = await getContent(`events/${slug}`)
 

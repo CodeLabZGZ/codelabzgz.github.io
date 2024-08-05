@@ -2,7 +2,6 @@ import { columns } from "@/components/app/events/columns"
 import { buttonVariants } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { auth } from "auth"
-import { notFound } from "next/navigation"
 import Joined from "./joined"
 import OnGoing from "./ongoing"
 import Past from "./past"
@@ -16,8 +15,7 @@ export default async function Page() {
     `${process.env.NEXT_PUBLIC_API_URL}/events?participations=true`
   )
     .then(res => res.json())
-    .then(({ data, status }) => {
-      if (status.code === 404) return notFound()
+    .then(({ data }) => {
       return data.map(({ participations, ...r }) => ({
         ...r,
         participating: participations.findIndex(p => p.user === user.id) !== -1,

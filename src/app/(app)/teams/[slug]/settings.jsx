@@ -15,7 +15,6 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { zodResolver } from "@hookform/resolvers/zod"
-import axios from "axios"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -80,21 +79,24 @@ export default function Settings(props) {
   function onSubmit(values) {
     const { email, twitter, discord, website, ...rest } = values
 
-    const promise = axios.put(
+    const promise = fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/teams/${props.slug}`,
       {
-        ...rest,
-        email: email.value,
-        emailVisibility: email.visibility,
-        twitter: twitter.value,
-        twitterVisibility: twitter.visibility,
-        discord: discord.value,
-        discordVisibility: discord.visibility,
-        website: website.value,
-        websiteVisibility: website.visibility,
-        slug: props.slug
-      },
-      { "Content-Type": "application/json" }
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...rest,
+          email: email.value,
+          emailVisibility: email.visibility,
+          twitter: twitter.value,
+          twitterVisibility: twitter.visibility,
+          discord: discord.value,
+          discordVisibility: discord.visibility,
+          website: website.value,
+          websiteVisibility: website.visibility,
+          slug: props.slug
+        })
+      }
     )
 
     toast.promise(promise, {

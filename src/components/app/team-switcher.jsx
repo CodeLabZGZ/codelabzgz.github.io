@@ -28,8 +28,8 @@ import { Button } from "@/components/ui/button"
 import { cn, isEmptyObject } from "@/lib/utils"
 import { useParticipation } from "@/stores/participation"
 import { useTeam } from "@/stores/team"
-import axios from "axios"
 import { useSession } from "next-auth/react"
+import { notFound } from "next/navigation"
 
 const GROUPS_INITIAL = [
   { label: "Accounts", values: [] },
@@ -48,12 +48,13 @@ export function TeamSwitcher({ className }) {
 
   useEffect(() => {
     if (status === "authenticated") {
-      axios
-        .get(
-          `${process.env.NEXT_PUBLIC_API_URL}/users/${session.user.id}?members=true&populate=true`
-        )
-        .then(({ data }) => {
-          const teams = data.data.members
+      fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/${session.user.id}?members=true&populate=true`
+      )
+        .then(res => res.json())
+        .then(({ data, status }) => {
+          if (status.code === 404) return notFound()
+          const teams = data.members
             .filter(e => e.role !== "pending")
             .map(({ team: { slug, image, name }, role }) => ({
               id: slug,

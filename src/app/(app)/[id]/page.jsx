@@ -18,29 +18,28 @@ import {
 } from "@/components/ui/table"
 import { db } from "@/db"
 import { cn } from "@/lib/utils"
-import axios from "axios"
 import { sql } from "drizzle-orm"
 import { notFound } from "next/navigation"
 
 const options = { day: "numeric", month: "short", year: "numeric" }
 
 export default async function Page({ params: { id } }) {
-  const {
-    data: { data: user }
-  } = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}?participations=true`)
-    .catch(({ response }) => {
-      if (response.status === 404) return notFound()
+  const user = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/users/${id}?participations=true`
+  )
+    .then(res => res.json())
+    .then(({ data, status }) => {
+      if (status.code === 404) return notFound()
+      return data
     })
+    .catch(err => console.error(err.message))
 
-  const {
-    data: { data: ranking }
-  } = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/users/scoreboard`)
-    .catch(({ response }) => {
-      if (response.status === 404) return notFound()
-    })
-  const myranking = ranking.find(r => r.user.id === id)
+  const ranking = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/users/scoreboard`
+  )
+    .then(res => res.json())
+    .then(({ data }) => data?.find(r => r.user.id === id))
+    .catch(err => console.error(err.message))
 
   const __scoreboards = await db.all(
     sql`
@@ -83,7 +82,7 @@ export default async function Page({ params: { id } }) {
         <Card className="col-span-1 rounded">
           <CardHeader>
             <CardTitle>
-              {myranking ? `# ${myranking.rank}` : "Sin calsificación"}
+              {ranking ? `# ${ranking.rank}` : "Sin calsificación"}
             </CardTitle>
             <CardDescription>Puesto global</CardDescription>
           </CardHeader>
@@ -91,7 +90,7 @@ export default async function Page({ params: { id } }) {
         <Card className="col-span-1 rounded">
           <CardHeader>
             <CardTitle>
-              {myranking ? myranking.points : "Sin calsificación"}
+              {ranking ? ranking.points : "Sin calsificación"}
             </CardTitle>
             <CardDescription>Puntuación total</CardDescription>
           </CardHeader>

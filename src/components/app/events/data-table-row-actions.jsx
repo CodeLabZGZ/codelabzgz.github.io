@@ -18,7 +18,6 @@ import {
 import { Button } from "@/components/ui/button"
 import { useParticipation } from "@/stores/participation"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
-import axios from "axios"
 import { Link } from "next-view-transitions"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
@@ -32,12 +31,16 @@ export function DataTableRowActions({ row }) {
   const { startDate, endDate, participating, slug } = row.original
 
   function handleJoin() {
-    const promise = axios.post(
+    const promise = fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}/participation`,
-      participation?.type === "team"
-        ? { team: participation.value }
-        : undefined,
-      { "Content-Type": "application/json" }
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body:
+          participation?.type === "team"
+            ? JSON.stringify({ team: participation.value })
+            : undefined
+      }
     )
 
     toast.promise(promise, {
@@ -67,8 +70,9 @@ export function DataTableRowActions({ row }) {
   }
 
   function handleLeave() {
-    const promise = axios.delete(
-      `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}/participation`
+    const promise = fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}/participation`,
+      { method: "DELETE" }
     )
 
     toast.promise(promise, {

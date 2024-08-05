@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button"
 import { useParticipation } from "@/stores/participation"
 import { Share2Icon } from "@radix-ui/react-icons"
-import axios from "axios"
 import { usePathname, useRouter } from "next/navigation"
 import { toast } from "sonner"
 
@@ -14,12 +13,16 @@ export function JoinLeaveButton({ event, state }) {
   const { participation } = useParticipation()
 
   function handleJoin() {
-    const promise = axios.post(
+    const promise = fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/events/${event.slug}/participation`,
-      participation?.type === "team"
-        ? { team: participation.value }
-        : undefined,
-      { "Content-Type": "application/json" }
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body:
+          participation?.type === "team"
+            ? JSON.stringify({ team: participation.value })
+            : undefined
+      }
     )
 
     toast.promise(promise, {
@@ -49,8 +52,9 @@ export function JoinLeaveButton({ event, state }) {
   }
 
   function handleLeave() {
-    const promise = axios.delete(
-      `${process.env.NEXT_PUBLIC_API_URL}/events/${event.slug}/participation`
+    const promise = fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/events/${event.slug}/participation`,
+      { method: "DELETE" }
     )
 
     toast.promise(promise, {
