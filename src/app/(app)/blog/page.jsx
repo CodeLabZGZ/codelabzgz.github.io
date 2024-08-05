@@ -25,20 +25,7 @@ export default async function Page() {
       </div>
       <main>
         <section className="flex flex-col divide-y-2 py-4">
-          {data.length === 0 ? (
-            <p>
-              <span className="font-medium">
-                ¡Este blog está esperando su primer post inspirador!
-              </span>{" "}
-              ✨ ¡Tú puedes ser la primera persona en compartir tus ideas,
-              experiencias o conocimientos! 📝 No importa si es una historia
-              personal, un análisis profundo o simplemente una reflexión diaria,
-              <span className="font-medium">
-                queremos escuchar lo que tienes que decir
-              </span>
-              . 📣
-            </p>
-          ) : (
+          {data && data.length > 0 ? (
             data.map(
               ({ slug, frontmatter: { title, description, author, date } }) => (
                 <Link
@@ -59,6 +46,19 @@ export default async function Page() {
                 </Link>
               )
             )
+          ) : (
+            <p>
+              <span className="font-medium">
+                ¡Este blog está esperando su primer post inspirador!
+              </span>{" "}
+              ✨ ¡Tú puedes ser la primera persona en compartir tus ideas,
+              experiencias o conocimientos! 📝 No importa si es una historia
+              personal, un análisis profundo o simplemente una reflexión diaria,
+              <span className="font-medium">
+                queremos escuchar lo que tienes que decir
+              </span>
+              . 📣
+            </p>
           )}
         </section>
       </main>
