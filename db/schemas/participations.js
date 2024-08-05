@@ -1,5 +1,5 @@
-import { relations } from "drizzle-orm"
-import { primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core"
+import { relations, sql } from "drizzle-orm"
+import { integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core"
 import { events } from "./events.js"
 import { teams } from "./teams.js"
 import { users } from "./users.js"
