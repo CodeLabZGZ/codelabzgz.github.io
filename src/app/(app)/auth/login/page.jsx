@@ -17,7 +17,7 @@ import { TbBrandDiscord, TbBrandGithub } from "react-icons/tb"
 export default function Page() {
   return (
     <div className="flex h-screen w-screen items-center justify-center">
-      <form className="max-w-sm px-6">
+      <div className="max-w-sm px-6">
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl">Accede a la plataforma</CardTitle>
@@ -65,7 +65,7 @@ export default function Page() {
             <Button className="w-full">Acceder</Button>
           </CardFooter>
         </Card>
-      </form>
+      </div>
     </div>
   )
 }
