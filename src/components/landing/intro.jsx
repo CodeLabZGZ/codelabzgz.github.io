@@ -42,9 +42,9 @@ export function IntroCard({
   return (
     <a
       href={href}
-      className={`relative flex w-full cursor-pointer rounded-lg border border-white p-4 shadow-sm ring-2 ring-white duration-500 ease-in-out ${
+      className={`relative flex w-full cursor-pointer rounded-lg border border-white p-4 shadow-sm ring-2 ring-white transition-transform duration-500 ease-in-out ${
         isActive ? "scale-105 opacity-100" : "opacity-20"
-      } focus:outline-none`}
+      } hover:scale-105 hover:opacity-100 focus:outline-none`}
       onMouseEnter={onMouseEnter}
     >
       <div className="flex flex-1">
@@ -80,7 +80,7 @@ export function Intro() {
         Zaragoza! Eventos de alto nivel, hackatones emocionantes, meetups
         inspiradores y más.
       </p>
-      <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+      <div className="z-40 mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
         <IntroCard
           key="Estudiantes"
           title="Estudiantes"

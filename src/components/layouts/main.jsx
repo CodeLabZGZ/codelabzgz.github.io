@@ -14,7 +14,7 @@ function Timeline() {
   const id = useId()
 
   return (
-    <div className="pointer-events-none absolute inset-0 z-50 overflow-hidden lg:right-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] lg:overflow-visible">
+    <div className="pointer-events-none absolute inset-0 overflow-hidden lg:right-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] lg:overflow-visible">
       <svg
         className="absolute left-[max(0px,calc(50%-18.125rem))] top-0 h-full w-1.5 lg:left-full lg:ml-1 xl:left-auto xl:right-1 xl:ml-0"
         aria-hidden="true"
@@ -75,7 +75,7 @@ function Glow() {
 
 function FixedSidebar({ main, footer }) {
   return (
-    <div className="relative h-screen flex-none overflow-hidden bg-gray-950 px-6 lg:pointer-events-none lg:fixed lg:inset-0 lg:flex lg:bg-white lg:px-0 lg:dark:bg-gray-950">
+    <div className="relative h-screen flex-none overflow-hidden bg-gray-950 px-6 lg:pointer-events-none lg:fixed lg:inset-0 lg:z-40 lg:flex lg:bg-transparent lg:px-0">
       <Glow />
       <div className="relative flex w-full lg:pointer-events-auto lg:mr-[calc(max(2rem,50%-38rem)+40rem)] lg:min-w-[32rem] lg:overflow-y-auto lg:overflow-x-hidden lg:pl-[max(4rem,calc(50%-38rem))]">
         <div className="mx-auto max-w-lg lg:mx-0 lg:flex lg:w-96 lg:max-w-none lg:flex-col lg:before:flex-1 lg:before:pt-6">
