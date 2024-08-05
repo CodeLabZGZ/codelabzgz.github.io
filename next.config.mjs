@@ -16,7 +16,6 @@ const withMDX = nextMDX({
 const nextConfig = {
   pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
   poweredByHeader: false,
-  output: "standalone",
   reactStrictMode: true,
   images: {
     unoptimized: true
