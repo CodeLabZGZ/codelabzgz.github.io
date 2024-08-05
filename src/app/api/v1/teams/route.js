@@ -63,6 +63,4 @@ export const POST = auth(
 export const PUT = auth(
   errorHandler(validator(updateHandler, { body: updateSchema }))
 )
-export const GET = auth(
-  errorHandler(validator(getHandler, { query: getSchema }))
-)
+export const GET = errorHandler(validator(getHandler, { query: getSchema }))
