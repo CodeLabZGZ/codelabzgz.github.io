@@ -1,5 +1,6 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,6 +8,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
+import { useParticipation } from "@/stores/participation"
+import { DotsHorizontalIcon } from "@radix-ui/react-icons"
+import { track } from "@vercel/analytics"
+import { Link } from "next-view-transitions"
+import { useRouter } from "next/navigation"
 import {
   TbCertificate,
   TbInfoSquare,
@@ -14,12 +20,6 @@ import {
   TbTicketOff,
   TbTimeline
 } from "react-icons/tb"
-
-import { Button } from "@/components/ui/button"
-import { useParticipation } from "@/stores/participation"
-import { DotsHorizontalIcon } from "@radix-ui/react-icons"
-import { Link } from "next-view-transitions"
-import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
 const currentDate = new Date()
@@ -31,6 +31,7 @@ export function DataTableRowActions({ row }) {
   const { startDate, endDate, participating, slug } = row.original
 
   function handleJoin() {
+    track("join event", { event: slug })
     const promise = fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}/participation`,
       {
@@ -70,6 +71,7 @@ export function DataTableRowActions({ row }) {
   }
 
   function handleLeave() {
+    track("leave event", { event: slug })
     const promise = fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/events/${slug}/participation`,
       { method: "DELETE" }

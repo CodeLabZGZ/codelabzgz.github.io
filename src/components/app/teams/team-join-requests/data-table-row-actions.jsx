@@ -1,16 +1,16 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
-import { TbUserMinus, TbUserPlus } from "react-icons/tb"
-
-import { Button } from "@/components/ui/button"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
+import { track } from "@vercel/analytics"
 import { useRouter } from "next/navigation"
+import { TbUserMinus, TbUserPlus } from "react-icons/tb"
 import { toast } from "sonner"
 
 export function DataTableRowActions({ row }) {
@@ -19,6 +19,11 @@ export function DataTableRowActions({ row }) {
 
   const handleAccept = e => {
     e.preventDefault()
+    track("join request [accept]", {
+      user: user.id,
+      team: slug,
+      role: "member"
+    })
 
     const promise = fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}/members`,
@@ -41,6 +46,10 @@ export function DataTableRowActions({ row }) {
 
   const handleReject = e => {
     e.preventDefault()
+    track("join request [reject]", {
+      user: user.id,
+      team: slug
+    })
 
     const promise = fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}/members`,

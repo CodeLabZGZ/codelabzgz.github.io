@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { track } from "@vercel/analytics"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -77,6 +78,7 @@ export default function Settings(props) {
   })
 
   function onSubmit(values) {
+    track("Update team", { team: props.slug })
     const { email, twitter, discord, website, ...rest } = values
 
     const promise = fetch(

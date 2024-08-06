@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { useParticipation } from "@/stores/participation"
 import { Share2Icon } from "@radix-ui/react-icons"
+import { track } from "@vercel/analytics"
 import { usePathname, useRouter } from "next/navigation"
 import { toast } from "sonner"
 
@@ -13,6 +14,7 @@ export function JoinLeaveButton({ event, state }) {
   const { participation } = useParticipation()
 
   function handleJoin() {
+    track("join event", { event: event.slug })
     const promise = fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/events/${event.slug}/participation`,
       {
@@ -52,6 +54,7 @@ export function JoinLeaveButton({ event, state }) {
   }
 
   function handleLeave() {
+    track("leave event", { event: event.slug })
     const promise = fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/events/${event.slug}/participation`,
       { method: "DELETE" }
@@ -82,13 +85,14 @@ export function JoinLeaveButton({ event, state }) {
   )
 }
 
-export function ShareButton() {
+export function ShareButton({ slug }) {
   const pathname = usePathname()
   return (
     <Button
       variant="outline"
       className="gap-1"
       onClick={() => {
+        track("share event", { event: slug })
         navigator.clipboard.writeText(
           `${process.env.NEXT_PUBLIC_SITE_URL}${pathname}`
         )

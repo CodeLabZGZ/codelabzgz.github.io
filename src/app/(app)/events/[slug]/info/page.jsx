@@ -65,7 +65,7 @@ export default async function Page({ params: { slug } }) {
               event={event}
               state={Boolean(event.participating)}
             />
-            <ShareButton />
+            <ShareButton slug={event.slug} />
           </div>
           <div className="flex items-center gap-2">
             <TooltipProvider>

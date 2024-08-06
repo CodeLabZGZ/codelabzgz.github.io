@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
+import { track } from "@vercel/analytics"
 import { useRouter } from "next/navigation"
 import { TbUserMinus } from "react-icons/tb"
 import { toast } from "sonner"
@@ -18,6 +19,10 @@ export function DataTableRowActions({ row }) {
 
   const handleKick = e => {
     e.preventDefault()
+    track("members [kick]", {
+      user: user.id,
+      team: slug
+    })
 
     const promise = fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/teams/${slug}/members`,
