@@ -10,7 +10,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Github({ allowDangerousEmailAccountLinking: true }),
     Discord({ allowDangerousEmailAccountLinking: true }),
-    Resend({ allowDangerousEmailAccountLinking: true })
+    Resend({
+      allowDangerousEmailAccountLinking: true,
+      from: "no-reply@codelabzgz.dev"
+    })
   ],
   callbacks: {
     authorized: async ({ request, auth }) => {
