@@ -112,7 +112,7 @@ export function UserNav({ color }) {
             </DropdownMenuItem>
             <DropdownMenuItem>
               <a
-                href="https://discord.gg/QHe9YYDtGf"
+                href="https://discord.gg/eAMGGMj3XW"
                 className="flex w-full items-center gap-x-2.5"
               >
                 <Help className="h-4 w-4" />

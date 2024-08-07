@@ -3,10 +3,15 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter"
 import NextAuth from "next-auth"
 import Discord from "next-auth/providers/discord"
 import Github from "next-auth/providers/github"
+import Resend from "next-auth/providers/resend"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: DrizzleAdapter(db),
-  providers: [Github, Discord],
+  providers: [
+    Github({ allowDangerousEmailAccountLinking: true }),
+    Discord({ allowDangerousEmailAccountLinking: true }),
+    Resend({ allowDangerousEmailAccountLinking: true })
+  ],
   callbacks: {
     authorized: async ({ request, auth }) => {
       // Logged in users are authenticated, otherwise redirect to login page

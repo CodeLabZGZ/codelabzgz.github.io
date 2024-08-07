@@ -85,7 +85,7 @@ export function Intro() {
           key="Estudiantes"
           title="Estudiantes"
           description="Reunete en Discord"
-          href="https://discord.gg/QHe9YYDtGf"
+          href="https://discord.gg/eAMGGMj3XW"
           Icon={FaDiscord}
           isActive={activeCard === "Estudiantes"}
           onMouseEnter={() => setActiveCard("Estudiantes")}

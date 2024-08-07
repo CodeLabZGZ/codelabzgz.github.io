@@ -1,18 +1,15 @@
-"use client"
-
+import { signIn } from "@/auth"
 import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { signIn } from "next-auth/react"
-import { TbBrandDiscord, TbBrandGithub } from "react-icons/tb"
+import { Discord, Github } from "./buttons"
 
 export default function Page() {
   return (
@@ -27,24 +24,8 @@ export default function Page() {
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className="grid grid-cols-2 gap-2">
-              <Button
-                variant="outline"
-                onClick={async () =>
-                  await signIn("github", { callbackUrl: "/events" })
-                }
-              >
-                <TbBrandGithub className="mr-2 h-4 w-4" />
-                Github
-              </Button>
-              <Button
-                variant="outline"
-                onClick={async () =>
-                  await signIn("discord", { callbackUrl: "/events" })
-                }
-              >
-                <TbBrandDiscord className="mr-2 h-4 w-4" />
-                Discord
-              </Button>
+              <Github />
+              <Discord />
             </div>
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
@@ -56,21 +37,29 @@ export default function Page() {
                 </span>
               </div>
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Correo electrónico</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                disabled={true}
-              />
-            </div>
+            <form
+              className="space-y-4"
+              action={async formData => {
+                "use server"
+                await signIn("resend", formData)
+              }}
+            >
+              <div className="grid gap-2">
+                <Label htmlFor="email">Correo electrónico</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="m@example.com"
+                />
+              </div>
+              <div className="flex items-center">
+                <Button type="submit" className="w-full">
+                  Acceder
+                </Button>
+              </div>
+            </form>
           </CardContent>
-          <CardFooter>
-            <Button className="w-full" disabled={true}>
-              Acceder
-            </Button>
-          </CardFooter>
         </Card>
       </div>
     </div>

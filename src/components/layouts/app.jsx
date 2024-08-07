@@ -133,7 +133,7 @@ export function AppLayout({ children }) {
           <CommandGroup heading="Misc">
             <CommandItem>
               <a
-                href="https://discord.gg/QHe9YYDtGf"
+                href="https://discord.gg/eAMGGMj3XW"
                 className="flex w-full items-center gap-2"
               >
                 <Help className="h-4 w-4" />
