@@ -12,10 +12,10 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { cn } from "@/lib/utils"
+import { validateDomainURL, validateWebsiteURL } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useEffect, useState } from "react"
-import { useFieldArray, useForm } from "react-hook-form"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -32,12 +32,44 @@ const profileFormSchema = z.object({
   email: z
     .string({ required_error: "Please select an email to display." })
     .email(),
-  urls: z
-    .array(
-      z.object({
-        value: z.string().url()
-      })
-    )
+  website: z.union([
+    z.string().url().refine(validateWebsiteURL, {
+      message:
+        "La página web debe tener dominio público y permitir sólo conexión HTTPS"
+    }),
+    z.literal("")
+  ]),
+  twitter: z
+    .union([
+      z
+        .string()
+        .url()
+        .refine(val => validateDomainURL(val, ["twitter.com", "x.com"]), {
+          message:
+            "La página web apuntar a un dominio de Twitter y permitir sólo conexión HTTPS"
+        }),
+      z.literal("")
+    ])
+    .optional(),
+  discord: z
+    .union([
+      z
+        .string()
+        .url()
+        .refine(
+          val =>
+            validateDomainURL(val, [
+              "discord.com",
+              "discord.gg",
+              "discordapp.com"
+            ]),
+          {
+            message:
+              "La página web debe apuntar a un dominio de Discord y permitir sólo conexión HTTPS"
+          }
+        ),
+      z.literal("")
+    ])
     .optional()
 })
 
@@ -51,42 +83,17 @@ export default function Account({ data }) {
       description: data?.description ?? "",
       username: data?.username ?? data?.name ?? "",
       email: data?.email,
-      urls: data?.urls?.map(u => ({ value: u })) ?? [
-        { value: "https://johndoe.github.io" },
-        { value: "https://www.linkedin.com/in/johndoe" },
-        { value: "https://github.com/johndoe" }
-      ]
+      website: data?.website,
+      twitter: data?.twitter,
+      discord: data?.discord
     }
-  })
-
-  const { fields, append } = useFieldArray({
-    name: "urls",
-    control: form.control
-  })
-
-  // Función para verificar si hay campos vacíos
-  const checkAndRemoveEmptyFields = () => {
-    const urls = form.getValues("urls")
-    const hasEmptyField = urls.some(field => field.value === "")
-    if (hasEmptyField && urls.length > 1) {
-      form.setValue(
-        "urls",
-        urls.filter(field => field.value !== "")
-      )
-    } else {
-      setIsButtonDisabled(false)
-    }
-  }
-
-  useEffect(() => {
-    checkAndRemoveEmptyFields()
   })
 
   async function onSubmit(values) {
+    console.log("v", values)
     const { createdAt, updatedAt, ...body } = {
       ...data,
-      ...values,
-      urls: values.urls.map(u => u.value)
+      ...values
     }
 
     const promise = fetch(
@@ -168,50 +175,52 @@ export default function Account({ data }) {
             </FormItem>
           )}
         />
-
-        <div>
-          {fields.map((field, index) => (
-            <FormField
-              control={form.control}
-              key={field.id}
-              name={`urls.${index}.value`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className={cn(index !== 0 && "sr-only")}>
-                    URLs
-                  </FormLabel>
-                  <FormDescription className={cn(index !== 0 && "sr-only")}>
-                    Añada enlaces a tu sitio web, blog o perfiles en redes
-                    sociales.
-                  </FormDescription>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      onChange={e => {
-                        field.onChange(e)
-                        checkAndRemoveEmptyFields()
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="mt-2"
-            disabled={isButtonDisabled}
-            onClick={() => {
-              append({ value: "" })
-              setIsButtonDisabled(true)
-            }}
-          >
-            Añadir URL
-          </Button>
-        </div>
+        <FormField
+          control={form.control}
+          name="website"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Página web</FormLabel>
+              <FormControl>
+                <Input placeholder="https://www.example.com" {...field} />
+              </FormControl>
+              <FormDescription>Página oficial de tu equipo.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="twitter"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Twitter</FormLabel>
+              <FormControl>
+                <Input placeholder="https://www.example.com" {...field} />
+              </FormControl>
+              <FormDescription>
+                Enlace a la cuenta de Twitter de tu equipo.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="discord"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Discord</FormLabel>
+              <FormControl>
+                <Input placeholder="https://www.example.com" {...field} />
+              </FormControl>
+              <FormDescription>
+                Invitación al chat de discord del equipo.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button type="submit">Guardar cambios</Button>
       </form>
     </Form>

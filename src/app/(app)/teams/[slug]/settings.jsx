@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
+import { validateDomainURL, validateWebsiteURL } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { track } from "@vercel/analytics"
 import { useRouter } from "next/navigation"
@@ -32,19 +33,51 @@ const formSchema = z.object({
   description: z.string().trim(),
   website: z
     .object({
-      value: z.union([z.string().url(), z.literal("")]),
+      value: z.union([
+        z.string().url().refine(validateWebsiteURL, {
+          message:
+            "La página web debe tener dominio público y permitir sólo conexión HTTPS"
+        }),
+        z.literal("")
+      ]),
       visibility: z.enum(["public", "private"])
     })
     .optional(),
   twitter: z
     .object({
-      value: z.union([z.string().url(), z.literal("")]),
+      value: z.union([
+        z
+          .string()
+          .url()
+          .refine(val => validateDomainURL(val, ["twitter.com", "x.com"]), {
+            message:
+              "La página web apuntar a un dominio de Twitter y permitir sólo conexión HTTPS"
+          }),
+        z.literal("")
+      ]),
       visibility: z.enum(["public", "private"])
     })
     .optional(),
   discord: z
     .object({
-      value: z.union([z.string().url(), z.literal("")]),
+      value: z.union([
+        z
+          .string()
+          .url()
+          .refine(
+            val =>
+              validateDomainURL(val, [
+                "discord.com",
+                "discord.gg",
+                "discordapp.com"
+              ]),
+            {
+              message:
+                "La página web debe apuntar a un dominio de Discord y permitir sólo conexión HTTPS"
+            }
+          ),
+        z.literal("")
+      ]),
       visibility: z.enum(["public", "private"])
     })
     .optional(),

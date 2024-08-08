@@ -82,7 +82,7 @@ export default async function Page({ params: { id } }) {
         <Card className="col-span-1 rounded">
           <CardHeader>
             <CardTitle>
-              {ranking ? `# ${ranking.rank}` : "Sin calsificación"}
+              {ranking ? `# ${ranking.rank}` : "Sin clasificación"}
             </CardTitle>
             <CardDescription>Puesto global</CardDescription>
           </CardHeader>
@@ -90,7 +90,7 @@ export default async function Page({ params: { id } }) {
         <Card className="col-span-1 rounded">
           <CardHeader>
             <CardTitle>
-              {ranking ? ranking.points : "Sin calsificación"}
+              {ranking ? ranking.points : "Sin clasificación"}
             </CardTitle>
             <CardDescription>Puntuación total</CardDescription>
           </CardHeader>

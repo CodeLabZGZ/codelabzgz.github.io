@@ -13,6 +13,6 @@ export const errorHandler = fn => async (req, res) => {
       })
     }
 
-    return response({ statusCode: 500 })
+    return response({ statusCode: 500, message: error.message })
   }
 }

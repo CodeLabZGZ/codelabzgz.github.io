@@ -18,7 +18,8 @@ function genUsers() {
     id: faker.string.uuid(),
     name: faker.person.fullName(),
     username: faker.internet.userName(),
-    email: faker.internet.email()
+    email: faker.internet.email(),
+    website: faker.internet.url()
   }
 }
 

@@ -80,7 +80,7 @@ export default function Notifications({ data }) {
               <p className="text-sm text-muted-foreground">
                 Estoy de acuerdo con la{" "}
                 <Link
-                  href="/privacy-policy"
+                  href="/privacy"
                   className="font-medium underline underline-offset-4"
                 >
                   política de privacidad

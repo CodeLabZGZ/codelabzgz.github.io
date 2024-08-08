@@ -80,3 +80,36 @@ export function isEmptyObject(obj) {
   if (typeof obj === "object") return Object.keys(obj).length === 0 // Verifica si es un objeto
   return false // En otros casos, no se considera vacío
 }
+
+/**
+ * Custom website URL string validator against potential SSRF attacks
+ * @param {string} val The URL to validate
+ * @returns {boolean} whether the URL is a valid website
+ */
+export function validateWebsiteURL(val) {
+  const ipRegex = /[0-9]{0,3}\.[0-9]{0,3}\.[0-9]{0,3}\.[0-9]{0,3}/gm
+  console.log(ipRegex.test(val.replace("/", "\\/")))
+
+  // should be a secured HTTPS url and shouldn't contain IPs
+  return val.startsWith("https://")
+}
+
+/**
+ * Custom domain URL validator against potential SSRF attacks
+ * @param {string} val The URL to validate
+ * @param {string[]} allowedDomains The URL to validate
+ * @returns {boolean} whether the URL is a valid website
+ */
+export function validateDomainURL(val, allowedDomains) {
+  if (allowedDomains.length == 0) return false
+
+  // should contain one of the allowed domains.
+  for (const domain of allowedDomains) {
+    const domainRegex = new RegExp(
+      `https://${domain.replace(".", "\\.")}(/[a-zA-Z0-9_/]*)?$`
+    )
+    if (domainRegex.test(val)) return true
+  }
+
+  return false
+}
