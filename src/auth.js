@@ -1,4 +1,5 @@
 import { db } from "@/db"
+import { sendVerificationRequest } from "@/lib/send-verification-request"
 import { DrizzleAdapter } from "@auth/drizzle-adapter"
 import NextAuth from "next-auth"
 import Discord from "next-auth/providers/discord"
@@ -12,7 +13,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Discord({ allowDangerousEmailAccountLinking: true }),
     Resend({
       allowDangerousEmailAccountLinking: true,
-      from: "no-reply@codelabzgz.dev"
+      from: "no-reply@codelabzgz.dev",
+      maxAge: 60 * 60 * 24,
+      sendVerificationRequest
     })
   ],
   callbacks: {
