@@ -1,5 +1,4 @@
 import { db } from "@/db"
-import { sendVerificationRequest } from "@/lib/send-verification-request"
 import { DrizzleAdapter } from "@auth/drizzle-adapter"
 import NextAuth from "next-auth"
 import Discord from "next-auth/providers/discord"
@@ -15,7 +14,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       allowDangerousEmailAccountLinking: true,
       from: "no-reply@codelabzgz.dev",
       maxAge: 60 * 60 * 24,
-      sendVerificationRequest
+      sendVerificationRequest: async function sendVerificationRequest(params) {
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/emails`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(params)
+        })
+          .then(res => {
+            if (!res.ok) {
+              throw new Error(`Error en la petición: ${res.statusText}`)
+            }
+          })
+          .catch(err => console.error("Error al enviar la petición:", error))
+      }
     })
   ],
   callbacks: {
