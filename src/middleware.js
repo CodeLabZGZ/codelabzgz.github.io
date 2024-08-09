@@ -1,21 +1,26 @@
 import { auth } from "@/auth"
 import { NextResponse } from "next/server"
 
-const whiteList = ["/", "/auth/login", "/privacy", "/terms"]
+const whiteList = ["/", "/auth/login", "/privacy", "/terms", "/faq"]
 
 export default async function middleware(request) {
-  const session = await auth()
   const { pathname, origin } = request.nextUrl
-  try {
-    const whitlisted = whiteList.includes(pathname)
 
-    // If token is valid, proceed to the protected route
-    if (!whitlisted && (!session || !session.user)) {
+  try {
+    const session = await auth()
+
+    const whitelisted = whiteList.includes(pathname)
+
+    // Si no está en la whitelist y no hay sesión válida, redirige al login
+    if (!whitelisted && (!session || !session.user)) {
       const absoluteURL = new URL("/auth/login", origin)
       return NextResponse.redirect(absoluteURL.toString())
     }
+
+    // Si todo está bien, permite el acceso
+    return NextResponse.next()
   } catch (error) {
-    // Redirects to the login page on failed authentication
+    // Redirige al login en caso de error de autenticación
     const absoluteURL = new URL("/auth/login", origin)
     return NextResponse.redirect(absoluteURL.toString())
   }

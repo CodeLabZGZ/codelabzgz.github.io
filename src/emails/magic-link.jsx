@@ -12,10 +12,6 @@ import {
   Text
 } from "@react-email/components"
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : ""
-
 export const MagicLink = ({ magicLink }) => (
   <Html>
     <Head />
@@ -23,7 +19,7 @@ export const MagicLink = ({ magicLink }) => (
     <Body style={main}>
       <Container style={container}>
         <Img
-          src={`${baseUrl}/static/raycast-logo.png`}
+          src={`${process.env.NEXT_PUBLIC_SITE_URL}/static/codelabzgz-logo.png`}
           width={48}
           height={48}
           alt="codelabzgz"
@@ -46,7 +42,7 @@ export const MagicLink = ({ magicLink }) => (
         </Text>
         <Hr style={hr} />
         <Img
-          src={`${baseUrl}/static/raycast-logo.png`}
+          src={`${process.env.NEXT_PUBLIC_SITE_URL}/static/codelabzgz-logo.png`}
           width={32}
           height={32}
           style={{

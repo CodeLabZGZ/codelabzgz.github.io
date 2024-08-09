@@ -81,7 +81,7 @@ export function UserNav({ color }) {
           <DropdownMenuGroup>
             <DropdownMenuItem>
               <Link
-                href={`/${session?.user.id}`}
+                href={`/users/${session?.user.id}`}
                 className="flex w-full items-center gap-x-2.5"
               >
                 <User className="h-4 w-4" />
